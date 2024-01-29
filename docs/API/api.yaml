@@ -1,0 +1,302 @@
+openapi: 3.0.3
+info:
+  title: API For Inventory
+  description: |-
+    API For Inventory stuff
+  version: "1.0"
+tags:
+  - name: Login Inventory
+    description: Login Page for Inventory
+  - name: Inventory Dashboard
+    description: Inventory Dashboard
+
+paths:
+  /login/:
+    get:
+      tags:
+        - Login Inventory
+      summary: Login page for inventory
+      description: Render a login page for inventory admin
+      operationId: loginPageAdmin
+      responses:
+        "200":
+          description: rendered login page
+        "400":
+          description: failed login
+    post:
+      tags:
+        - Login Inventory
+      summary: Login admin inventory
+      description: Login admin by passing username and password
+      operationId: loginAdmin
+      parameters:
+        - name: username
+          in: query
+          description: valid username for login as admin
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: valid password for login as admin
+          required: true
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Login successfull
+        "405":
+          description: Invalid input
+  /:
+    get:
+      tags:
+        - Inventory Dashboard
+      summary: Dashboard page for CRUD Inventory
+      description: Render a dashboard page for adminstrator for Inventory
+      operationId: dashboardInventory
+      responses:
+        "200":
+          description: Successful rendered inventory dashboard
+        "400":
+          description: Failed rendered inventory dashboard
+    put:
+      tags:
+        - Inventory Dashboard
+      summary: Update Inventory
+      description: Update an existing inventory item by Id using popup vue
+      operationId: updateInventory
+      parameters:
+        - name: id
+          in: query
+          description: id for updating inventory data
+          required: true
+          explode: false
+          schema:
+            type: integer
+        - name: picture
+          in: query
+          description: valid picture for inventory item
+          required: false
+          explode: false
+          schema:
+            type: string
+        - name: code
+          in: query
+          description: valid code for inventory item
+          required: false
+          explode: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: valid password for admin
+          required: false
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Admin account successfully changed
+        "400":
+          description: Invalid ID
+        "404":
+          description: ID not found
+        "405":
+          description: Validation exception
+    post:
+      tags:
+        - Inventory Dashboard
+      summary: Add a new Furniture
+      description: Add a new Furniture
+      operationId: createNewAdmin
+      parameters:
+        - name: id
+          in: query
+          description: id of the inventory
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: categories
+          in: query
+          description: categories of the inventory
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: picture
+          in: query
+          description: an Image of the furniture
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: code
+          in: query
+          description: code of a furniture
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: description
+          in: query
+          description: description of the furniture
+          required: true
+          explode: false
+          schema:
+            type: number
+        - name: width
+          in: query
+          description: width of furniture
+          required: true
+          explode: false
+          schema:
+            type: number
+        - name: depth
+          in: query
+          description: depth of furniture
+          required: true
+          explode: false
+          schema:
+            type: number
+        - name: height
+          in: query
+          description: height of furniture
+          required: true
+          explode: false
+          schema:
+            type: number
+        - name: colour
+          in: query
+          description: colour of furniture
+          required: false
+          explode: false
+          schema:
+            type: number
+        - name: price
+          in: query
+          description: price of furniture
+          required: true
+          explode: false
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Furniture account added
+        "405":
+          description: Invalid input
+  /admin/create/:
+    post:
+      tags:
+        - Admin Dashboard
+      summary: Add a new Admin
+      description: Add a new Admin but first enter a password
+      operationId: createNewAdmin
+      parameters:
+        - name: username
+          in: query
+          description: valid username for login as admin
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: valid name for login as admin
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: valid password for login as admin
+          required: true
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Admin added
+        "405":
+          description: Invalid input
+    delete:
+      tags:
+        - Admin Dashboard
+      summary: Deletes a admin account
+      description: delete a admin account
+      operationId: deleteAdmin
+      parameters:
+        - name: adminId
+          in: path
+          description: Admin id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "400":
+          description: Invalid admin id
+
+components:
+  schemas:
+    Furniture:
+      type: object
+      properties:
+        id:
+          type: number
+          format: id
+          example: 1
+        categories:
+          type: string
+          format: string
+          example: Indoor Furniture
+        picture:
+          type: string
+          format: string
+        code:
+          type: string
+          format: string
+          example: TW022
+        description:
+          type: string
+          format: string
+          example: this is a furniture
+        width:
+          type: number
+          format: float
+          example: 152
+        depth:
+          type: number
+          format: float
+          example: 152
+        height:
+          type: number
+          format: float
+          example: 77
+        colour:
+          type: string
+          format: string
+          example: DBGSB
+        price:
+          type: number
+          format: number
+          example: 4000000
+      xml:
+        name: member
+    Admin:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        username:
+          type: string
+          example: lmao
+        password:
+          type: string
+          example: pa$$word
+      xml:
+        name: Admin
