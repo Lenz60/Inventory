@@ -3,6 +3,10 @@ info:
   title: API For Inventory
   description: |-
     API For Inventory stuff
+
+
+    ERD of the table:
+    - [ERD of the Inventory table](https://dbdiagram.io/d/Inventory-ERD-65b7c8a2ac844320aef63b95)
   version: "1.0"
 tags:
   - name: Login Inventory
@@ -110,7 +114,7 @@ paths:
         - Inventory Dashboard
       summary: Add a new Furniture
       description: Add a new Furniture
-      operationId: createNewAdmin
+      operationId: createNewInventory
       parameters:
         - name: id
           in: query
@@ -221,6 +225,7 @@ paths:
           description: Admin added
         "405":
           description: Invalid input
+  /admin/delete/{adminId}:
     delete:
       tags:
         - Admin Dashboard
@@ -289,8 +294,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          format: uuid
           example: 100000
         username:
           type: string
