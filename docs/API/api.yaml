@@ -4,12 +4,18 @@ info:
   description: |-
     API For Inventory stuff
 
+    User can only input data
+
+    Admin can add user
+
 
     ERD of the table:
     - [ERD of the Inventory table](https://dbdiagram.io/d/Inventory-ERD-65b7c8a2ac844320aef63b95)
   version: "1.0"
 tags:
   - name: Login Inventory
+    description: Login Page for Inventory
+  - name: Login Admin
     description: Login Page for Inventory
   - name: Inventory Dashboard
     description: Inventory Dashboard
@@ -20,8 +26,8 @@ paths:
       tags:
         - Login Inventory
       summary: Login page for inventory
-      description: Render a login page for inventory admin
-      operationId: loginPageAdmin
+      description: Render a login page for inventory user
+      operationId: loginPageUser
       responses:
         "200":
           description: rendered login page
@@ -30,6 +36,44 @@ paths:
     post:
       tags:
         - Login Inventory
+      summary: Login user inventory
+      description: Login admin by passing username and password
+      operationId: loginAdmin
+      parameters:
+        - name: username
+          in: query
+          description: valid username for login as admin
+          required: true
+          explode: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: valid password for login as admin
+          required: true
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Login successfull
+        "405":
+          description: Invalid input
+  /admin/login:
+    get:
+      tags:
+        - Login Admin
+      summary: Login page for inventory
+      description: Render a login page for inventory Admin
+      operationId: loginPageUser
+      responses:
+        "200":
+          description: rendered login page
+        "400":
+          description: failed login
+    post:
+      tags:
+        - Login Admin
       summary: Login admin inventory
       description: Login admin by passing username and password
       operationId: loginAdmin
@@ -195,7 +239,7 @@ paths:
     post:
       tags:
         - Admin Dashboard
-      summary: Add a new Admin
+      summary: Add a new User
       description: Add a new Admin but first enter a password
       operationId: createNewAdmin
       parameters:
@@ -225,7 +269,7 @@ paths:
           description: Admin added
         "405":
           description: Invalid input
-  /admin/delete/{adminId}:
+  /admin/delete/{userId}:
     delete:
       tags:
         - Admin Dashboard
@@ -233,9 +277,9 @@ paths:
       description: delete a admin account
       operationId: deleteAdmin
       parameters:
-        - name: adminId
+        - name: userId
           in: path
-          description: Admin id to delete
+          description: user id to delete
           required: true
           schema:
             type: integer
@@ -246,17 +290,13 @@ paths:
 
 components:
   schemas:
-    Furniture:
+    Indoor:
       type: object
       properties:
         id:
           type: number
           format: id
           example: 1
-        categories:
-          type: string
-          format: string
-          example: Indoor Furniture
         picture:
           type: string
           format: string
@@ -268,6 +308,10 @@ components:
           type: string
           format: string
           example: this is a furniture
+        indoor_woodtype:
+          type: string
+          format: string
+          example: solid wood
         width:
           type: number
           format: float
@@ -289,7 +333,95 @@ components:
           format: number
           example: 4000000
       xml:
-        name: member
+        name: Indoor furniture
+    Outdoor:
+      type: object
+      properties:
+        id:
+          type: number
+          format: id
+          example: 1
+        picture:
+          type: string
+          format: string
+        code:
+          type: string
+          format: string
+          example: TW022
+        description:
+          type: string
+          format: string
+          example: this is a furniture
+        outdoor_woodtype:
+          type: string
+          format: string
+          example: solid wood
+        width:
+          type: number
+          format: float
+          example: 152
+        depth:
+          type: number
+          format: float
+          example: 152
+        height:
+          type: number
+          format: float
+          example: 77
+        colour:
+          type: string
+          format: string
+          example: DBGSB
+        price:
+          type: number
+          format: number
+          example: 4000000
+      xml:
+        name: Outdoor furniture
+    Garden:
+      type: object
+      properties:
+        id:
+          type: number
+          format: id
+          example: 1
+        picture:
+          type: string
+          format: string
+        code:
+          type: string
+          format: string
+          example: TW022
+        description:
+          type: string
+          format: string
+          example: this is a furniture
+        garden_woodtype:
+          type: string
+          format: string
+          example: solid wood
+        width:
+          type: number
+          format: float
+          example: 152
+        depth:
+          type: number
+          format: float
+          example: 152
+        height:
+          type: number
+          format: float
+          example: 77
+        colour:
+          type: string
+          format: string
+          example: DBGSB
+        price:
+          type: number
+          format: number
+          example: 4000000
+      xml:
+        name: Garden furniture
     Admin:
       type: object
       properties:
