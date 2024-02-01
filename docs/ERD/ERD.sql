@@ -7,22 +7,25 @@ CREATE TABLE users (
   updated_at timestamp
 );
 
+-- User id is UUID
+
 CREATE TABLE admin (
   id varchar(255),
-  name varchar(255),
+  username varchar(255),
   password varchar(255),
+  name varchar(255),
   role number,
-  remember_token varchar(255),
   created_at timestamp,
   updated_at timestamp
 );
 
+-- Admin id is UUID
 -- Role 1 is master admin can add admin and delete admin except himself
 -- Role 2 is regullar admin that can be filled CRUD data
 
 CREATE TABLE furniture (
   id varchar(255),
-  picture varchar(255),
+  image varchar(255),
   code varchar(255),
   description varchar(255),
   category ENUM(`Indoor`,`Outdoor`,`Handicraft`,`Root`),
