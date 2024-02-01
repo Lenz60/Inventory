@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Furniture extends Model
+class Order extends Model
 {
     use HasFactory;
-    protected $table = 'furniture';
-    protected $primaryKey = 'uuid';
+
+    protected $table = 'orders';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -20,14 +21,8 @@ class Furniture extends Model
     ];
 
     protected $fillable = [
-        'uuid',
-        'code',
-        'description',
-        'category',
-        'wood_type',
-        'width',
-        'depth',
-        'height',
-        'price',
+        'id',
+        'qty',
+        'total_price',
     ];
 }

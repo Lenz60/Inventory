@@ -5,29 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Furniture extends Model
+class Admin extends Model
 {
     use HasFactory;
-    protected $table = 'furniture';
+    protected $table = 'admin';
     protected $primaryKey = 'uuid';
 
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
-    protected $fillable = [
+protected $fillable = [
         'uuid',
-        'code',
-        'description',
-        'category',
-        'wood_type',
-        'width',
-        'depth',
-        'height',
-        'price',
+        'username',
+        'password',
+        'name',
+        'role',
     ];
+
+
 }
