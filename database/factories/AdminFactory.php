@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,7 @@ class AdminFactory extends Factory
         return [
             'uuid' => fake()->uuid(),
             'username' => fake()->username(),
-            'password' => Hash::make('password'),
+            'password' => 'password',
             'name' => fake()->name(),
             'role' => fake()->randomElement(['1','2']),
         ];
