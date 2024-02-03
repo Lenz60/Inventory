@@ -32,6 +32,12 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    protected function guard()
+{
+    // specify the guard that should be used for login attempts
+    return Auth::guard('admin');
+}
+
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -39,6 +45,9 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
+
+        // dd( Auth::guard('admin')->attempt($this->only(['username','password'])));
+        // (! Auth::guard('admin')->attempt($this->only([$email,'password'])));
         $this->ensureIsNotRateLimited();
 
 
@@ -55,6 +64,8 @@ class LoginRequest extends FormRequest
         //         'email' => trans('auth.failed'),
         //     ]);
         // }
+
+        // dd($this->all());
 
         RateLimiter::clear($this->throttleKey());
     }

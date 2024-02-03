@@ -37,6 +37,8 @@ const submit = () => {
             {{ status }}
         </div>
 
+        {{ $page.props.auth.user }}
+
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="email" value="Email" />
