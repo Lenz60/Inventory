@@ -5,97 +5,142 @@
                 <h1>This is a page where you can insert and see furniture</h1>
             </div>
             <div class="border-2 border-blue-400 m-5">
-                <h3>Add new data</h3>
+                <h3>Add Furniture</h3>
                 <div class="border-2 border-red-500 flex flex-col m-2">
                     <div
-                        class="border-2 border-purple-500 flex flex-row m-2 p-5"
+                        class="border-2 flex flex-col border-purple-500 m-2 p-5"
                     >
-                        <div
-                            class="border-2 border-green-500 w-[50%] items-center p-2"
-                        >
-                            <div
-                                class="flex flex-row p-2 border-2 border-cyan-300"
-                            >
-                                <h1 class="m-2">Description:</h1>
-                                <input
-                                    type="text"
-                                    placeholder="Type here"
-                                    class="input input-bordered input-primary w-full max-w-xs"
-                                />
-                            </div>
-                            <div
-                                class="flex flex-row p-2 border-2 border-cyan-300"
-                            >
-                                <h1 class="m-2">Description:</h1>
-                                <input
-                                    type="text"
-                                    placeholder="Type here"
-                                    class="input input-bordered input-primary w-full max-w-xs"
-                                />
-                            </div>
-                            <div
-                                class="flex flex-row p-2 border-2 border-cyan-300"
-                            >
-                                <h1 class="m-2">Description:</h1>
-                                <input
-                                    type="text"
-                                    placeholder="Type here"
-                                    class="input input-bordered input-primary w-full max-w-xs"
-                                />
-                            </div>
-                            <div
-                                class="flex flex-row p-2 border-2 border-cyan-300"
-                            >
-                                <h1 class="m-2">Description:</h1>
-                                <input
-                                    type="text"
-                                    placeholder="Type here"
-                                    class="input input-bordered input-primary w-full max-w-xs"
-                                />
-                            </div>
+                        <div class="mb-5">
+                            <button class="btn btn-outline btn-secondary">
+                                Add existing data
+                            </button>
                         </div>
-                        <div
-                            class="border-2 border-green-500 w-[50%] items-center p-2"
-                        >
-                            <div
-                                class="flex flex-row p-2 border-2 border-cyan-300"
-                            >
-                                <h1 class="m-2">Description:</h1>
-                                <input
-                                    type="text"
-                                    placeholder="Type here"
-                                    class="input input-bordered input-primary w-full max-w-xs"
-                                />
+                        <div class="border-2 border-blue-400 p-2 flex flex-col">
+                            <div>
+                                <h1>Add new data</h1>
                             </div>
                             <div
-                                class="flex flex-row p-2 border-2 border-cyan-300"
+                                class="border-2 border-yellow-400 p-2 flex flex-row"
                             >
-                                <h1 class="m-2">Description:</h1>
-                                <input
-                                    type="text"
-                                    placeholder="Type here"
-                                    class="input input-bordered input-primary w-full max-w-xs"
-                                />
-                            </div>
-                            <div
-                                class="flex flex-row p-2 border-2 border-cyan-300"
-                            >
-                                <h1 class="m-2">Description:</h1>
-                                <input
-                                    type="text"
-                                    placeholder="Type here"
-                                    class="input input-bordered input-primary w-full max-w-xs"
-                                />
-                            </div>
-                            <div
-                                class="flex flex-row p-2 border-2 border-cyan-300"
-                            >
-                                <h1 class="m-2">Description:</h1>
-                                <input
-                                    type="text"
-                                    placeholder="Type here"
-                                    class="input input-bordered input-primary w-full max-w-xs"
-                                />
+                                <div
+                                    class="border-2 border-green-500 w-[50%] items-center p-2"
+                                >
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Image :</h1>
+                                        <input
+                                            type="file"
+                                            class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
+                                        />
+                                    </div>
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Code :</h1>
+                                        <input
+                                            type="text"
+                                            placeholder="Type here"
+                                            class="input input-bordered input-primary w-full max-w-xs"
+                                        />
+                                    </div>
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Description :</h1>
+                                        <input
+                                            type="text"
+                                            placeholder="Type here"
+                                            class="input input-bordered input-primary w-full max-w-xs"
+                                        />
+                                    </div>
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Category :</h1>
+                                        <select
+                                            class="select select-md select-primary w-full max-w-xs"
+                                        >
+                                            <option disabled selected>
+                                                Insert category
+                                            </option>
+                                            <option>Indoor</option>
+                                            <option>Outdoor</option>
+                                            <option>Handicraft</option>
+                                            <option>Root</option>
+                                        </select>
+                                    </div>
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Wood Type :</h1>
+                                        <select
+                                            class="select select-md select-primary w-full max-w-xs"
+                                        >
+                                            <option disabled selected>
+                                                Insert wood type
+                                            </option>
+                                            <option>Teak Wood</option>
+                                            <option>Tiger Wood</option>
+                                            <option>Mahogany Wood</option>
+                                            <option>Root</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div
+                                    class="border-2 border-green-500 w-[50%] items-center p-2"
+                                >
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Width :</h1>
+                                        <input
+                                            type="text"
+                                            placeholder="Type here"
+                                            class="input input-bordered input-primary w-full max-w-xs"
+                                        />
+                                    </div>
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Depth :</h1>
+                                        <input
+                                            type="text"
+                                            placeholder="Type here"
+                                            class="input input-bordered input-primary w-full max-w-xs"
+                                        />
+                                    </div>
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Height :</h1>
+                                        <input
+                                            type="text"
+                                            placeholder="Type here"
+                                            class="input input-bordered input-primary w-full max-w-xs"
+                                        />
+                                    </div>
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Stock :</h1>
+                                        <input
+                                            type="text"
+                                            placeholder="Type here"
+                                            class="input input-bordered input-primary w-full max-w-xs"
+                                        />
+                                    </div>
+                                    <div
+                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                    >
+                                        <h1 class="m-2">Price :</h1>
+                                        <input
+                                            type="text"
+                                            placeholder="Type here"
+                                            class="input input-bordered input-primary w-full max-w-xs"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
