@@ -63,7 +63,7 @@
                                             <div class="flex flex-row">
                                                 <input
                                                     type="radio"
-                                                    name="radio-2"
+                                                    name="radioCode"
                                                     class="mb-2 radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
                                                     value="new"
                                                     @change="onChange($event)"
@@ -76,7 +76,7 @@
                                             <div class="flex flex-row">
                                                 <input
                                                     type="radio"
-                                                    name="radio-2"
+                                                    name="radioCode"
                                                     class="radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
                                                     value="exist"
                                                     @change="onChange($event)"
