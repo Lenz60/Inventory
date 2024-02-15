@@ -38,11 +38,54 @@
                                         class="flex flex-row p-2 border-2 border-cyan-300"
                                     >
                                         <h1 class="m-2">Code :</h1>
-                                        <input
-                                            type="text"
-                                            placeholder="Type here"
-                                            class="input input-bordered input-primary w-full max-w-xs"
-                                        />
+                                        <div v-if="radioCode == 'new'">
+                                            <input
+                                                type="text"
+                                                placeholder="Type here"
+                                                class="input input-bordered input-primary w-full max-w-xs"
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <select
+                                                class="select select-md select-primary w-full max-w-xs"
+                                            >
+                                                <option disabled selected>
+                                                    Existing Code
+                                                </option>
+                                                <option>TW-01</option>
+                                                <option>TW-02</option>
+                                                <option>TW-03</option>
+                                                <option>TW-04</option>
+                                            </select>
+                                        </div>
+                                        <!-- Radio Group -->
+                                        <div class="ml-5 flex flex-col">
+                                            <div class="flex flex-row">
+                                                <input
+                                                    type="radio"
+                                                    name="radio-2"
+                                                    class="mb-2 radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
+                                                    value="new"
+                                                    @change="onChange($event)"
+                                                    checked
+                                                />
+                                                <label for="radio" class="ml-2"
+                                                    >New data</label
+                                                >
+                                            </div>
+                                            <div class="flex flex-row">
+                                                <input
+                                                    type="radio"
+                                                    name="radio-2"
+                                                    class="radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
+                                                    value="exist"
+                                                    @change="onChange($event)"
+                                                />
+                                                <label for="radio" class="ml-2"
+                                                    >Existing data</label
+                                                >
+                                            </div>
+                                        </div>
                                     </div>
                                     <div
                                         class="flex flex-row p-2 border-2 border-cyan-300"
@@ -191,12 +234,20 @@
 
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { ref } from "vue";
 export default {
     components: {
         AuthenticatedLayout,
     },
     setup() {
-        return {};
+        const radioCode = ref("new");
+        return { radioCode };
+    },
+    methods: {
+        onChange(event) {
+            this.radioCode = event.target.value;
+            // console.log(this.radioCode);
+        },
     },
 };
 </script>
