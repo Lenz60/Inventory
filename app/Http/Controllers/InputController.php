@@ -14,7 +14,18 @@ class InputController extends Controller
 
     }
 
-    public function create(){
-
+    public function create(Request $request){
+        dd($request);
+        $request -> validate([
+            'image' => "required|file",
+            'description' => "required|string",
+            'category' => "required|string",
+            'woodtype' => "required|string",
+            'width' => "required|string",
+            'height' => "required|string",
+            'depth' => "required|string",
+            'stock' => "required|integer",
+            'price' => "required|integer",
+        ]);
     }
 }

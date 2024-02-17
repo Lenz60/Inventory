@@ -19,172 +19,267 @@
                             <div>
                                 <h1>Add new data</h1>
                             </div>
-                            <div
-                                class="border-2 border-yellow-400 p-2 flex flex-row"
-                            >
+                            <form @submit.prevent="submit">
                                 <div
-                                    class="border-2 border-green-500 w-[50%] items-center p-2"
+                                    class="border-2 border-yellow-400 p-2 flex flex-row"
                                 >
                                     <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                        class="border-2 border-green-500 w-[50%] items-center p-2"
                                     >
-                                        <h1 class="m-2">Image :</h1>
-                                        <input
-                                            type="file"
-                                            class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
-                                        />
-                                    </div>
-                                    <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
-                                    >
-                                        <h1 class="m-2">Code :</h1>
-                                        <div v-if="radioCode == 'new'">
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                        >
+                                            <h1 class="m-2">Image :</h1>
                                             <input
+                                                id="image"
+                                                @change="previewFiles"
+                                                type="file"
+                                                class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
+                                            />
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.image"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                        >
+                                            <h1 class="m-2">Code :</h1>
+                                            <div v-if="radioCode">
+                                                <input
+                                                    id="codeText"
+                                                    v-model="form.codeText"
+                                                    type="text"
+                                                    placeholder="Type here"
+                                                    class="input input-bordered input-primary w-full max-w-xs"
+                                                    required
+                                                />
+                                                <InputError
+                                                    class="mt-2"
+                                                    :message="
+                                                        form.errors.codeText
+                                                    "
+                                                />
+                                            </div>
+                                            <div v-else>
+                                                <select
+                                                    id="codeSelect"
+                                                    v-model="form.codeSelect"
+                                                    class="select select-md select-primary w-full max-w-xs"
+                                                    required
+                                                >
+                                                    <option disabled selected>
+                                                        Existing Code
+                                                    </option>
+                                                    <option>TW-01</option>
+                                                    <option>TW-02</option>
+                                                    <option>TW-03</option>
+                                                    <option>TW-04</option>
+                                                </select>
+                                                <InputError
+                                                    class="mt-2"
+                                                    :message="
+                                                        form.errors.codeSelect
+                                                    "
+                                                />
+                                                <!-- Radio Group -->
+                                            </div>
+                                            <div class="ml-5 flex flex-col">
+                                                <div class="flex flex-row">
+                                                    <input
+                                                        type="radio"
+                                                        name="radioCode"
+                                                        class="mb-2 radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
+                                                        value="new"
+                                                        @change="
+                                                            onChange($event)
+                                                        "
+                                                        checked
+                                                    />
+                                                    <label
+                                                        for="radio"
+                                                        class="ml-2"
+                                                        >New data</label
+                                                    >
+                                                </div>
+                                                <div class="flex flex-row">
+                                                    <input
+                                                        type="radio"
+                                                        name="radioCode"
+                                                        class="radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
+                                                        value="exist"
+                                                        @change="
+                                                            onChange($event)
+                                                        "
+                                                    />
+                                                    <label
+                                                        for="radio"
+                                                        class="ml-2"
+                                                        >Existing data</label
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                        >
+                                            <h1 class="m-2">Description :</h1>
+                                            <input
+                                                id="description"
+                                                v-model="form.description"
                                                 type="text"
                                                 placeholder="Type here"
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
+                                            <InputError
+                                                class="mt-2"
+                                                :message="
+                                                    form.errors.description
+                                                "
+                                            />
                                         </div>
-                                        <div v-else>
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                        >
+                                            <h1 class="m-2">Category :</h1>
                                             <select
+                                                id="category"
+                                                v-model="form.category"
                                                 class="select select-md select-primary w-full max-w-xs"
                                             >
                                                 <option disabled selected>
-                                                    Existing Code
+                                                    Insert category
                                                 </option>
-                                                <option>TW-01</option>
-                                                <option>TW-02</option>
-                                                <option>TW-03</option>
-                                                <option>TW-04</option>
+                                                <option>Indoor</option>
+                                                <option>Outdoor</option>
+                                                <option>Handicraft</option>
+                                                <option>Root</option>
                                             </select>
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.category"
+                                            />
                                         </div>
-                                        <!-- Radio Group -->
-                                        <div class="ml-5 flex flex-col">
-                                            <div class="flex flex-row">
-                                                <input
-                                                    type="radio"
-                                                    name="radioCode"
-                                                    class="mb-2 radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
-                                                    value="new"
-                                                    @change="onChange($event)"
-                                                    checked
-                                                />
-                                                <label for="radio" class="ml-2"
-                                                    >New data</label
-                                                >
-                                            </div>
-                                            <div class="flex flex-row">
-                                                <input
-                                                    type="radio"
-                                                    name="radioCode"
-                                                    class="radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
-                                                    value="exist"
-                                                    @change="onChange($event)"
-                                                />
-                                                <label for="radio" class="ml-2"
-                                                    >Existing data</label
-                                                >
-                                            </div>
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                        >
+                                            <h1 class="m-2">Wood Type :</h1>
+                                            <select
+                                                id="woodtype"
+                                                v-model="form.woodtype"
+                                                class="select select-md select-primary w-full max-w-xs"
+                                            >
+                                                <option disabled selected>
+                                                    Insert wood type
+                                                </option>
+                                                <option>Teak Wood</option>
+                                                <option>Tiger Wood</option>
+                                                <option>Mahogany Wood</option>
+                                                <option>Root</option>
+                                            </select>
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.woodtype"
+                                            />
                                         </div>
                                     </div>
                                     <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                        class="border-2 border-green-500 w-[50%] items-center p-2"
                                     >
-                                        <h1 class="m-2">Description :</h1>
-                                        <input
-                                            type="text"
-                                            placeholder="Type here"
-                                            class="input input-bordered input-primary w-full max-w-xs"
-                                        />
-                                    </div>
-                                    <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
-                                    >
-                                        <h1 class="m-2">Category :</h1>
-                                        <select
-                                            class="select select-md select-primary w-full max-w-xs"
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
-                                            <option disabled selected>
-                                                Insert category
-                                            </option>
-                                            <option>Indoor</option>
-                                            <option>Outdoor</option>
-                                            <option>Handicraft</option>
-                                            <option>Root</option>
-                                        </select>
-                                    </div>
-                                    <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
-                                    >
-                                        <h1 class="m-2">Wood Type :</h1>
-                                        <select
-                                            class="select select-md select-primary w-full max-w-xs"
+                                            <h1 class="m-2">Width :</h1>
+                                            <input
+                                                id="width"
+                                                v-model="form.width"
+                                                type="text"
+                                                placeholder="Type here"
+                                                class="input input-bordered input-primary w-full max-w-xs"
+                                            />
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.width"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
-                                            <option disabled selected>
-                                                Insert wood type
-                                            </option>
-                                            <option>Teak Wood</option>
-                                            <option>Tiger Wood</option>
-                                            <option>Mahogany Wood</option>
-                                            <option>Root</option>
-                                        </select>
+                                            <h1 class="m-2">Depth :</h1>
+                                            <input
+                                                id="depth"
+                                                v-model="form.depth"
+                                                type="text"
+                                                placeholder="Type here"
+                                                class="input input-bordered input-primary w-full max-w-xs"
+                                            />
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.depth"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                        >
+                                            <h1 class="m-2">Height :</h1>
+                                            <input
+                                                id="height"
+                                                v-model="form.height"
+                                                type="text"
+                                                placeholder="Type here"
+                                                class="input input-bordered input-primary w-full max-w-xs"
+                                            />
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.height"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                        >
+                                            <h1 class="m-2">Stock :</h1>
+                                            <input
+                                                id="stock"
+                                                v-model="form.stock"
+                                                type="text"
+                                                placeholder="Type here"
+                                                class="input input-bordered input-primary w-full max-w-xs"
+                                            />
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.stock"
+                                            />
+                                        </div>
+                                        <div
+                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                        >
+                                            <h1 class="m-2">Price :</h1>
+                                            <input
+                                                id="price"
+                                                v-model="form.price"
+                                                type="text"
+                                                placeholder="Type here"
+                                                class="input input-bordered input-primary w-full max-w-xs"
+                                            />
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.price"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                                <div
-                                    class="border-2 border-green-500 w-[50%] items-center p-2"
-                                >
-                                    <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
+                                <div>
+                                    <PrimaryButton
+                                        class="ml-4"
+                                        :class="{
+                                            'opacity-25': form.processing,
+                                        }"
+                                        :disabled="form.processing"
                                     >
-                                        <h1 class="m-2">Width :</h1>
-                                        <input
-                                            type="text"
-                                            placeholder="Type here"
-                                            class="input input-bordered input-primary w-full max-w-xs"
-                                        />
-                                    </div>
-                                    <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
-                                    >
-                                        <h1 class="m-2">Depth :</h1>
-                                        <input
-                                            type="text"
-                                            placeholder="Type here"
-                                            class="input input-bordered input-primary w-full max-w-xs"
-                                        />
-                                    </div>
-                                    <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
-                                    >
-                                        <h1 class="m-2">Height :</h1>
-                                        <input
-                                            type="text"
-                                            placeholder="Type here"
-                                            class="input input-bordered input-primary w-full max-w-xs"
-                                        />
-                                    </div>
-                                    <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
-                                    >
-                                        <h1 class="m-2">Stock :</h1>
-                                        <input
-                                            type="text"
-                                            placeholder="Type here"
-                                            class="input input-bordered input-primary w-full max-w-xs"
-                                        />
-                                    </div>
-                                    <div
-                                        class="flex flex-row p-2 border-2 border-cyan-300"
-                                    >
-                                        <h1 class="m-2">Price :</h1>
-                                        <input
-                                            type="text"
-                                            placeholder="Type here"
-                                            class="input input-bordered input-primary w-full max-w-xs"
-                                        />
-                                    </div>
+                                        Input
+                                    </PrimaryButton>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                     <div class="border-2 border-red-200 m-5 p-5">
@@ -234,19 +329,61 @@
 
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import { Link, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
+import InputError from "@/Components/InputError.vue";
 export default {
     components: {
         AuthenticatedLayout,
+        PrimaryButton,
+        TextInput,
+        InputLabel,
+        InputError,
     },
     setup() {
-        const radioCode = ref("new");
-        return { radioCode };
+        const radioCode = ref(true);
+        const form = useForm({
+            image: "",
+            codeText: "",
+            codeSelect: "",
+            description: "",
+            category: "",
+            woodtype: "",
+            width: "",
+            depth: "",
+            height: "",
+            stock: "",
+            price: "",
+        });
+
+        const submit = () => {
+            form.post(route("input.create"));
+        };
+
+        return { radioCode, submit, form };
     },
     methods: {
+        previewFiles(event) {
+            // console.log(event.target.files[0]);
+            const file = event.target.files;
+            this.form.image = file[0];
+            // this.form.image = "image";
+            // console.log(this.form);
+        },
         onChange(event) {
-            this.radioCode = event.target.value;
-            // console.log(this.radioCode);
+            this.radioCode = !this.radioCode;
+            if (this.radioCode) {
+                this.form.codeText = "";
+                delete this.form.codeSelect;
+            } else {
+                this.form.codeSelect = "";
+                delete this.form.codeText;
+            }
+            console.log(this.radioCode);
+            console.log(this.form);
         },
     },
 };
