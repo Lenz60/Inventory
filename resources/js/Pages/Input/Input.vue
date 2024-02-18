@@ -48,7 +48,7 @@
                                             <div v-if="radioCode">
                                                 <input
                                                     id="codeText"
-                                                    v-model="form.codeText"
+                                                    v-model="form.code"
                                                     type="text"
                                                     placeholder="Type here"
                                                     class="input input-bordered input-primary w-full max-w-xs"
@@ -56,15 +56,13 @@
                                                 />
                                                 <InputError
                                                     class="mt-2"
-                                                    :message="
-                                                        form.errors.codeText
-                                                    "
+                                                    :message="form.errors.code"
                                                 />
                                             </div>
                                             <div v-else>
                                                 <select
                                                     id="codeSelect"
-                                                    v-model="form.codeSelect"
+                                                    v-model="form.code"
                                                     class="select select-md select-primary w-full max-w-xs"
                                                     required
                                                 >
@@ -78,9 +76,7 @@
                                                 </select>
                                                 <InputError
                                                     class="mt-2"
-                                                    :message="
-                                                        form.errors.codeSelect
-                                                    "
+                                                    :message="form.errors.code"
                                                 />
                                                 <!-- Radio Group -->
                                             </div>
@@ -377,10 +373,22 @@ export default {
         const notRootType = ["Indoor", "Outdoor", "Handicraft"];
         const isRoot = ref(false);
         const selectedCategory = ref("");
+        // const form = useForm({
+        //     image: "",
+        //     codeText: "",
+        //     codeSelect: "",
+        //     description: "",
+        //     category: "",
+        //     woodtype: "",
+        //     width: "",
+        //     depth: "",
+        //     height: "",
+        //     stock: "",
+        //     price: "",
+        // });
         const form = useForm({
             image: "",
-            codeText: "",
-            codeSelect: "",
+            code: "",
             description: "",
             category: "",
             woodtype: "",
@@ -395,9 +403,9 @@ export default {
             form.post(route("input.create"));
         };
 
-        if (radioCode) {
-            delete form.codeSelect;
-        }
+        // if (radioCode) {
+        //     delete form.codeSelect;
+        // }
 
         return {
             radioCode,
@@ -419,13 +427,14 @@ export default {
         },
         onChange(event) {
             this.radioCode = !this.radioCode;
-            if (this.radioCode) {
-                this.form.codeText = "";
-                delete this.form.codeSelect;
-            } else {
-                this.form.codeSelect = "";
-                delete this.form.codeText;
-            }
+            // if (this.radioCode) {
+            //     this.form.codeText = "";
+            //     delete this.form.codeSelect;
+            // } else {
+            //     this.form.codeSelect = "";
+            //     delete this.form.codeText;
+            // }
+            this.form.reset("code");
             console.log(this.radioCode);
             console.log(this.form);
         },
