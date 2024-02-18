@@ -145,15 +145,21 @@
                                             <select
                                                 id="category"
                                                 v-model="form.category"
+                                                @change="categoryChange"
                                                 class="select select-md select-primary w-full max-w-xs"
                                             >
-                                                <option disabled selected>
+                                                <option
+                                                    v-for="category in categories"
+                                                >
+                                                    {{ category }}
+                                                </option>
+                                                <!-- <option disabled selected>
                                                     Insert category
                                                 </option>
                                                 <option>Indoor</option>
                                                 <option>Outdoor</option>
                                                 <option>Handicraft</option>
-                                                <option>Root</option>
+                                                <option>Root</option> -->
                                             </select>
                                             <InputError
                                                 class="mt-2"
@@ -169,13 +175,35 @@
                                                 v-model="form.woodtype"
                                                 class="select select-md select-primary w-full max-w-xs"
                                             >
-                                                <option disabled selected>
+                                                <option
+                                                    v-if="isRoot"
+                                                    value="Root"
+                                                >
+                                                    Root
+                                                </option>
+                                                <option
+                                                    v-if="!isRoot"
+                                                    v-for="notRoot in notRootType"
+                                                >
+                                                    {{ notRoot }}
+                                                </option>
+                                                <!-- <div v-if="selectedCategory">
+                                                    <option>Root</option>
+                                                </div>
+                                                <div v-else>
+                                                    <option>Teak Wood</option>
+                                                    <option>Tiger Wood</option>
+                                                    <option>
+                                                        Mahogany Wood
+                                                    </option>
+                                                </div> -->
+                                                <!-- <option disabled selected>
                                                     Insert wood type
                                                 </option>
                                                 <option>Teak Wood</option>
                                                 <option>Tiger Wood</option>
                                                 <option>Mahogany Wood</option>
-                                                <option>Root</option>
+                                                <option>Root</option> -->
                                             </select>
                                             <InputError
                                                 class="mt-2"
@@ -345,6 +373,10 @@ export default {
     },
     setup() {
         const radioCode = ref(true);
+        const categories = ["Indoor", "Outdoor", "Handicraft", "Root"];
+        const notRootType = ["Indoor", "Outdoor", "Handicraft"];
+        const isRoot = ref(false);
+        const selectedCategory = ref("");
         const form = useForm({
             image: "",
             codeText: "",
@@ -363,7 +395,19 @@ export default {
             form.post(route("input.create"));
         };
 
-        return { radioCode, submit, form };
+        if (radioCode) {
+            delete form.codeSelect;
+        }
+
+        return {
+            radioCode,
+            submit,
+            form,
+            categories,
+            selectedCategory,
+            notRootType,
+            isRoot,
+        };
     },
     methods: {
         previewFiles(event) {
@@ -384,6 +428,18 @@ export default {
             }
             console.log(this.radioCode);
             console.log(this.form);
+        },
+        categoryChange(event) {
+            if (event.target.options.selectedIndex > -1) {
+                this.selectedCategory = event.target.value;
+                if (this.selectedCategory == "Root") {
+                    this.isRoot = true;
+                } else {
+                    this.isRoot = false;
+                }
+                console.log(this.isRoot);
+                console.log(this.selectedCategory);
+            }
         },
     },
 };
