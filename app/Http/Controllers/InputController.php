@@ -15,17 +15,19 @@ class InputController extends Controller
     }
 
     public function create(Request $request){
-        dd($request);
+        $validationInteger = "required|integer";
+        $validationString = "required|string";
         $request -> validate([
             'image' => "required|file",
-            'description' => "required|string",
-            'category' => "required|string",
-            'woodtype' => "required|string",
-            'width' => "required|string",
-            'height' => "required|string",
-            'depth' => "required|string",
-            'stock' => "required|integer",
-            'price' => "required|integer",
+            'description' => $validationString,
+            'category' => $validationString,
+            'woodtype' => $validationString,
+            'width' => $validationInteger,
+            'height' => $validationInteger,
+            'depth' => $validationInteger,
+            'stock' => $validationInteger,
+            'price' => $validationInteger,
         ]);
+        dd($request);
     }
 }
