@@ -310,11 +310,11 @@
                                         <td>{{ furniture.description }}</td>
                                         <td>{{ furniture.category }}</td>
                                         <td>{{ furniture.wood_type }}</td>
-                                        <td>{{ furniture.width }}</td>
-                                        <td>{{ furniture.depth }}</td>
-                                        <td>{{ furniture.height }}</td>
+                                        <td>{{ furniture.width }}cm</td>
+                                        <td>{{ furniture.depth }}cm</td>
+                                        <td>{{ furniture.height }}cm</td>
                                         <td>{{ furniture.stock }}</td>
-                                        <td>{{ furniture.price }}</td>
+                                        <td>${{ furniture.price }}</td>
                                         <td>
                                             <button
                                                 class="btn btn-outline btn-info"
