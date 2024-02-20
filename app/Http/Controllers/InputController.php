@@ -27,6 +27,8 @@ class InputController extends Controller
     }
 
     public function create(Request $request){
+
+
         $validationInteger = "required|integer";
         $validationString = "required|string";
         $request -> validate([
@@ -40,6 +42,22 @@ class InputController extends Controller
             'stock' => $validationInteger,
             'price' => $validationInteger,
         ]);
-        dd($request);
+            if($request->category == 'Root'){
+                if($request->woodtype == 'Root'){
+                    $isRoot = true;
+                }else{
+                    $isRoot = false;
+                }
+            }else{
+                $isRoot = false;
+            }
+
+            // if(!$isRoot){
+            //     $request->woodtype->validate('must be Root');
+            // }else{
+
+            // }
+
+        dd($request->all());
     }
 }
