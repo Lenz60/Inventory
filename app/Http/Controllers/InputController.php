@@ -4,13 +4,25 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class InputController extends Controller
 {
     //
     public function index(Request $request){
+        $user = Auth::user();
 
-    return Inertia::render('Input/Input');
+        // dd($user);
+        $furniture = DB::table('furniture')
+        ->get();
+        // dd($furniture);
+
+
+
+    return Inertia::render('Input/Input', [
+        'furnitures' => $furniture,
+    ]);
 
     }
 

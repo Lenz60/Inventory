@@ -10,11 +10,6 @@
                     <div
                         class="border-2 flex flex-col border-purple-500 m-2 p-5"
                     >
-                        <div class="mb-5">
-                            <button class="btn btn-outline btn-secondary">
-                                Add existing data
-                            </button>
-                        </div>
                         <div class="border-2 border-blue-400 p-2 flex flex-col">
                             <div>
                                 <h1>Add new data</h1>
@@ -69,10 +64,11 @@
                                                     <option disabled selected>
                                                         Existing Code
                                                     </option>
-                                                    <option>TW-01</option>
-                                                    <option>TW-02</option>
-                                                    <option>TW-03</option>
-                                                    <option>TW-04</option>
+                                                    <option
+                                                        v-for="furniture in furnitures"
+                                                    >
+                                                        {{ furniture.code }}
+                                                    </option>
                                                 </select>
                                                 <InputError
                                                     class="mt-2"
@@ -149,13 +145,6 @@
                                                 >
                                                     {{ category }}
                                                 </option>
-                                                <!-- <option disabled selected>
-                                                    Insert category
-                                                </option>
-                                                <option>Indoor</option>
-                                                <option>Outdoor</option>
-                                                <option>Handicraft</option>
-                                                <option>Root</option> -->
                                             </select>
                                             <InputError
                                                 class="mt-2"
@@ -183,23 +172,6 @@
                                                 >
                                                     {{ notRoot }}
                                                 </option>
-                                                <!-- <div v-if="selectedCategory">
-                                                    <option>Root</option>
-                                                </div>
-                                                <div v-else>
-                                                    <option>Teak Wood</option>
-                                                    <option>Tiger Wood</option>
-                                                    <option>
-                                                        Mahogany Wood
-                                                    </option>
-                                                </div> -->
-                                                <!-- <option disabled selected>
-                                                    Insert wood type
-                                                </option>
-                                                <option>Teak Wood</option>
-                                                <option>Tiger Wood</option>
-                                                <option>Mahogany Wood</option>
-                                                <option>Root</option> -->
                                             </select>
                                             <InputError
                                                 class="mt-2"
@@ -312,33 +284,51 @@
                                 <!-- head -->
                                 <thead>
                                     <tr>
-                                        <th></th>
-                                        <th>Name</th>
-                                        <th>Job</th>
-                                        <th>Favorite Color</th>
+                                        <th>No</th>
+                                        <th>Image</th>
+                                        <th>Code</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Wood Type</th>
+                                        <th>Width</th>
+                                        <th>Depth</th>
+                                        <th>Height</th>
+                                        <th>Stock</th>
+                                        <th>Price</th>
+                                        <th>Update</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- row 1 -->
-                                    <tr class="hover:bg-neutral">
-                                        <th>1</th>
-                                        <td>Cy Ganderton</td>
-                                        <td>Quality Control Specialist</td>
-                                        <td>Blue</td>
-                                    </tr>
-                                    <!-- row 2 -->
-                                    <tr class="hover:bg-neutral">
-                                        <th>2</th>
-                                        <td>Hart Hagerty</td>
-                                        <td>Desktop Support Technician</td>
-                                        <td>Purple</td>
-                                    </tr>
-                                    <!-- row 3 -->
-                                    <tr class="hover:bg-neutral">
-                                        <th>3</th>
-                                        <td>Brice Swyre</td>
-                                        <td>Tax Accountant</td>
-                                        <td>Red</td>
+                                    <tr
+                                        v-for="(furniture, no) in furnitures"
+                                        class="hover:bg-neutral"
+                                    >
+                                        <td>{{ no + 1 }}</td>
+                                        <td>{{ furniture.image }}</td>
+                                        <td>{{ furniture.code }}</td>
+                                        <td>{{ furniture.description }}</td>
+                                        <td>{{ furniture.category }}</td>
+                                        <td>{{ furniture.wood_type }}</td>
+                                        <td>{{ furniture.width }}</td>
+                                        <td>{{ furniture.depth }}</td>
+                                        <td>{{ furniture.height }}</td>
+                                        <td>{{ furniture.stock }}</td>
+                                        <td>{{ furniture.price }}</td>
+                                        <td>
+                                            <button
+                                                class="btn btn-outline btn-info"
+                                            >
+                                                Update
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                class="btn btn-outline btn-error"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -367,25 +357,16 @@ export default {
         InputLabel,
         InputError,
     },
-    setup() {
+    props: ["furnitures"],
+    setup(props) {
         const radioCode = ref(true);
         const categories = ["Indoor", "Outdoor", "Handicraft", "Root"];
         const notRootType = ["Indoor", "Outdoor", "Handicraft"];
         const isRoot = ref(false);
         const selectedCategory = ref("");
-        // const form = useForm({
-        //     image: "",
-        //     codeText: "",
-        //     codeSelect: "",
-        //     description: "",
-        //     category: "",
-        //     woodtype: "",
-        //     width: "",
-        //     depth: "",
-        //     height: "",
-        //     stock: "",
-        //     price: "",
-        // });
+
+        // console.log(props.furnitures);
+
         const form = useForm({
             image: "",
             code: "",
@@ -403,10 +384,6 @@ export default {
             form.post(route("input.create"));
         };
 
-        // if (radioCode) {
-        //     delete form.codeSelect;
-        // }
-
         return {
             radioCode,
             submit,
@@ -419,21 +396,11 @@ export default {
     },
     methods: {
         previewFiles(event) {
-            // console.log(event.target.files[0]);
             const file = event.target.files;
             this.form.image = file[0];
-            // this.form.image = "image";
-            // console.log(this.form);
         },
         onChange(event) {
             this.radioCode = !this.radioCode;
-            // if (this.radioCode) {
-            //     this.form.codeText = "";
-            //     delete this.form.codeSelect;
-            // } else {
-            //     this.form.codeSelect = "";
-            //     delete this.form.codeText;
-            // }
             this.form.reset("code");
             console.log(this.radioCode);
             console.log(this.form);
