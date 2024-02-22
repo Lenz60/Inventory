@@ -5,14 +5,13 @@
                 <h1>This is a page where you can insert and see furniture</h1>
             </div>
             <div class="border-2 border-blue-400 m-5">
-                <h3>Add Furniture</h3>
                 <div class="border-2 border-red-500 flex flex-col m-2">
                     <div
                         class="border-2 flex flex-col border-purple-500 m-2 p-5"
                     >
                         <div class="border-2 border-blue-400 p-2 flex flex-col">
                             <div>
-                                <h1>Add new data</h1>
+                                <!-- <h1>Add new data</h1> -->
                             </div>
                             <form @submit.prevent="submit">
                                 <div
@@ -265,15 +264,20 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <PrimaryButton
-                                        class="ml-4"
-                                        :class="{
-                                            'opacity-25': form.processing,
-                                        }"
+                                    <button
+                                        class="btn m-4 px-10 btn-primary"
                                         :disabled="form.processing"
                                     >
-                                        Input
-                                    </PrimaryButton>
+                                        <div v-if="form.processing">
+                                            <span
+                                                class="loading loading-spinner loading-sm text-primary"
+                                                >Input</span
+                                            >
+                                        </div>
+                                        <div v-else>
+                                            <span>Input</span>
+                                        </div>
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -318,6 +322,7 @@
                                         <td>
                                             <button
                                                 class="btn btn-outline btn-info"
+                                                @click="toggleUpdateModal"
                                             >
                                                 Update
                                             </button>
@@ -337,7 +342,10 @@
                 </div>
             </div>
         </div>
-        <div class="border-2 border-yellow-300">Text 2</div>
+        <div v-if="showUpdateModal">
+            <UpdateModal @close="toggleUpdateModal()" class="w-full h-full">
+            </UpdateModal>
+        </div>
     </AuthenticatedLayout>
 </template>
 
@@ -346,6 +354,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import UpdateModal from "@/Pages/Input/Modal/Update.vue";
 import { Link, useForm } from "@inertiajs/vue3";
 import { ref } from "vue";
 import InputError from "@/Components/InputError.vue";
@@ -356,6 +365,7 @@ export default {
         TextInput,
         InputLabel,
         InputError,
+        UpdateModal,
     },
     props: ["furnitures"],
     setup(props) {
@@ -364,6 +374,8 @@ export default {
         const notRootType = ["Indoor", "Outdoor", "Handicraft"];
         const isRoot = ref(false);
         const selectedCategory = ref("");
+        // const isLoading = ref(true);
+        const showUpdateModal = ref(false);
 
         // console.log(props.furnitures);
 
@@ -392,6 +404,7 @@ export default {
             selectedCategory,
             notRootType,
             isRoot,
+            showUpdateModal,
         };
     },
     methods: {
@@ -416,6 +429,10 @@ export default {
                 console.log(this.isRoot);
                 console.log(this.selectedCategory);
             }
+        },
+        toggleUpdateModal() {
+            this.showUpdateModal = !this.showUpdateModal;
+            console.log(this.showUpdateModal);
         },
     },
 };
