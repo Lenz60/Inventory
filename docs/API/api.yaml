@@ -97,7 +97,7 @@ paths:
           description: Login successfull
         "405":
           description: Invalid input
-  /:
+  /input:
     get:
       tags:
         - Inventory Dashboard
@@ -109,7 +109,7 @@ paths:
           description: Successful rendered inventory dashboard
         "400":
           description: Failed rendered inventory dashboard
-    put:
+    patch:
       tags:
         - Inventory Dashboard
       summary: Update Inventory
@@ -235,6 +235,23 @@ paths:
           description: Furniture account added
         "405":
           description: Invalid input
+    delete:
+      tags:
+        - Inventory Dashboard
+      summary: Deletes a Furniture
+      description: delete a Furniture
+      operationId: deleteFurniture
+      parameters:
+        - name: uuid(furniture)
+          in: path
+          description: furniture uuid to delete
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        "400":
+          description: Invalid admin id
   /admin/create/:
     post:
       tags:
