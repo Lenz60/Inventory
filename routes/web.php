@@ -41,6 +41,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth:admin')->group(function (){
     Route::get('/input',[InputController::class, 'index'])->name('input.index');
     Route::post('/input',[InputController::class, 'create'])->name('input.create');
+    Route::patch('/input',[InputController::class, 'update'])->name('input.update');
 
 });
 
