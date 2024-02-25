@@ -21,26 +21,31 @@
                                         class="border-2 border-green-500 w-[50%] items-center p-2"
                                     >
                                         <div
-                                            class="flex flex-row p-2 border-2 border-cyan-300"
+                                            class="flex flex-col p-2 border-2 border-cyan-300"
                                         >
-                                            <h1 class="m-2">Image :</h1>
-                                            <input
-                                                id="image"
-                                                @change="previewFiles"
-                                                type="file"
-                                                class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
-                                            />
-                                            <InputError
-                                                class="mt-2"
-                                                :message="form.errors.image"
-                                            />
+                                            <div class="p-5">
+                                                <p>{{ form.image }}</p>
+                                            </div>
+                                            <div class="flex flex-row">
+                                                <h1 class="m-2">Image :</h1>
+                                                <input
+                                                    id="image"
+                                                    @change="setImage"
+                                                    type="file"
+                                                    class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
+                                                />
+                                                <InputError
+                                                    class="mt-2"
+                                                    :message="form.errors.image"
+                                                />
+                                            </div>
                                         </div>
                                         <div
                                             class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
                                             <h1 class="m-2">Code :</h1>
                                             <div v-if="radioCode">
-                                                <input
+                                                <TextInput
                                                     id="codeText"
                                                     v-model="form.code"
                                                     type="text"
@@ -115,7 +120,7 @@
                                             class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
                                             <h1 class="m-2">Description :</h1>
-                                            <input
+                                            <TextInput
                                                 id="description"
                                                 v-model="form.description"
                                                 type="text"
@@ -185,7 +190,7 @@
                                             class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
                                             <h1 class="m-2">Width :</h1>
-                                            <input
+                                            <TextInput
                                                 id="width"
                                                 v-model="form.width"
                                                 type="text"
@@ -201,7 +206,7 @@
                                             class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
                                             <h1 class="m-2">Depth :</h1>
-                                            <input
+                                            <TextInput
                                                 id="depth"
                                                 v-model="form.depth"
                                                 type="text"
@@ -217,7 +222,7 @@
                                             class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
                                             <h1 class="m-2">Height :</h1>
-                                            <input
+                                            <TextInput
                                                 id="height"
                                                 v-model="form.height"
                                                 type="text"
@@ -233,7 +238,7 @@
                                             class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
                                             <h1 class="m-2">Stock :</h1>
-                                            <input
+                                            <TextInput
                                                 id="stock"
                                                 v-model="form.stock"
                                                 type="text"
@@ -249,7 +254,7 @@
                                             class="flex flex-row p-2 border-2 border-cyan-300"
                                         >
                                             <h1 class="m-2">Price :</h1>
-                                            <input
+                                            <TextInput
                                                 id="price"
                                                 v-model="form.price"
                                                 type="text"
@@ -322,7 +327,9 @@
                                         <td>
                                             <button
                                                 class="btn btn-outline btn-info"
-                                                @click="toggleUpdateModal"
+                                                @click="
+                                                    toggleUpdateModal(furniture)
+                                                "
                                             >
                                                 Update
                                             </button>
@@ -343,7 +350,12 @@
             </div>
         </div>
         <div v-if="showUpdateModal">
-            <UpdateModal @close="toggleUpdateModal()" class="w-full h-full">
+            <UpdateModal
+                :Furnitures="furnitures"
+                :SelectedFurniture="furniturePayload"
+                @close="toggleUpdateModal()"
+                class="w-full h-full overflow-auto"
+            >
             </UpdateModal>
         </div>
     </AuthenticatedLayout>
@@ -371,11 +383,12 @@ export default {
     setup(props) {
         const radioCode = ref(true);
         const categories = ["Indoor", "Outdoor", "Handicraft", "Root"];
-        const notRootType = ["Indoor", "Outdoor", "Handicraft"];
+        const notRootType = ["Teak wood", "Tiger wood", "Mahogany wood"];
         const isRoot = ref(false);
         const selectedCategory = ref("");
         // const isLoading = ref(true);
         const showUpdateModal = ref(false);
+        const furniturePayload = ref("");
 
         // console.log(props.furnitures);
 
@@ -405,10 +418,11 @@ export default {
             notRootType,
             isRoot,
             showUpdateModal,
+            furniturePayload,
         };
     },
     methods: {
-        previewFiles(event) {
+        setImage(event) {
             const file = event.target.files;
             this.form.image = file[0];
         },
@@ -430,9 +444,11 @@ export default {
                 console.log(this.selectedCategory);
             }
         },
-        toggleUpdateModal() {
+        toggleUpdateModal(furniture) {
             this.showUpdateModal = !this.showUpdateModal;
-            console.log(this.showUpdateModal);
+            this.furniturePayload = furniture;
+            // console.log(furniture);
+            // console.log(this.showUpdateModal);
         },
     },
 };
