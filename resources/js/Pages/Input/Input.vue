@@ -15,10 +15,12 @@
                                 <div class="p-2 flex flex-row rounded-md">
                                     <div class="w-[50%] items-center p-2">
                                         <div class="flex flex-col p-2">
-                                            <div class="p-5">
+                                            <div v-if="tempUrl" class="p-5">
+                                                <h2 class="m-2">
+                                                    Preview Image
+                                                </h2>
                                                 <img
                                                     class="m-auto"
-                                                    v-if="tempUrl"
                                                     :src="tempUrl"
                                                     alt=""
                                                 />
