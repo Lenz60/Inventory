@@ -292,7 +292,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="bg-primary-content card m-5 p-5">
+                    <div class="bg-primary-content card m-2 p-5">
                         <div class="overflow-x-auto">
                             <table class="table">
                                 <!-- head -->
