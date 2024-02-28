@@ -37,7 +37,7 @@ const submit = () => {
             {{ status }}
         </div>
 
-        {{ $page.props.auth.user }}
+        <!-- {{ $page.props.auth.user }} -->
 
         <form @submit.prevent="submit">
             <div>
