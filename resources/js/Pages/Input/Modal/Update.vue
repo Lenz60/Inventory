@@ -16,18 +16,18 @@
                         >
                             <div class="w-[50%] items-center p-2">
                                 <div class="flex flex-col p-2">
-                                    <div class="p-5">
+                                    <div v-if="tempUrl" class="p-5">
                                         <!-- Makes Check, if open first time, take img url from db and display it -->
                                         <!-- If there is a change in image, change preview to current selected image -->
+                                        <h2 class="m-2">Preview Image</h2>
                                         <img
                                             class="m-auto"
-                                            v-if="tempUrl"
                                             :src="tempUrl"
                                             alt=""
                                         />
                                     </div>
-                                    <div class="flex flex-row">
-                                        <h1 class="m-2">Image :</h1>
+                                    <div class="flex flex-col">
+                                        <h1 class="m-2 text-start">Image</h1>
                                         <input
                                             id="image"
                                             @change="setImage"
@@ -40,74 +40,78 @@
                                         />
                                     </div>
                                 </div>
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Code :</h1>
-                                    <div v-if="radioCode">
-                                        <TextInput
-                                            id="codeText"
-                                            v-model="form.code"
-                                            type="text"
-                                            placeholder="Type here"
-                                            class="input input-bordered input-primary w-full max-w-xs"
-                                            required
-                                        />
-                                        <InputError
-                                            class="mt-2"
-                                            :message="form.errors.code"
-                                        />
+                                <div class="flex flex-col p-2">
+                                    <div>
+                                        <h1 class="m-2 text-start">Code</h1>
                                     </div>
-                                    <div v-else>
-                                        <select
-                                            id="codeSelect"
-                                            v-model="form.code"
-                                            class="select select-md select-primary w-full max-w-xs"
-                                            required
-                                        >
-                                            <option disabled selected>
-                                                Existing Code
-                                            </option>
-                                            <option
-                                                v-for="furniture in Furnitures"
-                                            >
-                                                {{ furniture.code }}
-                                            </option>
-                                        </select>
-                                        <InputError
-                                            class="mt-2"
-                                            :message="form.errors.code"
-                                        />
-                                        <!-- Radio Group -->
-                                    </div>
-                                    <div class="ml-5 flex flex-col">
-                                        <div class="flex flex-row">
-                                            <input
-                                                type="radio"
-                                                name="radioCode"
-                                                class="mb-2 radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
-                                                value="new"
-                                                @change="onChange($event)"
-                                                checked
+                                    <div class="flex flex-row">
+                                        <div v-if="radioCode">
+                                            <TextInput
+                                                id="codeText"
+                                                v-model="form.code"
+                                                type="text"
+                                                placeholder="Type here"
+                                                class="input input-bordered input-primary w-full max-w-xs"
+                                                required
                                             />
-                                            <label for="radio" class="ml-2"
-                                                >New data</label
-                                            >
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.code"
+                                            />
                                         </div>
-                                        <div class="flex flex-row">
-                                            <input
-                                                type="radio"
-                                                name="radioCode"
-                                                class="radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
-                                                value="exist"
-                                                @change="onChange($event)"
-                                            />
-                                            <label for="radio" class="ml-2"
-                                                >Existing data</label
+                                        <div v-else>
+                                            <select
+                                                id="codeSelect"
+                                                v-model="form.code"
+                                                class="select select-md select-primary w-full max-w-xs"
+                                                required
                                             >
+                                                <option disabled selected>
+                                                    Existing Code
+                                                </option>
+                                                <option
+                                                    v-for="furniture in Furnitures"
+                                                >
+                                                    {{ furniture.code }}
+                                                </option>
+                                            </select>
+                                            <InputError
+                                                class="mt-2"
+                                                :message="form.errors.code"
+                                            />
+                                            <!-- Radio Group -->
+                                        </div>
+                                        <div class="ml-5 flex flex-col">
+                                            <div class="flex flex-row">
+                                                <input
+                                                    type="radio"
+                                                    name="radioCode"
+                                                    class="mb-2 radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
+                                                    value="new"
+                                                    @change="onChange($event)"
+                                                    checked
+                                                />
+                                                <label for="radio" class="ml-2"
+                                                    >New data</label
+                                                >
+                                            </div>
+                                            <div class="flex flex-row">
+                                                <input
+                                                    type="radio"
+                                                    name="radioCode"
+                                                    class="radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
+                                                    value="exist"
+                                                    @change="onChange($event)"
+                                                />
+                                                <label for="radio" class="ml-2"
+                                                    >Existing data</label
+                                                >
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Description :</h1>
+                                <div class="flex flex-col p-2">
+                                    <h1 class="m-2 text-start">Description</h1>
                                     <TextInput
                                         id="description"
                                         v-model="form.description"
@@ -120,8 +124,8 @@
                                         :message="form.errors.description"
                                     />
                                 </div>
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Category :</h1>
+                                <div class="flex flex-col p-2">
+                                    <h1 class="m-2 text-start">Category</h1>
                                     <select
                                         id="category"
                                         v-model="form.category"
@@ -137,8 +141,8 @@
                                         :message="form.errors.category"
                                     />
                                 </div>
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Wood Type :</h1>
+                                <div class="flex flex-col p-2">
+                                    <h1 class="m-2 text-start">Wood Type</h1>
                                     <select
                                         id="woodtype"
                                         v-model="form.woodtype"
@@ -161,8 +165,8 @@
                                 </div>
                             </div>
                             <div class="w-[50%] items-center p-2">
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Width :</h1>
+                                <div class="flex flex-col p-2">
+                                    <h1 class="m-2 text-start">Width</h1>
                                     <TextInput
                                         id="width"
                                         v-model="form.width"
@@ -175,8 +179,8 @@
                                         :message="form.errors.width"
                                     />
                                 </div>
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Depth :</h1>
+                                <div class="flex flex-col p-2">
+                                    <h1 class="m-2 text-start">Depth</h1>
                                     <TextInput
                                         id="depth"
                                         v-model="form.depth"
@@ -189,8 +193,8 @@
                                         :message="form.errors.depth"
                                     />
                                 </div>
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Height :</h1>
+                                <div class="flex flex-col p-2">
+                                    <h1 class="m-2 text-start">Height</h1>
                                     <TextInput
                                         id="height"
                                         v-model="form.height"
@@ -203,8 +207,8 @@
                                         :message="form.errors.height"
                                     />
                                 </div>
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Stock :</h1>
+                                <div class="flex flex-col p-2">
+                                    <h1 class="m-2 text-start">Stock</h1>
                                     <TextInput
                                         id="stock"
                                         v-model="form.stock"
@@ -217,8 +221,8 @@
                                         :message="form.errors.stock"
                                     />
                                 </div>
-                                <div class="flex flex-row p-2">
-                                    <h1 class="m-2">Price :</h1>
+                                <div class="flex flex-col p-2">
+                                    <h1 class="m-2 text-start">Price</h1>
                                     <TextInput
                                         id="price"
                                         v-model="form.price"
