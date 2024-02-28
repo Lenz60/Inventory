@@ -1,25 +1,30 @@
 <template>
     <div @click.self="closeModal()" class="backdrop">
         <div
-            class="bg-neutral justify-center items-center text-center w-[90%] h-fit p-5 m-auto mt-[3%] mb-[2%] overflow-auto"
+            class="bg-base-100 justify-center items-center text-center w-[90%] h-fit p-5 m-auto mt-[3%] mb-[2%] overflow-auto rounded-md"
         >
             <slot class="w-fit h-fit">
-                <div class="border-2 border-blue-400 p-2 flex flex-col">
-                    <div>
+                <div class="p-2 flex flex-col">
+                    <div
+                        class="font-semibold text-xl text-neutral-content leading-tight mb-5"
+                    >
                         <h1>Update existing data</h1>
                     </div>
                     <form @submit.prevent="submit">
                         <div
-                            class="border-2 border-yellow-400 p-2 flex flex-row"
+                            class="p-2 flex flex-row card bg-neutral rounded-md"
                         >
-                            <div
-                                class="border-2 border-green-500 w-[50%] items-center p-2"
-                            >
-                                <div
-                                    class="flex flex-col p-2 border-2 border-cyan-300"
-                                >
+                            <div class="w-[50%] items-center p-2">
+                                <div class="flex flex-col p-2">
                                     <div class="p-5">
-                                        <p>{{ form.image }}</p>
+                                        <!-- Makes Check, if open first time, take img url from db and display it -->
+                                        <!-- If there is a change in image, change preview to current selected image -->
+                                        <img
+                                            class="m-auto"
+                                            v-if="tempUrl"
+                                            :src="tempUrl"
+                                            alt=""
+                                        />
                                     </div>
                                     <div class="flex flex-row">
                                         <h1 class="m-2">Image :</h1>
@@ -35,9 +40,7 @@
                                         />
                                     </div>
                                 </div>
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Code :</h1>
                                     <div v-if="radioCode">
                                         <TextInput
@@ -103,9 +106,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Description :</h1>
                                     <TextInput
                                         id="description"
@@ -119,9 +120,7 @@
                                         :message="form.errors.description"
                                     />
                                 </div>
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Category :</h1>
                                     <select
                                         id="category"
@@ -138,9 +137,7 @@
                                         :message="form.errors.category"
                                     />
                                 </div>
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Wood Type :</h1>
                                     <select
                                         id="woodtype"
@@ -163,12 +160,8 @@
                                     />
                                 </div>
                             </div>
-                            <div
-                                class="border-2 border-green-500 w-[50%] items-center p-2"
-                            >
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                            <div class="w-[50%] items-center p-2">
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Width :</h1>
                                     <TextInput
                                         id="width"
@@ -182,9 +175,7 @@
                                         :message="form.errors.width"
                                     />
                                 </div>
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Depth :</h1>
                                     <TextInput
                                         id="depth"
@@ -198,9 +189,7 @@
                                         :message="form.errors.depth"
                                     />
                                 </div>
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Height :</h1>
                                     <TextInput
                                         id="height"
@@ -214,9 +203,7 @@
                                         :message="form.errors.height"
                                     />
                                 </div>
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Stock :</h1>
                                     <TextInput
                                         id="stock"
@@ -230,9 +217,7 @@
                                         :message="form.errors.stock"
                                     />
                                 </div>
-                                <div
-                                    class="flex flex-row p-2 border-2 border-cyan-300"
-                                >
+                                <div class="flex flex-row p-2">
                                     <h1 class="m-2">Price :</h1>
                                     <TextInput
                                         id="price"
@@ -294,6 +279,7 @@ export default {
         const notRootType = ["Teak wood", "Tiger wood", "Mahogany wood"];
         const isRoot = ref(false);
         const selectedCategory = ref("");
+        let tempUrl = ref("");
 
         const form = ref(
             useForm({
@@ -323,6 +309,7 @@ export default {
             notRootType,
             isRoot,
             selectedCategory,
+            tempUrl,
         };
     },
     methods: {
@@ -332,7 +319,8 @@ export default {
         setImage(event) {
             const file = event.target.files;
             this.form.image = file[0];
-            console.log(this.form.image);
+            this.tempUrl = URL.createObjectURL(this.form.image);
+            console.log(this.tempUrl);
         },
         onChange(event) {
             this.radioCode = !this.radioCode;
