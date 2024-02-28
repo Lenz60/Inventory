@@ -16,15 +16,20 @@
                         >
                             <div class="w-[50%] items-center p-2">
                                 <div class="flex flex-col p-2">
-                                    <div v-if="tempUrl" class="p-5">
-                                        <!-- Makes Check, if open first time, take img url from db and display it -->
-                                        <!-- If there is a change in image, change preview to current selected image -->
-                                        <h2 class="m-2">Preview Image</h2>
-                                        <img
-                                            class="m-auto"
-                                            :src="tempUrl"
-                                            alt=""
-                                        />
+                                    <div>
+                                        <div v-if="tempUrl" class="p-5">
+                                            <!-- M̶a̶k̶e̶s̶ C̶h̶e̶c̶k̶,̶ i̶f̶ o̶p̶e̶n̶ f̶i̶r̶s̶t̶ t̶i̶m̶e̶,̶ t̶a̶k̶e̶ i̶m̶g̶ u̶r̶l̶ f̶r̶o̶m̶ d̶b̶ a̶n̶d̶ d̶i̶s̶p̶l̶a̶y̶ i̶t̶ -->
+                                            <!-- I̶f̶ t̶h̶e̶r̶e̶ i̶s̶ a̶ c̶h̶a̶n̶g̶e̶ i̶n̶ i̶m̶a̶g̶e̶,̶ c̶h̶a̶n̶g̶e̶ p̶r̶e̶v̶i̶e̶w̶ t̶o̶ c̶u̶r̶r̶e̶n̶t̶ s̶e̶l̶e̶c̶t̶e̶d̶ i̶m̶a̶g̶e̶ -->
+                                            <h2 class="m-2">Preview Image</h2>
+                                            <img
+                                                class="m-auto"
+                                                :src="tempUrl"
+                                                alt=""
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <h1>{{ form.image }}</h1>
+                                        </div>
                                     </div>
                                     <div class="flex flex-col">
                                         <h1 class="m-2 text-start">Image</h1>
