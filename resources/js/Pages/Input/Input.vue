@@ -174,11 +174,12 @@
                                                 <option
                                                     v-if="isRoot"
                                                     value="Root"
+                                                    selected
                                                 >
                                                     Root
                                                 </option>
                                                 <option
-                                                    v-if="!isRoot"
+                                                    v-else
                                                     v-for="notRoot in notRootType"
                                                 >
                                                     {{ notRoot }}
@@ -198,8 +199,8 @@
                                             <TextInput
                                                 id="width"
                                                 v-model="form.width"
-                                                type="text"
-                                                placeholder="Type here"
+                                                type="number"
+                                                placeholder="0"
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
@@ -214,8 +215,8 @@
                                             <TextInput
                                                 id="depth"
                                                 v-model="form.depth"
-                                                type="text"
-                                                placeholder="Type here"
+                                                type="number"
+                                                placeholder="0"
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
@@ -230,8 +231,8 @@
                                             <TextInput
                                                 id="height"
                                                 v-model="form.height"
-                                                type="text"
-                                                placeholder="Type here"
+                                                type="number"
+                                                placeholder="0"
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
@@ -246,8 +247,8 @@
                                             <TextInput
                                                 id="stock"
                                                 v-model="form.stock"
-                                                type="text"
-                                                placeholder="Type here"
+                                                type="number"
+                                                placeholder="0"
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
@@ -262,8 +263,8 @@
                                             <TextInput
                                                 id="price"
                                                 v-model="form.price"
-                                                type="text"
-                                                placeholder="Type here"
+                                                type="number"
+                                                placeholder="0"
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
@@ -332,9 +333,7 @@
                                         <td>
                                             <button
                                                 class="btn btn-outline btn-info"
-                                                @click="
-                                                    toggleUpdateModal(furniture)
-                                                "
+                                                @click="toggleModal(furniture)"
                                             >
                                                 Update
                                             </button>
@@ -358,7 +357,7 @@
             <UpdateModal
                 :Furnitures="furnitures"
                 :SelectedFurniture="furniturePayload"
-                @close="toggleUpdateModal()"
+                @close="toggleModal()"
                 class="w-full h-full overflow-auto"
             >
             </UpdateModal>
@@ -370,6 +369,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import NumberInput from "@/Components/NumberInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import UpdateModal from "@/Pages/Input/Modal/Update.vue";
 import { Link, useForm } from "@inertiajs/vue3";
@@ -380,6 +380,7 @@ export default {
         AuthenticatedLayout,
         PrimaryButton,
         TextInput,
+        NumberInput,
         InputLabel,
         InputError,
         UpdateModal,
@@ -431,16 +432,21 @@ export default {
         setImage(event) {
             const file = event.target.files;
             this.form.image = file[0];
+            //Preview Image
             this.tempUrl = URL.createObjectURL(this.form.image);
             // console.log(this.tempUrl);
         },
         onChange(event) {
+            //Change between input code manually and existing code
             this.radioCode = !this.radioCode;
             this.form.reset("code");
-            console.log(this.radioCode);
-            console.log(this.form);
+            // console.log(this.radioCode);
+            // console.log(this.form);
         },
         categoryChange(event) {
+            //Check the selected category
+            //if selected category is not root
+            //then remove root from wood type
             if (event.target.options.selectedIndex > -1) {
                 this.selectedCategory = event.target.value;
                 if (this.selectedCategory == "Root") {
@@ -448,15 +454,29 @@ export default {
                 } else {
                     this.isRoot = false;
                 }
-                console.log(this.isRoot);
-                console.log(this.selectedCategory);
+                // console.log(this.isRoot);
+                // console.log(this.selectedCategory);
             }
+            console.log(this.isRoot);
         },
-        toggleUpdateModal(furniture) {
+        toggleModal(furniture) {
             this.showUpdateModal = !this.showUpdateModal;
-            this.furniturePayload = furniture;
-            // console.log(furniture);
-            // console.log(this.showUpdateModal);
+            // Set the furniture data if the modal is open
+            if (this.showUpdateModal) {
+                this.furniturePayload = {
+                    uuid: furniture.uuid,
+                    image: furniture.image,
+                    code: furniture.code,
+                    description: furniture.description,
+                    category: furniture.category,
+                    woodtype: furniture.wood_type,
+                    width: parseInt(furniture.width),
+                    depth: parseInt(furniture.depth),
+                    height: parseInt(furniture.height),
+                    stock: parseInt(furniture.stock),
+                    price: parseFloat(furniture.price),
+                };
+            }
         },
     },
 };
