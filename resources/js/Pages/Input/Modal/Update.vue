@@ -10,7 +10,7 @@
                     >
                         <h1>Update existing data</h1>
                     </div>
-                    <form @submit.prevent="submit">
+                    <form @submit.prevent="update">
                         <div
                             class="p-2 flex flex-row card bg-neutral rounded-md"
                         >
@@ -22,13 +22,16 @@
                                             <!-- I̶f̶ t̶h̶e̶r̶e̶ i̶s̶ a̶ c̶h̶a̶n̶g̶e̶ i̶n̶ i̶m̶a̶g̶e̶,̶ c̶h̶a̶n̶g̶e̶ p̶r̶e̶v̶i̶e̶w̶ t̶o̶ c̶u̶r̶r̶e̶n̶t̶ s̶e̶l̶e̶c̶t̶e̶d̶ i̶m̶a̶g̶e̶ -->
                                             <h2 class="m-2">Preview Image</h2>
                                             <img
-                                                class="m-auto"
+                                                class="m-auto rounded-md border-2 border-primary p-2"
                                                 :src="tempUrl"
                                                 alt=""
                                             />
                                         </div>
                                         <div v-else>
-                                            <h1>{{ form.image }}</h1>
+                                            <!-- Change to img later -->
+                                            <h1>
+                                                {{ form.image }}
+                                            </h1>
                                         </div>
                                     </div>
                                     <div class="flex flex-col">
@@ -153,7 +156,11 @@
                                         v-model="form.woodtype"
                                         class="select select-md select-primary w-full max-w-xs"
                                     >
-                                        <option v-if="isRoot" value="Root">
+                                        <option
+                                            v-if="isRoot"
+                                            value="Root"
+                                            selected
+                                        >
                                             Root
                                         </option>
                                         <option
@@ -172,12 +179,13 @@
                             <div class="w-[50%] items-center p-2">
                                 <div class="flex flex-col p-2">
                                     <h1 class="m-2 text-start">Width</h1>
-                                    <TextInput
+                                    <NumberInput
                                         id="width"
                                         v-model="form.width"
-                                        type="text"
+                                        type="number"
                                         placeholder="Type here"
                                         class="input input-bordered input-primary w-full max-w-xs"
+                                        required
                                     />
                                     <InputError
                                         class="mt-2"
@@ -186,12 +194,13 @@
                                 </div>
                                 <div class="flex flex-col p-2">
                                     <h1 class="m-2 text-start">Depth</h1>
-                                    <TextInput
+                                    <NumberInput
                                         id="depth"
                                         v-model="form.depth"
-                                        type="text"
+                                        type="number"
                                         placeholder="Type here"
                                         class="input input-bordered input-primary w-full max-w-xs"
+                                        required
                                     />
                                     <InputError
                                         class="mt-2"
@@ -200,12 +209,13 @@
                                 </div>
                                 <div class="flex flex-col p-2">
                                     <h1 class="m-2 text-start">Height</h1>
-                                    <TextInput
+                                    <NumberInput
                                         id="height"
                                         v-model="form.height"
-                                        type="text"
+                                        type="number"
                                         placeholder="Type here"
                                         class="input input-bordered input-primary w-full max-w-xs"
+                                        required
                                     />
                                     <InputError
                                         class="mt-2"
@@ -214,12 +224,13 @@
                                 </div>
                                 <div class="flex flex-col p-2">
                                     <h1 class="m-2 text-start">Stock</h1>
-                                    <TextInput
+                                    <NumberInput
                                         id="stock"
                                         v-model="form.stock"
-                                        type="text"
+                                        type="number"
                                         placeholder="Type here"
                                         class="input input-bordered input-primary w-full max-w-xs"
+                                        required
                                     />
                                     <InputError
                                         class="mt-2"
@@ -228,12 +239,13 @@
                                 </div>
                                 <div class="flex flex-col p-2">
                                     <h1 class="m-2 text-start">Price</h1>
-                                    <TextInput
+                                    <NumberInput
                                         id="price"
                                         v-model="form.price"
-                                        type="text"
+                                        type="number"
                                         placeholder="Type here"
                                         class="input input-bordered input-primary w-full max-w-xs"
+                                        required
                                     />
                                     <InputError
                                         class="mt-2"
@@ -257,6 +269,12 @@
                                     <span>Update</span>
                                 </div>
                             </button>
+                            <p
+                                v-if="form.recentlySuccessful"
+                                class="text-sm text-neutral-content"
+                            >
+                                Saved.
+                            </p>
                         </div>
                     </form>
                 </div>
@@ -269,16 +287,19 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
+import NumberInput from "@/Components/NumberInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import InputError from "@/Components/InputError.vue";
+import { watch } from "vue";
 export default {
     props: ["SelectedFurniture", "Furnitures"],
     components: {
         AuthenticatedLayout,
         PrimaryButton,
         TextInput,
+        NumberInput,
         InputLabel,
         InputError,
     },
@@ -290,25 +311,38 @@ export default {
         const selectedCategory = ref("");
         let tempUrl = ref("");
 
-        const form = ref(
-            useForm({
-                image: props.SelectedFurniture.image,
-                code: props.SelectedFurniture.code,
-                description: props.SelectedFurniture.description,
-                category: props.SelectedFurniture.category,
-                woodtype: props.SelectedFurniture.wood_type,
-                width: props.SelectedFurniture.width,
-                depth: props.SelectedFurniture.width,
-                height: props.SelectedFurniture.height,
-                stock: props.SelectedFurniture.stock,
-                price: props.SelectedFurniture.price,
-            })
-        );
+        // Declare props as the existing values of the input field
+        let form = useForm({
+            uuid: props.SelectedFurniture.uuid,
+            image: props.SelectedFurniture.image,
+            code: props.SelectedFurniture.code,
+            description: props.SelectedFurniture.description,
+            category: props.SelectedFurniture.category,
+            woodtype: props.SelectedFurniture.woodtype,
+            width: parseInt(props.SelectedFurniture.width),
+            depth: parseInt(props.SelectedFurniture.width),
+            height: parseInt(props.SelectedFurniture.height),
+            stock: parseInt(props.SelectedFurniture.stock),
+            price: parseFloat(props.SelectedFurniture.price),
+        });
 
-        console.log(props.SelectedFurniture.wood_type);
+        // console.log(props.SelectedFurniture.woodtype);
 
-        const submit = () => {
-            form.post(route("input.update"));
+        const update = () => {
+            router.post(route("input.update"), {
+                _method: "patch",
+                uuid: form.uuid,
+                image: form.image,
+                code: form.code,
+                description: form.description,
+                category: form.category,
+                woodtype: form.woodtype,
+                width: form.width,
+                depth: form.depth,
+                height: form.height,
+                stock: form.stock,
+                price: form.price,
+            });
         };
 
         return {
@@ -319,6 +353,7 @@ export default {
             isRoot,
             selectedCategory,
             tempUrl,
+            update,
         };
     },
     methods: {
@@ -326,18 +361,20 @@ export default {
             this.$emit("close");
         },
         setImage(event) {
-            const file = event.target.files;
-            this.form.image = file[0];
-            this.tempUrl = URL.createObjectURL(this.form.image);
-            console.log(this.tempUrl);
+            let file = event.target.files[0];
+            this.form.image = file;
+            //Preview Image
+            this.tempUrl = URL.createObjectURL(file);
         },
         onChange(event) {
+            //Change between input code manually and existing code
             this.radioCode = !this.radioCode;
             this.form.reset("code");
-            console.log(this.radioCode);
-            console.log(this.form);
         },
         categoryChange(event) {
+            //Check the selected category
+            //if selected category is not root
+            //then remove root from wood type
             if (event.target.options.selectedIndex > -1) {
                 this.selectedCategory = event.target.value;
                 if (this.selectedCategory == "Root") {
@@ -345,8 +382,6 @@ export default {
                 } else {
                     this.isRoot = false;
                 }
-                console.log(this.isRoot);
-                console.log(this.selectedCategory);
             }
         },
     },
