@@ -6,6 +6,8 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\InputUpdateRequest;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class InputController extends Controller
 {
@@ -46,16 +48,9 @@ class InputController extends Controller
         dd($request->all());
     }
 
-    public function checkRoot($request){
-        if($request->category == 'Root'){
-            if($request->woodtype == 'Root'){
-                $isRoot = true;
-            }else{
-                $isRoot = false;
-            }
-        }else{
-            $isRoot = false;
-        }
-        return $isRoot;
+    public function update(Request $request){
+
+        dd($request->all());
+        // return Redirect::route('input.update');
     }
 }
