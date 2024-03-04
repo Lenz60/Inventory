@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\ProfileController;
 
@@ -44,6 +45,10 @@ Route::middleware('auth:admin')->group(function (){
     Route::patch('/input',[InputController::class, 'update'])->name('input.update');
     Route::delete('/input',[InputController::class, 'delete'])->name('input.delete');
 
+});
+
+Route::middleware('auth:admin')->group(function(){
+    Route::get('/manage', [AdminController::class, 'manageIndex'])->name('manage.index');
 });
 
 Route::middleware('auth:admin')->group(function () {
