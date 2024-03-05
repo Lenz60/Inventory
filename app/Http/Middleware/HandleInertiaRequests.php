@@ -36,6 +36,11 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user ? $user->only(['uuid','role','name']) : null,
                 // 'admin' => $request->admin()
             ],
+            'flash' => function () use ($request){
+                return [
+                    'message' => $request->session()->get('message'),
+                ];
+            }
         ];
     }
 }
