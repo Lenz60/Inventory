@@ -9,7 +9,7 @@
                     <div class="bg-info-content flex flex-col m-2 p-5 card">
                         <div class="p-2 flex flex-col">
                             <div>
-                                <!-- <h1>Add new data</h1> -->
+                                <h1>Input new furnitures</h1>
                             </div>
                             <form @submit.prevent="submit">
                                 <div class="p-2 flex flex-row rounded-md">
