@@ -13,7 +13,7 @@ class InputController extends Controller
 {
     //
     public function index(Request $request){
-        $user = Auth::user();
+        // $user = Auth::user();
 
         // dd($user);
         $furniture = DB::table('furniture')
