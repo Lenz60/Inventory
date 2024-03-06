@@ -21,6 +21,7 @@ class Furniture extends Model
 
     protected $fillable = [
         'uuid',
+        'image',
         'code',
         'description',
         'category',
@@ -29,5 +30,6 @@ class Furniture extends Model
         'depth',
         'height',
         'price',
+        'stock'
     ];
 }
