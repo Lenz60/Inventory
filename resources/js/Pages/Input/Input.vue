@@ -341,6 +341,11 @@
                                         <td>
                                             <button
                                                 class="btn btn-outline btn-error"
+                                                @click="
+                                                    deleteSelected(
+                                                        furniture.uuid
+                                                    )
+                                                "
                                             >
                                                 Delete
                                             </button>
@@ -418,7 +423,7 @@ export default {
 
         const submit = () => {
             form.post(route("input.create"), {
-                onFinish: () => form.reset(),
+                // onFinish: () => form.reset(),
             });
         };
 
@@ -431,6 +436,14 @@ export default {
                     timer: 1500,
                 });
                 router.get(route("input.index"));
+            } else if (usePage().props.flash.message == "delete:200") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Furniture deleted successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                // router.get(route("input.index"));
             }
         });
 
@@ -497,6 +510,13 @@ export default {
                     price: parseFloat(furniture.price),
                 };
             }
+        },
+        deleteSelected($uuid) {
+            // console.log($uuid);
+            router.post(route("input.delete"), {
+                _method: "delete",
+                uuid: $uuid,
+            });
         },
     },
 };
