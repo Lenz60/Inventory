@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Furniture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,27 @@ class InputController extends Controller
 
     public function create(Request $request){
 
-        $this->validateInput($request,'input');
+
+
+        $check = $this->validateInput($request,'input');
+        // dd($request->all());
+        // dd($request->image->getClientOriginalName());
+        // dd(fake()->uuid());
+        if($check){
+            Furniture::create ([
+                'uuid' => fake()->uuid(),
+                'image' => $request->image->getClientOriginalName(),
+                'code' => $request->code,
+                'description' => $request->description,
+                'category' => $request->category,
+                'wood_type' => $request->woodtype,
+                'width' => $request->width,
+                'depth' => $request->depth,
+                'height' => $request->height,
+                'stock' => $request->stock,
+                'price' => $request->price,
+            ]);
+        }
         return redirect()->back()->with('message', 'input:200');
     }
 
@@ -71,5 +92,13 @@ class InputController extends Controller
                     'sPrice' => $validationInteger,
             ]);
         }
+    }
+    public function delete(Request $request){
+        $deletedFurniture = Furniture::find($request->uuid);
+        $deletedFurniture->delete();
+
+        //create failsafe here if uuid is not valid or not exists
+        //if uuid is not exists then send message that the uuid is invalid
+        return redirect()->back()->with('message', 'delete:200');
     }
 }
