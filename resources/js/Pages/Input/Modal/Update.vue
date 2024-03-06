@@ -44,7 +44,7 @@
                                         />
                                         <InputError
                                             class="mt-2"
-                                            :message="form.errors.image"
+                                            :message="Errors.sImage"
                                         />
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                                             />
                                             <InputError
                                                 class="mt-2"
-                                                :message="form.errors.code"
+                                                :message="Errors.sCode"
                                             />
                                         </div>
                                         <div v-else>
@@ -85,7 +85,7 @@
                                             </select>
                                             <InputError
                                                 class="mt-2"
-                                                :message="form.errors.code"
+                                                :message="Errors.sCode"
                                             />
                                             <!-- Radio Group -->
                                         </div>
@@ -129,7 +129,7 @@
                                     />
                                     <InputError
                                         class="mt-2"
-                                        :message="form.errors.description"
+                                        :message="Errors.sDescription"
                                     />
                                 </div>
                                 <div class="flex flex-col p-2">
@@ -146,7 +146,7 @@
                                     </select>
                                     <InputError
                                         class="mt-2"
-                                        :message="form.errors.category"
+                                        :message="Errors.sCategory"
                                     />
                                 </div>
                                 <div class="flex flex-col p-2">
@@ -172,7 +172,7 @@
                                     </select>
                                     <InputError
                                         class="mt-2"
-                                        :message="form.errors.woodtype"
+                                        :message="Errors.sWoodtype"
                                     />
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
                                     />
                                     <InputError
                                         class="mt-2"
-                                        :message="form.errors.width"
+                                        :message="Errors.sWidth"
                                     />
                                 </div>
                                 <div class="flex flex-col p-2">
@@ -204,7 +204,7 @@
                                     />
                                     <InputError
                                         class="mt-2"
-                                        :message="form.errors.depth"
+                                        :message="Errors.sDepth"
                                     />
                                 </div>
                                 <div class="flex flex-col p-2">
@@ -219,7 +219,7 @@
                                     />
                                     <InputError
                                         class="mt-2"
-                                        :message="form.errors.height"
+                                        :message="Errors.sHeight"
                                     />
                                 </div>
                                 <div class="flex flex-col p-2">
@@ -234,7 +234,7 @@
                                     />
                                     <InputError
                                         class="mt-2"
-                                        :message="form.errors.stock"
+                                        :message="Errors.sStock"
                                     />
                                 </div>
                                 <div class="flex flex-col p-2">
@@ -249,7 +249,7 @@
                                     />
                                     <InputError
                                         class="mt-2"
-                                        :message="form.errors.price"
+                                        :message="Errors.sPrice"
                                     />
                                 </div>
                             </div>
@@ -289,12 +289,13 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { Link, useForm, router } from "@inertiajs/vue3";
+import { Link, useForm, router, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import InputError from "@/Components/InputError.vue";
-import { watch } from "vue";
+import { onUpdated } from "vue";
+import Swal from "sweetalert2";
 export default {
-    props: ["SelectedFurniture", "Furnitures"],
+    props: ["SelectedFurniture", "Furnitures", "message", "Errors"],
     components: {
         AuthenticatedLayout,
         PrimaryButton,
@@ -303,7 +304,7 @@ export default {
         InputLabel,
         InputError,
     },
-    setup(props) {
+    setup(props, context) {
         const radioCode = ref(true);
         const categories = ["Indoor", "Outdoor", "Handicraft", "Root"];
         const notRootType = ["Teak wood", "Tiger wood", "Mahogany wood"];
@@ -328,22 +329,41 @@ export default {
 
         // console.log(props.SelectedFurniture.woodtype);
 
+        console.log(props.Errors);
+
+        // console.log(props.message);
+
         const update = () => {
             router.post(route("input.update"), {
                 _method: "patch",
-                uuid: form.uuid,
-                image: form.image,
-                code: form.code,
-                description: form.description,
-                category: form.category,
-                woodtype: form.woodtype,
-                width: form.width,
-                depth: form.depth,
-                height: form.height,
-                stock: form.stock,
-                price: form.price,
+                sUuid: form.uuid,
+                sImage: form.image,
+                sCode: form.code,
+                sDescription: form.description,
+                sCategory: form.category,
+                sWoodtype: form.woodtype,
+                sWidth: form.width,
+                sDepth: form.depth,
+                sHeight: form.height,
+                sStock: form.stock,
+                sPrice: form.price,
             });
         };
+
+        // let msg = usePage().props.flash.message;
+
+        onUpdated(() => {
+            // console.log(props.errors);
+            if (usePage().props.flash.message == "update:200") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Furniture updated successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                router.get(route("input.index"));
+            }
+        });
 
         return {
             form,

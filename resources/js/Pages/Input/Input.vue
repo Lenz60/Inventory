@@ -196,7 +196,7 @@
                                             <h1 class="m-2 text-start">
                                                 Width
                                             </h1>
-                                            <TextInput
+                                            <NumberInput
                                                 id="width"
                                                 v-model="form.width"
                                                 type="number"
@@ -212,7 +212,7 @@
                                             <h1 class="m-2 text-start">
                                                 Depth
                                             </h1>
-                                            <TextInput
+                                            <NumberInput
                                                 id="depth"
                                                 v-model="form.depth"
                                                 type="number"
@@ -228,7 +228,7 @@
                                             <h1 class="m-2 text-start">
                                                 Height
                                             </h1>
-                                            <TextInput
+                                            <NumberInput
                                                 id="height"
                                                 v-model="form.height"
                                                 type="number"
@@ -244,7 +244,7 @@
                                             <h1 class="m-2 text-start">
                                                 Stock
                                             </h1>
-                                            <TextInput
+                                            <NumberInput
                                                 id="stock"
                                                 v-model="form.stock"
                                                 type="number"
@@ -260,7 +260,7 @@
                                             <h1 class="m-2 text-start">
                                                 Price
                                             </h1>
-                                            <TextInput
+                                            <NumberInput
                                                 id="price"
                                                 v-model="form.price"
                                                 type="number"
@@ -357,6 +357,7 @@
             <UpdateModal
                 :Furnitures="furnitures"
                 :SelectedFurniture="furniturePayload"
+                :Errors="errors"
                 @close="toggleModal()"
                 class="w-full h-full overflow-auto"
             >
@@ -372,9 +373,12 @@ import TextInput from "@/Components/TextInput.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import UpdateModal from "@/Pages/Input/Modal/Update.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm, usePage, router } from "@inertiajs/vue3";
+import Swal from "sweetalert2";
 import { ref } from "vue";
 import InputError from "@/Components/InputError.vue";
+import { onUpdated } from "vue";
+import { all } from "axios";
 export default {
     components: {
         AuthenticatedLayout,
@@ -385,7 +389,7 @@ export default {
         InputError,
         UpdateModal,
     },
-    props: ["furnitures"],
+    props: ["furnitures", "errors"],
     setup(props) {
         const radioCode = ref(true);
         const categories = ["Indoor", "Outdoor", "Handicraft", "Root"];
@@ -396,6 +400,7 @@ export default {
         const showUpdateModal = ref(false);
         const furniturePayload = ref("");
         let tempUrl = ref("");
+        // const errors = ref(props.errors);
         // console.log(props.furnitures);
 
         const form = useForm({
@@ -404,16 +409,30 @@ export default {
             description: "",
             category: "",
             woodtype: "",
-            width: "",
-            depth: "",
-            height: "",
-            stock: "",
-            price: "",
+            width: 0,
+            depth: 0,
+            height: 0,
+            stock: 0,
+            price: 0,
         });
 
         const submit = () => {
-            form.post(route("input.create"));
+            form.post(route("input.create"), {
+                onFinish: () => form.reset(),
+            });
         };
+
+        onUpdated(() => {
+            if (usePage().props.flash.message == "input:200") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Furniture inputed successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                router.get(route("input.index"));
+            }
+        });
 
         return {
             radioCode,
@@ -462,6 +481,7 @@ export default {
         toggleModal(furniture) {
             this.showUpdateModal = !this.showUpdateModal;
             // Set the furniture data if the modal is open
+            // props.errors.reset();
             if (this.showUpdateModal) {
                 this.furniturePayload = {
                     uuid: furniture.uuid,
