@@ -4,9 +4,9 @@
             <div class="text-xl text-neutral-content leading-tight m-5">
                 <h1>Furniture Input</h1>
             </div>
-            <div class="m-5 p-3 bg-neutral card">
+            <div class="m-5 p-3 bg-base-300 card">
                 <div class="flex flex-col m-2">
-                    <div class="bg-info-content flex flex-col m-2 p-5 card">
+                    <div class="bg-primary-content flex flex-col m-2 p-5 card">
                         <div class="p-2 flex flex-col">
                             <div>
                                 <h1>Input new furnitures</h1>
@@ -36,7 +36,7 @@
                                                     class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
                                                 />
                                                 <InputError
-                                                    class="mt-2"
+                                                    class="mt-2 text-start"
                                                     :message="form.errors.image"
                                                 />
                                             </div>
@@ -56,7 +56,7 @@
                                                         required
                                                     />
                                                     <InputError
-                                                        class="mt-2"
+                                                        class="mt-2 text-start"
                                                         :message="
                                                             form.errors.code
                                                         "
@@ -82,7 +82,7 @@
                                                         </option>
                                                     </select>
                                                     <InputError
-                                                        class="mt-2"
+                                                        class="mt-2 text-start"
                                                         :message="
                                                             form.errors.code
                                                         "
@@ -135,7 +135,7 @@
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
-                                                class="mt-2"
+                                                class="mt-2 text-start"
                                                 :message="
                                                     form.errors.description
                                                 "
@@ -158,7 +158,7 @@
                                                 </option>
                                             </select>
                                             <InputError
-                                                class="mt-2"
+                                                class="mt-2 text-start"
                                                 :message="form.errors.category"
                                             />
                                         </div>
@@ -186,7 +186,7 @@
                                                 </option>
                                             </select>
                                             <InputError
-                                                class="mt-2"
+                                                class="mt-2 text-start"
                                                 :message="form.errors.woodtype"
                                             />
                                         </div>
@@ -204,7 +204,7 @@
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
-                                                class="mt-2"
+                                                class="mt-2 text-start"
                                                 :message="form.errors.width"
                                             />
                                         </div>
@@ -220,7 +220,7 @@
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
-                                                class="mt-2"
+                                                class="mt-2 text-start"
                                                 :message="form.errors.depth"
                                             />
                                         </div>
@@ -236,7 +236,7 @@
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
-                                                class="mt-2"
+                                                class="mt-2 text-start"
                                                 :message="form.errors.height"
                                             />
                                         </div>
@@ -252,7 +252,7 @@
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
-                                                class="mt-2"
+                                                class="mt-2 text-start"
                                                 :message="form.errors.stock"
                                             />
                                         </div>
@@ -268,7 +268,7 @@
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
-                                                class="mt-2"
+                                                class="mt-2 text-start"
                                                 :message="form.errors.price"
                                             />
                                         </div>

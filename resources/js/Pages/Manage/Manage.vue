@@ -9,11 +9,11 @@
                 <h1>Admin Management</h1>
             </div>
             <div class="w-full sm:px-6 lg:px-8">
-                <div class="bg-neutral overflow-hidden card">
+                <div class="bg-base-300 overflow-hidden card">
                     <div class="flex flex-col p-2">
                         <form @submit.prevent="submit">
                             <div
-                                class="bg-info-content flex flex-col card m-2 p-5"
+                                class="bg-primary-content flex flex-col card m-2 p-5"
                             >
                                 <h2 class="text-center">Create new admin</h2>
                                 <div class="w-full flex flex-row">

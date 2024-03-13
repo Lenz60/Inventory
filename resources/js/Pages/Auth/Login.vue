@@ -41,34 +41,47 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Username" />
+                <InputLabel
+                    class="text-primary-content"
+                    for="email"
+                    value="Username"
+                />
 
                 <TextInput
                     id="username"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-md"
                     v-model="form.username"
                     required
                     autofocus
-                    autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.username" />
+                <InputError
+                    class="mt-2 text-red-600"
+                    :message="form.errors.username"
+                />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel
+                    class="text-primary-content"
+                    for="password"
+                    value="Password"
+                />
 
                 <TextInput
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-md"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError
+                    class="mt-2 text-red-600"
+                    :message="form.errors.password"
+                />
             </div>
 
             <!-- <div class="block mt-4">
@@ -88,7 +101,7 @@ const submit = () => {
                 </Link> -->
 
                 <PrimaryButton
-                    class="ms-4"
+                    class="ms-4 bg-secondary"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >

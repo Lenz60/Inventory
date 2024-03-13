@@ -11,7 +11,7 @@ const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
-    <div>
+    <div data-theme="halloween">
         <div class="min-h-screen">
             <nav class="border-b border-gray-400">
                 <!-- Primary Navigation Menu -->
