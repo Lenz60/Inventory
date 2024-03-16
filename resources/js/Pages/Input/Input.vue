@@ -1,5 +1,6 @@
 <template>
     <AuthenticatedLayout>
+        <Head title="Inventory input" />
         <div class="flex flex-col text-center" data-theme="halloween">
             <div class="text-xl text-neutral-content leading-tight m-5">
                 <h1>Furniture Input</h1>
@@ -404,13 +405,14 @@ import TextInput from "@/Components/TextInput.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import UpdateModal from "@/Pages/Input/Modal/Update.vue";
-import { Link, useForm, usePage, router } from "@inertiajs/vue3";
+import { Link, useForm, usePage, router, Head } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
 import { ref, watch, computed } from "vue";
 import InputError from "@/Components/InputError.vue";
 import { onUpdated } from "vue";
 export default {
     components: {
+        Head,
         AuthenticatedLayout,
         PrimaryButton,
         TextInput,

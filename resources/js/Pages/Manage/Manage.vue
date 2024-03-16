@@ -1,5 +1,5 @@
 <template>
-    <Head title="Manage" />
+    <Head title="Manage admin" />
 
     <AuthenticatedLayout>
         <div class="flex flex-col">
