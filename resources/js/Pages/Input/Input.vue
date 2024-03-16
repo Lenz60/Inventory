@@ -566,14 +566,30 @@ export default {
             }
         },
         deleteSelected($uuid) {
-            // console.log($uuid);
-            router.post(route("input.delete"), {
-                _method: "delete",
-                uuid: $uuid,
+            Swal.fire({
+                title: "Are you sure?",
+                text: "The selected item will be deleted",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#FF8F00",
+                cancelButtonColor: "#F35248",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.post(route("input.delete"), {
+                        _method: "delete",
+                        uuid: $uuid,
+                    });
+                }
             });
+            // console.log($uuid);
         },
     },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.swal-button {
+    color: #131616;
+}
+</style>
