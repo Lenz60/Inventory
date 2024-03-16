@@ -342,7 +342,7 @@
                                 </thead>
                                 <tbody>
                                     <tr
-                                        v-for="(furniture, no) in furnitures"
+                                        v-for="(furniture, no) in filteredItems"
                                         class="hover:bg-neutral"
                                     >
                                         <td>{{ no + 1 }}</td>
@@ -406,7 +406,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import UpdateModal from "@/Pages/Input/Modal/Update.vue";
 import { Link, useForm, usePage, router } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import InputError from "@/Components/InputError.vue";
 import { onUpdated } from "vue";
 export default {
@@ -475,9 +475,29 @@ export default {
             }
         });
 
-        watch(search, (value) => {
-            router.get("/input/", { search: value });
+        // console.log(props.furnitures.description);
+
+        const filteredItems = computed(() => {
+            return props.furnitures.filter(
+                (furniture) =>
+                    furniture.description
+                        .toLowerCase()
+                        .includes(search.value.toLowerCase()) ||
+                    furniture.category
+                        .toLowerCase()
+                        .includes(search.value.toLowerCase()) ||
+                    furniture.code
+                        .toLowerCase()
+                        .includes(search.value.toLowerCase()) ||
+                    furniture.wood_type
+                        .toLowerCase()
+                        .includes(search.value.toLowerCase())
+            );
         });
+
+        // watch(search, (value) => {
+        //     router.get("/input/", { search: value });
+        // });
 
         return {
             radioCode,
@@ -491,6 +511,7 @@ export default {
             furniturePayload,
             tempUrl,
             search,
+            filteredItems,
         };
     },
     methods: {

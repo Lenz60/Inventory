@@ -27,10 +27,6 @@ class InputController extends Controller
 
     return Inertia::render('Input/Input', [
         'furnitures' => $furniture,
-        'tags' => Tag::query()
-                        ->when($request->input('search'), function($query, $search) {
-                            $query->where('description','like', "%{$search}%");
-                        })
     ]);
 
     }
