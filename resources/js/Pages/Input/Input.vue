@@ -1,6 +1,6 @@
 <template>
     <AuthenticatedLayout>
-        <div class="flex flex-col text-center">
+        <div class="flex flex-col text-center" data-theme="halloween">
             <div class="text-xl text-neutral-content leading-tight m-5">
                 <h1>Furniture Input</h1>
             </div>
@@ -294,6 +294,32 @@
                         </div>
                     </div>
                     <div class="bg-primary-content card m-2 p-5">
+                        <div class="flex justify-end">
+                            <div
+                                class="w-fit input input-bordered flex items-center gap-2 h-fit"
+                            >
+                                <input
+                                    v-model="search"
+                                    type="text"
+                                    class="grow input"
+                                    placeholder="Search"
+                                />
+                                <div @click="">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 16 16"
+                                        fill="currentColor"
+                                        class="w-4 h-4 opacity-70"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="table">
                                 <!-- head -->
@@ -380,10 +406,9 @@ import InputLabel from "@/Components/InputLabel.vue";
 import UpdateModal from "@/Pages/Input/Modal/Update.vue";
 import { Link, useForm, usePage, router } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import InputError from "@/Components/InputError.vue";
 import { onUpdated } from "vue";
-import { all } from "axios";
 export default {
     components: {
         AuthenticatedLayout,
@@ -405,6 +430,9 @@ export default {
         const showUpdateModal = ref(false);
         const furniturePayload = ref("");
         let tempUrl = ref("");
+
+        const search = ref("");
+        const perPage = ref("");
         // const errors = ref(props.errors);
         // console.log(props.furnitures);
 
@@ -447,6 +475,10 @@ export default {
             }
         });
 
+        watch(search, (value) => {
+            router.get("/input/", { search: value });
+        });
+
         return {
             radioCode,
             submit,
@@ -458,6 +490,7 @@ export default {
             showUpdateModal,
             furniturePayload,
             tempUrl,
+            search,
         };
     },
     methods: {

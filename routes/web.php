@@ -41,6 +41,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth:admin')->group(function (){
     Route::get('/input',[InputController::class, 'index'])->name('input.index');
+    Route::get('/input/tags',[InputController::class, 'search'])->name('input.search');
     Route::post('/input',[InputController::class, 'create'])->name('input.create');
     Route::patch('/input',[InputController::class, 'update'])->name('input.update');
     Route::delete('/input',[InputController::class, 'delete'])->name('input.delete');

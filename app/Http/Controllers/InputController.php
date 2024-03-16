@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use Spatie\Tags\Tag;
 use App\Models\Furniture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,10 @@ class InputController extends Controller
 
     return Inertia::render('Input/Input', [
         'furnitures' => $furniture,
+        'tags' => Tag::query()
+                        ->when($request->input('search'), function($query, $search) {
+                            $query->where('description','like', "%{$search}%");
+                        })
     ]);
 
     }
@@ -100,5 +105,9 @@ class InputController extends Controller
         //create failsafe here if uuid is not valid or not exists
         //if uuid is not exists then send message that the uuid is invalid
         return redirect()->back()->with('message', 'delete:200');
+    }
+
+    public function search (){
+
     }
 }
