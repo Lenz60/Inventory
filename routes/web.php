@@ -50,6 +50,7 @@ Route::middleware('auth:admin')->group(function (){
 Route::middleware('auth:admin')->group(function(){
     Route::get('/manage', [AdminController::class, 'manageIndex'])->name('manage.index');
     Route::post('/manage', [AdminController::class, 'manageCreate'])->name('manage.create');
+    Route::delete('/manage', [AdminController::class, 'manageDelete'])->name('manage.delete');
 });
 
 Route::middleware('auth:admin')->group(function () {

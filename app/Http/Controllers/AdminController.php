@@ -29,7 +29,6 @@ class AdminController extends Controller
     }
 
     public function manageCreate(Request $request){
-
         // dd($request->all());
         $validated = $request->validate([
             'name' => ['required', 'string'],
@@ -46,6 +45,15 @@ class AdminController extends Controller
             ]);
         }
         return redirect()->back()->with('message', 'admin:200');
+    }
+
+    public function manageDelete(Request $request){
+        // dd($request->uuid);
+        $deletedAdmin = Admin::find($request->uuid);
+        $deletedAdmin->delete();
+
+
+        return redirect()->back()->with('message', 'delete:200');
     }
 
 }

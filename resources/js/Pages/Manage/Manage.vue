@@ -130,6 +130,11 @@
                                             <td>
                                                 <button
                                                     class="btn btn-outline btn-error"
+                                                    @click="
+                                                        deleteSelected(
+                                                            admin.uuid
+                                                        )
+                                                    "
                                                 >
                                                     Delete
                                                 </button>
@@ -157,7 +162,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import { useForm, usePage } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
 import { onUpdated, computed } from "vue";
@@ -178,25 +183,6 @@ export default {
             password_confirmation: "",
         });
 
-        ///////////////////////////// Percobaan susah susah anjing
-        const createdAt = props.admins[0].created_at;
-        const createdAt2 = props.admins[4].created_at;
-        const regex = /\d{2}:\d{2}:\d{2}/;
-
-        const match = createdAt.match(regex);
-        const time = match ? match[0] : null;
-        const match2 = createdAt2.match(regex);
-        const time2 = match2 ? match2[0] : null;
-
-        const arrayofTime = [
-            time2.split(":").join(""),
-            time.split(":").join(""),
-        ];
-        const sorted = arrayofTime.sort(function (a, b) {
-            return b - a;
-        });
-        console.log(sorted);
-        ///////////////////////////////////////////////////////////
         const sortNewest = computed(() => {
             return _.orderBy(props.admins, ["created_at"], ["desc"]);
         });
@@ -211,6 +197,13 @@ export default {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+            } else if (usePage().props.flash.message == "delete:200") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Admin deleted successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             }
         });
 
@@ -218,6 +211,27 @@ export default {
             form.post(route("manage.create"));
         };
         return { form, submit, sortNewest };
+    },
+    methods: {
+        deleteSelected($uuid) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "The selected item will be deleted",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#FF8F00",
+                cancelButtonColor: "#F35248",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.post(route("manage.delete"), {
+                        _method: "delete",
+                        uuid: $uuid,
+                    });
+                }
+            });
+            // console.log($uuid);
+        },
     },
 };
 </script>
