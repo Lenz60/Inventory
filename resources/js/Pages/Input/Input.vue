@@ -410,6 +410,7 @@ import Swal from "sweetalert2";
 import { ref, watch, computed } from "vue";
 import InputError from "@/Components/InputError.vue";
 import { onUpdated } from "vue";
+import { _ } from "lodash";
 export default {
     components: {
         Head,
@@ -479,21 +480,27 @@ export default {
 
         // console.log(props.furnitures.description);
 
+        // console.log(props.furnitures[0].description);
+
         const filteredItems = computed(() => {
-            return props.furnitures.filter(
-                (furniture) =>
-                    furniture.description
-                        .toLowerCase()
-                        .includes(search.value.toLowerCase()) ||
-                    furniture.category
-                        .toLowerCase()
-                        .includes(search.value.toLowerCase()) ||
-                    furniture.code
-                        .toLowerCase()
-                        .includes(search.value.toLowerCase()) ||
-                    furniture.wood_type
-                        .toLowerCase()
-                        .includes(search.value.toLowerCase())
+            return _.orderBy(
+                props.furnitures.filter(
+                    (furniture) =>
+                        furniture.description
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase()) ||
+                        furniture.category
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase()) ||
+                        furniture.code
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase()) ||
+                        furniture.wood_type
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase())
+                ),
+                ["created_at"],
+                ["desc"]
             );
         });
 

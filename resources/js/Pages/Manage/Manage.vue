@@ -121,7 +121,7 @@
                                     <tbody>
                                         <!-- row 1 -->
                                         <tr
-                                            v-for="(admin, no) in admins"
+                                            v-for="(admin, no) in sortNewest"
                                             class="hover:bg-neutral"
                                         >
                                             <td>{{ no + 1 }}</td>
@@ -160,7 +160,8 @@ import InputError from "@/Components/InputError.vue";
 import { Head } from "@inertiajs/vue3";
 import { useForm, usePage } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
-import { onUpdated } from "vue";
+import { onUpdated, computed } from "vue";
+import { _ } from "lodash";
 export default {
     props: ["admins", "success"],
     components: {
@@ -177,7 +178,30 @@ export default {
             password_confirmation: "",
         });
 
-        // console.log(admin);
+        ///////////////////////////// Percobaan susah susah anjing
+        const createdAt = props.admins[0].created_at;
+        const createdAt2 = props.admins[4].created_at;
+        const regex = /\d{2}:\d{2}:\d{2}/;
+
+        const match = createdAt.match(regex);
+        const time = match ? match[0] : null;
+        const match2 = createdAt2.match(regex);
+        const time2 = match2 ? match2[0] : null;
+
+        const arrayofTime = [
+            time2.split(":").join(""),
+            time.split(":").join(""),
+        ];
+        const sorted = arrayofTime.sort(function (a, b) {
+            return b - a;
+        });
+        console.log(sorted);
+        ///////////////////////////////////////////////////////////
+        const sortNewest = computed(() => {
+            return _.orderBy(props.admins, ["created_at"], ["desc"]);
+        });
+
+        // console.log(sortNewest);
 
         onUpdated(() => {
             if (usePage().props.flash.message == "admin:200") {
@@ -193,7 +217,7 @@ export default {
         const submit = () => {
             form.post(route("manage.create"));
         };
-        return { form, submit };
+        return { form, submit, sortNewest };
     },
 };
 </script>

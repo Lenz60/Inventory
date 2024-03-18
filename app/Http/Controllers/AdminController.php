@@ -18,7 +18,7 @@ class AdminController extends Controller
         if($user->role == '1'){
             // $admins = new Admin;
             $admins = DB::table('admin')
-            ->select('uuid', 'email', 'name')
+            ->select('uuid', 'email', 'name','created_at')
             ->where('role','2')
             ->get();
             // dd($admins);
