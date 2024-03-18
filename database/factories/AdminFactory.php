@@ -19,7 +19,7 @@ class AdminFactory extends Factory
     {
         return [
             'uuid' => fake()->uuid(),
-            'username' => fake()->username(),
+            'email' => fake()->email(),
             'password' => 'password',
             'name' => fake()->name(),
             'role' => fake()->randomElement(['1','2']),

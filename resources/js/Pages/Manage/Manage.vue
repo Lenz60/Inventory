@@ -34,18 +34,18 @@
                                         </div>
                                         <div class="flex flex-col p-2">
                                             <h1 class="m-2 text-start">
-                                                Username
+                                                Email
                                             </h1>
                                             <TextInput
-                                                id="username"
-                                                v-model="form.username"
-                                                type="text"
+                                                id="email"
+                                                v-model="form.email"
+                                                type="email"
                                                 placeholder="Type here"
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
                                                 class="mt-2"
-                                                :message="form.errors.username"
+                                                :message="form.errors.email"
                                             />
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Username</th>
+                                            <th>Email</th>
                                             <th>Name</th>
                                         </tr>
                                     </thead>
@@ -125,7 +125,7 @@
                                             class="hover:bg-neutral"
                                         >
                                             <td>{{ no + 1 }}</td>
-                                            <td>{{ admin.username }}</td>
+                                            <td>{{ admin.email }}</td>
                                             <td>{{ admin.name }}</td>
                                             <td>
                                                 <button
@@ -171,17 +171,19 @@ export default {
     },
     setup(props) {
         const form = useForm({
-            username: "",
+            email: "",
             name: "",
             password: "",
             password_confirmation: "",
         });
 
+        // console.log(admin);
+
         onUpdated(() => {
             if (usePage().props.flash.message == "admin:200") {
                 Swal.fire({
                     icon: "success",
-                    title: "Your work has been saved",
+                    title: "New admin created",
                     showConfirmButton: false,
                     timer: 1500,
                 });
