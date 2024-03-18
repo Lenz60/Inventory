@@ -13,17 +13,19 @@ class AdminController extends Controller
 {
     public function manageIndex(){
 
-        // $user = Auth::user();
-        // dd($user);
-
-        // $admins = new Admin;
-        $admins = DB::table('admin')
-        ->select('uuid', 'username', 'name')
-        ->where('role','2')
-        ->get();
-
-        // dd($admins);
-        return Inertia::render('Manage/Manage', ['admins' => $admins]);
+        $user = Auth::user();
+        // dd($user->role);
+        if($user->role == '1'){
+            // $admins = new Admin;
+            $admins = DB::table('admin')
+            ->select('uuid', 'email', 'name')
+            ->where('role','2')
+            ->get();
+            // dd($admins);
+            return Inertia::render('Manage/Manage', ['admins' => $admins]);
+        }else{
+            return redirect('dashboard');
+        }
     }
 
     public function manageCreate(Request $request){
@@ -31,9 +33,18 @@ class AdminController extends Controller
         // dd($request->all());
         $validated = $request->validate([
             'name' => ['required', 'string'],
-            'username' =>['required', 'string'],
+            'email' =>['required', 'string','email'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
+        if($validated){
+            Admin::create([
+                'uuid' => fake()->uuid(),
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+                'role' => '2'
+            ]);
+        }
         return redirect()->back()->with('message', 'admin:200');
     }
 
