@@ -36,6 +36,7 @@ class InputController extends Controller
 
 
         $check = $this->validateInput($request,'input');
+        // dd($check);
         // dd($request->all());
         // dd($request->image->getClientOriginalName());
         // dd(fake()->uuid());
@@ -68,6 +69,9 @@ class InputController extends Controller
         $validationInteger = "required|numeric|min:0|not_in:0";
         $validationString = "required|string";
 
+        //To separate different error validation between input and update validation
+        //pass the context to the function
+        //if there is not context then it means that the validation is for update field and return different error variables
         if ($context == 'input'){
             return $input -> validate([
                     'image' => "required|file",
