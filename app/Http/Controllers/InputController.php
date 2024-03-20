@@ -21,7 +21,7 @@ class InputController extends Controller
         // dd($user);
         $furniture = DB::table('furniture')
         ->get();
-        // dd($furniture);
+        // dd($furniture[0]->image);
 
 
 
@@ -36,14 +36,20 @@ class InputController extends Controller
 
 
         $check = $this->validateInput($request,'input');
-        // dd($check);
+        // dd($check['image']);
         // dd($request->all());
         // dd($request->image->getClientOriginalName());
         // dd(fake()->uuid());
         if($check){
+            if($check['image']){
+                $fileUrl = $request->file('image')->store('furniture-img');
+            }else {
+                $fileUrl = null;
+            }
+
             Furniture::create ([
                 'uuid' => fake()->uuid(),
-                'image' => $request->image->getClientOriginalName(),
+                'image' => 'storage/'.$fileUrl,
                 'code' => $request->code,
                 'description' => $request->description,
                 'category' => $request->category,
@@ -74,7 +80,7 @@ class InputController extends Controller
         //if there is not context then it means that the validation is for update field and return different error variables
         if ($context == 'input'){
             return $input -> validate([
-                    'image' => "required|file",
+                    'image' => "required|image|file|max:1024",
                     'description' => $validationString,
                     'category' => $validationString,
                     'woodtype' => $validationString,
@@ -86,7 +92,7 @@ class InputController extends Controller
                 ]);
         }else{
             return $input -> validate([
-                    'sImage' => "required|file",
+                    'sImage' => "required|image|file|max:1024",
                     'sDescription' => $validationString,
                     'sCategory' => $validationString,
                     'sWoodtype' => $validationString,

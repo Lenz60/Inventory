@@ -347,7 +347,13 @@
                                         class="hover:bg-neutral"
                                     >
                                         <td>{{ no + 1 }}</td>
-                                        <td>{{ furniture.image }}</td>
+                                        <!-- <td>{{ furniture.image }}</td> -->
+                                        <td>
+                                            <img
+                                                :src="furniture.image"
+                                                alt="Invalid image"
+                                            />
+                                        </td>
                                         <td>{{ furniture.code }}</td>
                                         <td>{{ furniture.description }}</td>
                                         <td>{{ furniture.category }}</td>
@@ -436,6 +442,7 @@ export default {
 
         const search = ref("");
         const perPage = ref("");
+        const prefixAsset = "storage/";
         // const errors = ref(props.errors);
         // console.log(props.furnitures);
 
@@ -521,6 +528,7 @@ export default {
             tempUrl,
             search,
             filteredItems,
+            prefixAsset,
         };
     },
     methods: {
