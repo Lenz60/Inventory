@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('furniture', function (Blueprint $table) {
             $table->string('uuid')->primary();
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('code');
             $table->string('description');
             $table->enum('category',array('Indoor','Outdoor','Handicraft','Root'));
