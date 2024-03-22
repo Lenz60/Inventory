@@ -292,6 +292,35 @@
                                     </button>
                                 </div>
                             </form>
+                            <div>
+                                <div v-if="filename == ''">
+                                    <button
+                                        class="btn m-4 px-10 btn-success"
+                                        :disabled="form.processing"
+                                        @click.prevent="$refs.file.click()"
+                                    >
+                                        Import
+                                    </button>
+                                </div>
+                                <div>{{ filename }}</div>
+                                <input
+                                    type="file"
+                                    ref="file"
+                                    class="hidden"
+                                    name="importExcel"
+                                    id="importExcel"
+                                    @change="onFileSelected"
+                                />
+                                <div v-if="filename != ''">
+                                    <button
+                                        class="btn m-4 px-10 btn-success"
+                                        :disabled="form.processing"
+                                        @click="xlsToLaravel(excelImport)"
+                                    >
+                                        Import
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="bg-primary-content card m-2 p-5">
@@ -445,6 +474,11 @@ export default {
         const search = ref("");
         const perPage = ref("");
         const prefixAsset = "storage/";
+        const filename = ref("");
+        const excelImport = useForm({
+            file: "",
+        });
+        // const excelImport = ref("");
         // const errors = ref(props.errors);
         // console.log(props.furnitures);
 
@@ -531,6 +565,8 @@ export default {
             search,
             filteredItems,
             prefixAsset,
+            filename,
+            excelImport,
         };
     },
     methods: {
@@ -602,6 +638,14 @@ export default {
                 }
             });
             // console.log($uuid);
+        },
+        xlsToLaravel(e) {
+            this.excelImport.post(route("input.import"));
+            // router.get(route("input.import"));
+        },
+        onFileSelected(e) {
+            this.filename = e.target.files[0].name;
+            this.excelImport.file = e.target.files[0];
         },
     },
 };

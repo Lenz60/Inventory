@@ -113,7 +113,10 @@ class InputController extends Controller
         return redirect()->back()->with('message', 'delete:200');
     }
 
-    public function search (){
-
+    public function importIndex (Request $request){
+        return Inertia::render('Input/Import');
+    }
+    public function import (Request $request){
+        dd($request);
     }
 }

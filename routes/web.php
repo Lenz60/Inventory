@@ -45,6 +45,8 @@ Route::middleware('auth:admin')->group(function (){
     Route::patch('/input',[InputController::class, 'update'])->name('input.update');
     Route::delete('/input',[InputController::class, 'delete'])->name('input.delete');
 
+    Route::get('/import',[InputController::class, 'importIndex'])->name('input.importIndex');
+    Route::post('/import',[InputController::class, 'import'])->name('input.import');
 });
 
 Route::middleware('auth:admin')->group(function(){
