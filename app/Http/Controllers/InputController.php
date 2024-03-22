@@ -49,7 +49,7 @@ class InputController extends Controller
 
             Furniture::create ([
                 'uuid' => fake()->uuid(),
-                'image' => 'storage/'.$fileUrl,
+                'image' => $fileUrl,
                 'code' => $request->code,
                 'description' => $request->description,
                 'category' => $request->category,

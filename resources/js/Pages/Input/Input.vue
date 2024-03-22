@@ -350,8 +350,10 @@
                                         <!-- <td>{{ furniture.image }}</td> -->
                                         <td>
                                             <img
-                                                :src="furniture.image"
-                                                alt="Invalid image"
+                                                class="w-30 h-30"
+                                                :src="
+                                                    'storage/' + furniture.image
+                                                "
                                             />
                                         </td>
                                         <td>{{ furniture.code }}</td>
