@@ -350,11 +350,31 @@
                                 </div>
                             </div>
                         </div>
+                        <div
+                            v-if="selectedFurnitures.length > 0"
+                            class="flex justify-start p-2"
+                        >
+                            <button class="btn btn-error" @click="bulkDelete">
+                                Bulk Delete
+                            </button>
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="table">
                                 <!-- head -->
                                 <thead>
                                     <tr>
+                                        <th>
+                                            <div class="form-control">
+                                                <input
+                                                    type="checkbox"
+                                                    @change="
+                                                        selectAllFurnitures
+                                                    "
+                                                    v-model="selectAll"
+                                                    class="checkbox checkbox-primary bg-transparent"
+                                                />
+                                            </div>
+                                        </th>
                                         <th>No</th>
                                         <th>Image</th>
                                         <th>Code</th>
@@ -375,6 +395,17 @@
                                         v-for="(furniture, no) in filteredItems"
                                         class="hover:bg-neutral"
                                     >
+                                        <td>
+                                            <div class="form-control">
+                                                <input
+                                                    type="checkbox"
+                                                    class="checkbox checkbox-primary bg-transparent"
+                                                    @change="
+                                                        selectDelete(furniture)
+                                                    "
+                                                />
+                                            </div>
+                                        </td>
                                         <td>{{ no + 1 }}</td>
                                         <!-- <td>{{ furniture.image }}</td> -->
                                         <td>
@@ -383,6 +414,7 @@
                                                 :src="
                                                     'storage/' + furniture.image
                                                 "
+                                                :alt="furniture.image"
                                             />
                                         </td>
                                         <td>{{ furniture.code }}</td>
@@ -478,6 +510,8 @@ export default {
         const excelImport = useForm({
             file: "",
         });
+        const selectAll = ref(false);
+        const selectedFurnitures = ref([]);
         // const excelImport = ref("");
         // const errors = ref(props.errors);
         // console.log(props.furnitures);
@@ -517,9 +551,22 @@ export default {
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                router.get(route("input.index"));
+                // selectedFurnitures.value = "";
                 // router.get(route("input.index"));
             }
         });
+
+        const selectAllFurnitures = () => {
+            if (selectAll.value) {
+                selectedFurnitures.value = props.furnitures.value.data.map(
+                    (furniture) => props.furnitures.uuid
+                );
+            } else {
+                selectedFurnitures.value = [];
+            }
+        };
+        console.log(selectedFurnitures.value);
 
         // console.log(props.furnitures.description);
 
@@ -567,6 +614,9 @@ export default {
             prefixAsset,
             filename,
             excelImport,
+            selectAll,
+            selectAllFurnitures,
+            selectedFurnitures,
         };
     },
     methods: {
@@ -620,7 +670,7 @@ export default {
                 };
             }
         },
-        deleteSelected($uuid) {
+        deleteSelected(uuid) {
             Swal.fire({
                 title: "Are you sure?",
                 text: "The selected item will be deleted",
@@ -633,7 +683,7 @@ export default {
                 if (result.isConfirmed) {
                     router.post(route("input.delete"), {
                         _method: "delete",
-                        uuid: $uuid,
+                        uuid: uuid,
                     });
                 }
             });
@@ -646,6 +696,34 @@ export default {
         onFileSelected(e) {
             this.filename = e.target.files[0].name;
             this.excelImport.file = e.target.files[0];
+        },
+        selectDelete(furniture) {
+            const index = this.selectedFurnitures.indexOf(furniture.uuid);
+            if (index === -1) {
+                this.selectedFurnitures.push(furniture.uuid);
+            } else {
+                this.selectedFurnitures.splice(index, 1);
+            }
+            // console.log(this.selectedFurnitures);
+        },
+        bulkDelete() {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "The selected item will be deleted",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#FF8F00",
+                cancelButtonColor: "#F35248",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.post(route("input.bulkdelete"), {
+                        _method: "delete",
+                        uuids: this.selectedFurnitures,
+                    });
+                    this.selectedFurnitures.value = [];
+                }
+            });
         },
     },
 };

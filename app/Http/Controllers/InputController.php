@@ -6,10 +6,14 @@ use Inertia\Inertia;
 use Spatie\Tags\Tag;
 use App\Models\Furniture;
 use Illuminate\Http\Request;
+use App\Imports\FurnituresImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\InputUpdateRequest;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class InputController extends Controller
@@ -114,9 +118,130 @@ class InputController extends Controller
     }
 
     public function importIndex (Request $request){
+
+        // $excel_file = public_path('storage/excel/jpyziLYmnjRxTDXscRmDBRTKxdffnwDQ7kuajCsO.xlsx');
+
+
+        // $reader = new Xlsx();
+        // $spreadsheet = $reader->load($excel_file);
+        // // $spreadsheet->getSheet(0);
+        // $sheet = $spreadsheet->getActiveSheet();
+
+        // $drawings = $sheet->getDrawingCollection();
+
+        // // dd($sheet);
+
+        // // dd($drawings);
+        // foreach ($drawings as $drawing){
+        //         $coordinates = $drawing->getCoordinates();
+        //         $drawing_path = $drawing->getPath();
+        //         $extension = pathinfo($drawing_path, PATHINFO_EXTENSION);
+
+        //         $img_url = "/storage/furniture-img/{$coordinates}.{$extension}";
+        //         $img_path = public_path($img_url);
+
+
+        //         $contents = file_get_contents($drawing_path);
+        //         file_put_contents($img_path, $contents);
+        //         // echo $coordinates . '';
+        //         // echo $drawing_path . '';
+        //         // echo '<br>';
+        //         // dd($img_path);
+        //     }
+        //     foreach($drawings as $drawing){
+        //         dd($drawing);
+        //     }
+
+
+
+
         return Inertia::render('Input/Import');
     }
+
     public function import (Request $request){
-        dd($request);
+        // dd($request);
+        if($request->file){
+            $excelFile = $request->file('file');
+
+            $fileName = $excelFile->getClientOriginalName();
+            $excelFile->move('FurnitureData', $fileName);
+
+            $excelUrl = public_path('/FurnitureData/'.$fileName);
+
+            $reader = new Xlsx();
+            $spreadsheet = $reader->load($excelUrl);
+
+            $sheet = $spreadsheet->getActiveSheet();
+            $drawings = $sheet->getDrawingCollection();
+
+            $cells = $sheet->getCellCollection();
+
+            // dd($cells->getHighestRow());
+
+            for($row = 1; $row <= $cells->getHighestRow(); $row++){
+                $array[$row]['uuid'] = fake()->uuid();
+                $array[$row]['image'] = ($cells->get('B'.$row)) ? $cells->get('B'.$row)->getValue():'';
+                $array[$row]['code'] = ($cells->get('C'.$row)) ? $cells->get('C'.$row)->getValue():'';
+                $array[$row]['description'] = ($cells->get('D'.$row)) ? $cells->get('D'.$row)->getValue():'';
+                $array[$row]['category'] = ($cells->get('E'.$row)) ? $cells->get('E'.$row)->getValue():'';
+                $array[$row]['wood_type'] = ($cells->get('F'.$row)) ? $cells->get('F'.$row)->getValue():'';
+                $array[$row]['width'] = ($cells->get('G'.$row)) ? $cells->get('G'.$row)->getValue():'';
+                $array[$row]['depth'] = ($cells->get('H'.$row)) ? $cells->get('H'.$row)->getValue():'';
+                $array[$row]['height'] = ($cells->get('I'.$row)) ? $cells->get('I'.$row)->getValue():'';
+                $array[$row]['stock'] = ($cells->get('J'.$row)) ? $cells->get('J'.$row)->getValue():'';
+                $array[$row]['price'] = ($cells->get('K'.$row)) ? $cells->get('K'.$row)->getValue():'';
+            }
+
+            // dd(count($array));
+
+            for($i = 1; $i <= count($array); $i++){
+                $importFirst = new Furniture($array[$i]);
+                $importFirst->save();
+            }
+
+            foreach ($drawings as $drawing){
+                $coordinates = $drawing->getCoordinates();
+                $drawing_path = $drawing->getPath();
+                $extension = pathinfo($drawing_path, PATHINFO_EXTENSION);
+
+                $img_url = "/storage/furniture-img/{$coordinates}.{$extension}";
+                $img_path = public_path($img_url);
+
+
+                $contents = file_get_contents($drawing_path);
+
+                file_put_contents($img_path, $contents);
+
+                // dd($coordinates);
+                // dd($img_url_altered);
+
+                for($i = 1 ; $i <= count($array); $i++){
+                    $furniture = Furniture::where('uuid', $array[$i]['uuid'])->first();
+                    if($furniture){
+                        $furniture->update([
+                            'image' => "/furniture-img/B{$i}.{$extension}"
+                        ]);
+                    }
+                }
+            }
+
+
+
+            // Storage::delete(public_path('/FurnitureData/'.$fileName));
+            unlink(public_path('/FurnitureData/'.$fileName));
+
+
+            // Excel::import(new FurnituresImport, \public_path('/FurnitureData/'.$fileName));
+            return \redirect()->back();
+            // return  $excelFile;
+            // dd($request->all());
+        }
+
+    }
+    public function deleteBulk(request $request){
+
+        // dd($request->uuids);
+        Furniture::whereIn('uuid', $request->uuids)->delete();
+        return redirect()->back()->with('message', 'delete:200');
     }
 }
