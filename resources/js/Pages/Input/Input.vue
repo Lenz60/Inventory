@@ -368,7 +368,9 @@
                                                 <input
                                                     type="checkbox"
                                                     @change="
-                                                        selectAllFurnitures
+                                                        selectAllFurnitures(
+                                                            filteredItems
+                                                        )
                                                     "
                                                     v-model="selectAll"
                                                     class="checkbox checkbox-primary bg-transparent"
@@ -400,6 +402,7 @@
                                                 <input
                                                     type="checkbox"
                                                     class="checkbox checkbox-primary bg-transparent"
+                                                    :checked="selectAll"
                                                     @change="
                                                         selectDelete(furniture)
                                                     "
@@ -557,16 +560,16 @@ export default {
             }
         });
 
-        const selectAllFurnitures = () => {
-            if (selectAll.value) {
-                selectedFurnitures.value = props.furnitures.value.data.map(
-                    (furniture) => props.furnitures.uuid
-                );
-            } else {
-                selectedFurnitures.value = [];
-            }
-        };
-        console.log(selectedFurnitures.value);
+        // const selectAllFurnitures = () => {
+        //     if (selectAll.value) {
+        //         selectedFurnitures.value = props.furnitures.value.data.map(
+        //             (furniture) => props.furnitures.uuid
+        //         );
+        //     } else {
+        //         selectedFurnitures.value = [];
+        //     }
+        // };
+        // console.log(selectedFurnitures.value);
 
         // console.log(props.furnitures.description);
 
@@ -615,7 +618,6 @@ export default {
             filename,
             excelImport,
             selectAll,
-            selectAllFurnitures,
             selectedFurnitures,
         };
     },
@@ -724,6 +726,18 @@ export default {
                     this.selectedFurnitures.value = [];
                 }
             });
+        },
+        selectAllFurnitures(allFurnitures) {
+            // console.log(allFurnitures[0].uuid);
+            // console.log(allFurnitures.map((furniture) => furniture.uuid));
+            if (this.selectAll) {
+                this.selectedFurnitures = allFurnitures.map(
+                    (furniture) => furniture.uuid
+                );
+            } else {
+                this.selectedFurnitures = [];
+            }
+            console.log(this.selectedFurnitures);
         },
     },
 };
