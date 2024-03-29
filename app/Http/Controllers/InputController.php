@@ -121,47 +121,6 @@ class InputController extends Controller
         return redirect()->back()->with('message', 'delete:200');
     }
 
-    public function importIndex (Request $request){
-
-        // $excel_file = public_path('storage/excel/jpyziLYmnjRxTDXscRmDBRTKxdffnwDQ7kuajCsO.xlsx');
-
-
-        // $reader = new Xlsx();
-        // $spreadsheet = $reader->load($excel_file);
-        // // $spreadsheet->getSheet(0);
-        // $sheet = $spreadsheet->getActiveSheet();
-
-        // $drawings = $sheet->getDrawingCollection();
-
-        // // dd($sheet);
-
-        // // dd($drawings);
-        // foreach ($drawings as $drawing){
-        //         $coordinates = $drawing->getCoordinates();
-        //         $drawing_path = $drawing->getPath();
-        //         $extension = pathinfo($drawing_path, PATHINFO_EXTENSION);
-
-        //         $img_url = "/storage/furniture-img/{$coordinates}.{$extension}";
-        //         $img_path = public_path($img_url);
-
-
-        //         $contents = file_get_contents($drawing_path);
-        //         file_put_contents($img_path, $contents);
-        //         // echo $coordinates . '';
-        //         // echo $drawing_path . '';
-        //         // echo '<br>';
-        //         // dd($img_path);
-        //     }
-        //     foreach($drawings as $drawing){
-        //         dd($drawing);
-        //     }
-
-
-
-
-        return Inertia::render('Input/Import');
-    }
-
     public function import(Request $request){
         if ($request->hasFile('file')) {
             //* Save excel to local storage
