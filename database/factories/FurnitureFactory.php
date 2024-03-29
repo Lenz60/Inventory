@@ -27,6 +27,7 @@ class FurnitureFactory extends Factory
             'depth' => $this->faker->randomNumber(3,true),
             'height' => $this->faker->randomNumber(3,true),
             'stock' => $this->faker->randomNumber(2,true),
+            'color' => $this->faker->colorName(),
             'price' => $this->faker->randomNumber(3,true),
             //
         ];

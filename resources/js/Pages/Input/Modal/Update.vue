@@ -304,6 +304,28 @@
                                                             "
                                                         />
                                                     </div>
+                                                    <div
+                                                        class="flex flex-col p-2"
+                                                    >
+                                                        <h1
+                                                            class="m-2 text-start"
+                                                        >
+                                                            Color
+                                                        </h1>
+                                                        <TextInput
+                                                            id="description"
+                                                            v-model="form.color"
+                                                            type="text"
+                                                            placeholder="Type here"
+                                                            class="input input-bordered input-primary w-full max-w-xs"
+                                                        />
+                                                        <InputError
+                                                            class="mt-2 text-start"
+                                                            :message="
+                                                                Errors.sColor
+                                                            "
+                                                        />
+                                                    </div>
                                                 </div>
                                                 <div
                                                     class="w-[50%] items-center p-2"
@@ -492,6 +514,8 @@ export default {
         const selectedCategory = ref("");
         let tempUrl = ref("");
 
+        console.log(props.SelectedFurniture.color);
+
         // Declare props as the existing values of the input field
         let form = useForm({
             uuid: props.SelectedFurniture.uuid,
@@ -500,8 +524,9 @@ export default {
             description: props.SelectedFurniture.description,
             category: props.SelectedFurniture.category,
             woodtype: props.SelectedFurniture.woodtype,
+            color: props.SelectedFurniture.color,
             width: parseInt(props.SelectedFurniture.width),
-            depth: parseInt(props.SelectedFurniture.width),
+            depth: parseInt(props.SelectedFurniture.depth),
             height: parseInt(props.SelectedFurniture.height),
             stock: parseInt(props.SelectedFurniture.stock),
             price: parseFloat(props.SelectedFurniture.price),
@@ -522,6 +547,7 @@ export default {
                 sDescription: form.description,
                 sCategory: form.category,
                 sWoodtype: form.woodtype,
+                sColor: form.color,
                 sWidth: form.width,
                 sDepth: form.depth,
                 sHeight: form.height,

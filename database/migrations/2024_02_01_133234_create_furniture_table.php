@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('depth');
             $table->string('height');
             $table->string('stock');
+            $table->string('color');
             $table->float('price');
             $table->timestamps();
         });

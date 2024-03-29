@@ -27,6 +27,7 @@ class Furniture extends Model
         'category',
         'wood_type',
         'width',
+        'color',
         'depth',
         'height',
         'price',

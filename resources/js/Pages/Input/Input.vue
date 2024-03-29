@@ -191,6 +191,22 @@
                                                 :message="form.errors.woodtype"
                                             />
                                         </div>
+                                        <div class="flex flex-col p-2">
+                                            <h1 class="m-2 text-start">
+                                                Color
+                                            </h1>
+                                            <TextInput
+                                                id="description"
+                                                v-model="form.color"
+                                                type="text"
+                                                placeholder="Type here"
+                                                class="input input-bordered input-primary w-full max-w-xs"
+                                            />
+                                            <InputError
+                                                class="mt-2 text-start"
+                                                :message="form.errors.color"
+                                            />
+                                        </div>
                                     </div>
                                     <div class="w-[50%] items-center p-2">
                                         <div class="flex flex-col p-2">
@@ -373,7 +389,7 @@
                                                         )
                                                     "
                                                     v-model="selectAll"
-                                                    class="checkbox checkbox-primary bg-transparent"
+                                                    class="checkbox checkbox-sm checkbox-primary bg-transparent"
                                                 />
                                             </div>
                                         </th>
@@ -387,6 +403,7 @@
                                         <th>Depth</th>
                                         <th>Height</th>
                                         <th>Stock</th>
+                                        <th>Color</th>
                                         <th>Price</th>
                                         <th>Update</th>
                                         <th>Delete</th>
@@ -401,7 +418,7 @@
                                             <div class="form-control">
                                                 <input
                                                     type="checkbox"
-                                                    class="checkbox checkbox-primary bg-transparent"
+                                                    class="checkbox checkbox-sm checkbox-primary bg-transparent"
                                                     :checked="selectAll"
                                                     @change="
                                                         selectDelete(furniture)
@@ -428,10 +445,11 @@
                                         <td>{{ furniture.depth }}cm</td>
                                         <td>{{ furniture.height }}cm</td>
                                         <td>{{ furniture.stock }}</td>
+                                        <td>{{ furniture.color }}</td>
                                         <td>${{ furniture.price }}</td>
                                         <td>
                                             <button
-                                                class="btn btn-outline btn-info"
+                                                class="btn btn-md btn-outline btn-info"
                                                 @click="toggleModal(furniture)"
                                             >
                                                 Update
@@ -439,7 +457,7 @@
                                         </td>
                                         <td>
                                             <button
-                                                class="btn btn-outline btn-error"
+                                                class="btn btn-md btn-outline btn-error"
                                                 @click="
                                                     deleteSelected(
                                                         furniture.uuid
@@ -525,6 +543,7 @@ export default {
             description: "",
             category: "",
             woodtype: "",
+            color: "",
             width: 0,
             depth: 0,
             height: 0,
@@ -589,6 +608,9 @@ export default {
                             .toLowerCase()
                             .includes(search.value.toLowerCase()) ||
                         furniture.wood_type
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase()) ||
+                        furniture.color
                             .toLowerCase()
                             .includes(search.value.toLowerCase())
                 ),
@@ -664,6 +686,7 @@ export default {
                     description: furniture.description,
                     category: furniture.category,
                     woodtype: furniture.wood_type,
+                    color: furniture.color,
                     width: parseInt(furniture.width),
                     depth: parseInt(furniture.depth),
                     height: parseInt(furniture.height),
