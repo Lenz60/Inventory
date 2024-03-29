@@ -162,80 +162,84 @@ class InputController extends Controller
         return Inertia::render('Input/Import');
     }
 
-    public function import (Request $request){
-        // dd($request);
-        if($request->file){
-            $excelFile = $request->file('file');
-
-            $fileName = $excelFile->getClientOriginalName();
-            $excelFile->move('FurnitureData', $fileName);
-
-            $excelUrl = public_path('/FurnitureData/'.$fileName);
-
-            $reader = new Xlsx();
-            $spreadsheet = $reader->load($excelUrl);
-
-            $sheet = $spreadsheet->getActiveSheet();
-            $drawings = $sheet->getDrawingCollection();
-
-            $cells = $sheet->getCellCollection();
-
-            // dd($cells->getHighestRow());
-            //* Row value is indicated of the begining of the row in the excel
-            for($row = 2; $row <= $cells->getHighestRow(); $row++){
-                $array[$row]['uuid'] = fake()->uuid();
-                $array[$row]['image'] = ($cells->get('B'.$row)) ? $cells->get('B'.$row)->getValue():'';
-                $array[$row]['code'] = ($cells->get('C'.$row)) ? $cells->get('C'.$row)->getValue():'';
-                $array[$row]['description'] = ($cells->get('D'.$row)) ? $cells->get('D'.$row)->getValue():'';
-                $array[$row]['category'] = ($cells->get('E'.$row)) ? $cells->get('E'.$row)->getValue():'';
-                $array[$row]['wood_type'] = ($cells->get('F'.$row)) ? $cells->get('F'.$row)->getValue():'';
-                $array[$row]['width'] = ($cells->get('G'.$row)) ? $cells->get('G'.$row)->getValue():'';
-                $array[$row]['depth'] = ($cells->get('H'.$row)) ? $cells->get('H'.$row)->getValue():'';
-                $array[$row]['height'] = ($cells->get('I'.$row)) ? $cells->get('I'.$row)->getValue():'';
-                $array[$row]['stock'] = ($cells->get('J'.$row)) ? $cells->get('J'.$row)->getValue():'';
-                $array[$row]['color'] = ($cells->get('K'.$row)) ? $cells->get('K'.$row)->getValue():'';
-                $array[$row]['price'] = ($cells->get('L'.$row)) ? $cells->get('L'.$row)->getValue():'';
-            }
-
-
-            foreach ($array as $data){
-                $importFirst = new Furniture($data);
-                $importFirst->save();
-            }
-
-            foreach ($drawings as $drawing){
-                $coordinates = $drawing->getCoordinates();
-                $drawing_path = $drawing->getPath();
-                //! Because the extension can't be looped using index loop so change all the extension to jpg format
-                //// $extension = pathinfo($drawing_path, PATHINFO_EXTENSION);
-                //? Save any image as jpg
-                $img_url = "/storage/furniture-img/{$coordinates}.jpg";
-                $img_path = public_path($img_url);
-
-                $contents = file_get_contents($drawing_path);
-                file_put_contents($img_path, $contents);
-
-                foreach ($array as $index => $data){
-                    $furniture = Furniture::where('uuid', $data['uuid'])->first();
-                    if($furniture){
-                        $furniture->update([
-                            'image' => "/furniture-img/B{$index}.jpg"
-                        ]);
-                    }
-                }
-            }
-
-
-
-            //* Delete file after uploaded and save a image
-            unlink(public_path('/FurnitureData/'.$fileName));
-
-
-            return \redirect()->back();
+    public function import(Request $request){
+        if ($request->hasFile('file')) {
+            //* Save excel to local storage
+            $fileName = $this->saveExcelFile($request->file('file'));
+            //* Process the uploaded excel file and return as array (exluding image files)
+            $array = $this->processExcelData($fileName);
+            //* Save uploaded excel data to database
+            $this->saveFurnitureData($array);
+            //* Get the drawing from excel and update image field in furniture based on saved image on laravel
+            $this->processDrawings($array, $fileName);
+            //* Delete uploaded file to avoid unecessary excess storage
+            $this->deleteUploadedFile($fileName);
+            return redirect()->back();
         }
-
     }
 
+    private function saveExcelFile(UploadedFile $file): string{
+        $fileName = $file->getClientOriginalName();
+        $file->move('FurnitureData', $fileName);
+        return $fileName;
+    }
+
+    private function loadExcelData(string $fileName) {
+        $reader = new Xlsx();
+        $spreadsheet = $reader->load(public_path('FurnitureData/' . $fileName));
+        return $spreadsheet->getActiveSheet();
+    }
+
+    private function processExcelData(string $fileName): array{
+        $cells = $this->loadExcelData($fileName)->getCellCollection();
+        $array = [];
+        for ($row = 2; $row <= $cells->getHighestRow(); $row++) {
+            $array[$row]['uuid'] = \Faker\Factory::create()->uuid;
+            $array[$row]['image'] = $cells->get('B' . $row) ? $cells->get('B' . $row)->getValue() : '';
+            $array[$row]['code'] = $cells->get('C' . $row) ? $cells->get('C' . $row)->getValue() : '';
+            $array[$row]['description'] = $cells->get('D' . $row) ? $cells->get('D' . $row)->getValue() : '';
+            $array[$row]['category'] = $cells->get('E' . $row) ? $cells->get('E' . $row)->getValue() : '';
+            $array[$row]['wood_type'] = $cells->get('F' . $row) ? $cells->get('F' . $row)->getValue() : '';
+            $array[$row]['width'] = $cells->get('G' . $row) ? $cells->get('G' . $row)->getValue() : '';
+            $array[$row]['depth'] = $cells->get('H' . $row) ? $cells->get('H' . $row)->getValue() : '';
+            $array[$row]['height'] = $cells->get('I' . $row) ? $cells->get('I' . $row)->getValue() : '';
+            $array[$row]['stock'] = $cells->get('J' . $row) ? $cells->get('J' . $row)->getValue() : '';
+            $array[$row]['color'] = $cells->get('K' . $row) ? $cells->get('K' . $row)->getValue() : '';
+            $array[$row]['price'] = $cells->get('L' . $row) ? $cells->get('L' . $row)->getValue() : '';
+        }
+        return $array;
+    }
+
+    private function saveFurnitureData(array $array): void{
+        foreach ($array as $data) {
+            Furniture::create($data);
+        }
+    }
+
+    private function processDrawings(array $array, string $fileName): void{
+        $drawings = $this->loadExcelData($fileName)->getDrawingCollection();
+        foreach ($drawings as $index => $drawing) {
+            $coordinates = $drawing->getCoordinates();
+            $drawing_path = $drawing->getPath();
+            $img_url = "/storage/furniture-img/{$coordinates}.jpg";
+            $img_path = public_path($img_url);
+            $contents = file_get_contents($drawing_path);
+            file_put_contents($img_path, $contents);
+
+            foreach($array as $index => $data){
+                $furniture = Furniture::where('uuid',$data['uuid'])->first();
+                if($furniture){
+                    $furniture->update([
+                        'image' => "/furniture-img/B{$index}.jpg"
+                    ]);
+                }
+            }
+        }
+    }
+
+    private function deleteUploadedFile(string $fileName): void{
+        unlink(public_path('FurnitureData/' . $fileName));
+    }
 
     public function deleteBulk(request $request){
 
