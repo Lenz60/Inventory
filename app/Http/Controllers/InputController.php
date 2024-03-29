@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\InputUpdateRequest;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class InputController extends Controller
 {
@@ -58,6 +59,7 @@ class InputController extends Controller
                 'description' => $request->description,
                 'category' => $request->category,
                 'wood_type' => $request->woodtype,
+                'color' => $request->color,
                 'width' => $request->width,
                 'depth' => $request->depth,
                 'height' => $request->height,
@@ -88,6 +90,7 @@ class InputController extends Controller
                     'description' => $validationString,
                     'category' => $validationString,
                     'woodtype' => $validationString,
+                    'color' => $validationString,
                     'width' => $validationInteger,
                     'height' => $validationInteger,
                     'depth' => $validationInteger,
@@ -100,6 +103,7 @@ class InputController extends Controller
                     'sDescription' => $validationString,
                     'sCategory' => $validationString,
                     'sWoodtype' => $validationString,
+                    'sColor' => $validationString,
                     'sWidth' => $validationInteger,
                     'sHeight' => $validationInteger,
                     'sDepth' => $validationInteger,
@@ -177,8 +181,8 @@ class InputController extends Controller
             $cells = $sheet->getCellCollection();
 
             // dd($cells->getHighestRow());
-
-            for($row = 1; $row <= $cells->getHighestRow(); $row++){
+            //* Row value is indicated of the begining of the row in the excel
+            for($row = 2; $row <= $cells->getHighestRow(); $row++){
                 $array[$row]['uuid'] = fake()->uuid();
                 $array[$row]['image'] = ($cells->get('B'.$row)) ? $cells->get('B'.$row)->getValue():'';
                 $array[$row]['code'] = ($cells->get('C'.$row)) ? $cells->get('C'.$row)->getValue():'';
@@ -189,37 +193,33 @@ class InputController extends Controller
                 $array[$row]['depth'] = ($cells->get('H'.$row)) ? $cells->get('H'.$row)->getValue():'';
                 $array[$row]['height'] = ($cells->get('I'.$row)) ? $cells->get('I'.$row)->getValue():'';
                 $array[$row]['stock'] = ($cells->get('J'.$row)) ? $cells->get('J'.$row)->getValue():'';
-                $array[$row]['price'] = ($cells->get('K'.$row)) ? $cells->get('K'.$row)->getValue():'';
+                $array[$row]['color'] = ($cells->get('K'.$row)) ? $cells->get('K'.$row)->getValue():'';
+                $array[$row]['price'] = ($cells->get('L'.$row)) ? $cells->get('L'.$row)->getValue():'';
             }
 
-            // dd(count($array));
 
-            for($i = 1; $i <= count($array); $i++){
-                $importFirst = new Furniture($array[$i]);
+            foreach ($array as $data){
+                $importFirst = new Furniture($data);
                 $importFirst->save();
             }
 
             foreach ($drawings as $drawing){
                 $coordinates = $drawing->getCoordinates();
                 $drawing_path = $drawing->getPath();
-                $extension = pathinfo($drawing_path, PATHINFO_EXTENSION);
-
-                $img_url = "/storage/furniture-img/{$coordinates}.{$extension}";
+                //! Because the extension can't be looped using index loop so change all the extension to jpg format
+                //// $extension = pathinfo($drawing_path, PATHINFO_EXTENSION);
+                //? Save any image as jpg
+                $img_url = "/storage/furniture-img/{$coordinates}.jpg";
                 $img_path = public_path($img_url);
 
-
                 $contents = file_get_contents($drawing_path);
-
                 file_put_contents($img_path, $contents);
 
-                // dd($coordinates);
-                // dd($img_url_altered);
-
-                for($i = 1 ; $i <= count($array); $i++){
-                    $furniture = Furniture::where('uuid', $array[$i]['uuid'])->first();
+                foreach ($array as $index => $data){
+                    $furniture = Furniture::where('uuid', $data['uuid'])->first();
                     if($furniture){
                         $furniture->update([
-                            'image' => "/furniture-img/B{$i}.{$extension}"
+                            'image' => "/furniture-img/B{$index}.jpg"
                         ]);
                     }
                 }
@@ -227,17 +227,16 @@ class InputController extends Controller
 
 
 
-            // Storage::delete(public_path('/FurnitureData/'.$fileName));
+            //* Delete file after uploaded and save a image
             unlink(public_path('/FurnitureData/'.$fileName));
 
 
-            // Excel::import(new FurnituresImport, \public_path('/FurnitureData/'.$fileName));
             return \redirect()->back();
-            // return  $excelFile;
-            // dd($request->all());
         }
 
     }
+
+
     public function deleteBulk(request $request){
 
         // dd($request->uuids);
