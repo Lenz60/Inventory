@@ -16,30 +16,40 @@
                                 <div class="p-2 flex flex-row rounded-md">
                                     <div class="w-[50%] items-center p-2">
                                         <div class="flex flex-col p-2">
-                                            <div v-if="tempUrl" class="p-5">
-                                                <h2 class="m-2">
-                                                    Preview Image
-                                                </h2>
-                                                <img
-                                                    class="m-auto"
-                                                    :src="tempUrl"
-                                                    alt=""
-                                                />
+                                            <div v-if="!radioCode">
+                                                <!-- ! Add logic to place img url of the selected code -->
+                                                <div v-if="form.code">
+                                                    <p>{{ form.code }} image</p>
+                                                </div>
                                             </div>
-                                            <div class="flex flex-col">
-                                                <h1 class="text-start m-2">
-                                                    Image
-                                                </h1>
-                                                <input
-                                                    id="image"
-                                                    @change="setImage"
-                                                    type="file"
-                                                    class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
-                                                />
-                                                <InputError
-                                                    class="mt-2 text-start"
-                                                    :message="form.errors.image"
-                                                />
+                                            <div v-else>
+                                                <div v-if="tempUrl" class="p-5">
+                                                    <h2 class="m-2">
+                                                        Preview Image
+                                                    </h2>
+                                                    <img
+                                                        class="m-auto"
+                                                        :src="tempUrl"
+                                                        alt=""
+                                                    />
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <h1 class="text-start m-2">
+                                                        Image
+                                                    </h1>
+                                                    <input
+                                                        id="image"
+                                                        @change="setImage"
+                                                        type="file"
+                                                        class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
+                                                    />
+                                                    <InputError
+                                                        class="mt-2 text-start"
+                                                        :message="
+                                                            form.errors.image
+                                                        "
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="flex flex-col p-2">
