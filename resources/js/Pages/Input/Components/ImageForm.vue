@@ -13,19 +13,13 @@
                 type="file"
                 class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
             />
-            <!-- <InputError class="mt-2 text-start" :message="form.errors.image" /> -->
         </div>
     </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import InputError from "@/Components/InputError.vue";
-import { useForm } from "@inertiajs/vue3";
 export default {
-    components: {
-        InputError,
-    },
     setup() {
         const tempUrl = ref("");
         return { tempUrl };

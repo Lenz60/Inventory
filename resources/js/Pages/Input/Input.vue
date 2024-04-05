@@ -54,6 +54,13 @@
                                                                 tempUrl
                                                             "
                                                         ></ImageForm>
+                                                        <InputError
+                                                            class="mt-2 text-start"
+                                                            :message="
+                                                                form.errors
+                                                                    .image
+                                                            "
+                                                        />
                                                         <button
                                                             class="mt-4 btn w-fit btn-info btn-sm items-center"
                                                             type="button"
@@ -71,6 +78,10 @@
                                                     @imageForm="form.image"
                                                     @tempUrlChange="tempUrl"
                                                 ></ImageForm>
+                                                <InputError
+                                                    class="mt-2 text-start"
+                                                    :message="form.errors.image"
+                                                />
                                             </div>
                                         </div>
                                         <div class="flex flex-col p-2">
