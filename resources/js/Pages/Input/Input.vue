@@ -19,37 +19,58 @@
                                             <div v-if="!radioCode">
                                                 <!-- ! Add logic to place img url of the selected code -->
                                                 <div v-if="form.code">
-                                                    <p>{{ form.code }} image</p>
+                                                    <!-- <p>{{ form.code }} image</p> -->
+                                                    <div
+                                                        v-if="previewCodeImg"
+                                                        class="flex flex-col items-center"
+                                                    >
+                                                        <img
+                                                            class="w-[30%] h-[30%]"
+                                                            :src="
+                                                                'storage/' +
+                                                                codeSelectedImg
+                                                            "
+                                                            alt=""
+                                                        />
+                                                        <button
+                                                            class="mt-4 btn btn-info btn-sm w-fit"
+                                                            type="button"
+                                                            @click="
+                                                                uploadNewImg()
+                                                            "
+                                                        >
+                                                            Use new image
+                                                        </button>
+                                                    </div>
+                                                    <div
+                                                        v-else
+                                                        class="flex flex-col justify-center"
+                                                    >
+                                                        <ImageForm
+                                                            @imageForm="
+                                                                form.image
+                                                            "
+                                                            @tempUrlChange="
+                                                                tempUrl
+                                                            "
+                                                        ></ImageForm>
+                                                        <button
+                                                            class="mt-4 btn w-fit btn-info btn-sm items-center"
+                                                            type="button"
+                                                            @click="
+                                                                uploadNewImg()
+                                                            "
+                                                        >
+                                                            Use stored image
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div v-else>
-                                                <div v-if="tempUrl" class="p-5">
-                                                    <h2 class="m-2">
-                                                        Preview Image
-                                                    </h2>
-                                                    <img
-                                                        class="m-auto"
-                                                        :src="tempUrl"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <h1 class="text-start m-2">
-                                                        Image
-                                                    </h1>
-                                                    <input
-                                                        id="image"
-                                                        @change="setImage"
-                                                        type="file"
-                                                        class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
-                                                    />
-                                                    <InputError
-                                                        class="mt-2 text-start"
-                                                        :message="
-                                                            form.errors.image
-                                                        "
-                                                    />
-                                                </div>
+                                                <ImageForm
+                                                    @imageForm="form.image"
+                                                    @tempUrlChange="tempUrl"
+                                                ></ImageForm>
                                             </div>
                                         </div>
                                         <div class="flex flex-col p-2">
@@ -78,6 +99,7 @@
                                                         id="codeSelect"
                                                         v-model="form.code"
                                                         class="select select-md select-primary w-full max-w-xs"
+                                                        @change="codeSelected()"
                                                         required
                                                     >
                                                         <option
@@ -122,9 +144,7 @@
                                                             name="radioCode"
                                                             class="radio radio-sm radio-primary bg-inherit enabled:hover:border-info enabled:checked:bg-primary"
                                                             value="exist"
-                                                            @change="
-                                                                onChange($event)
-                                                            "
+                                                            @change="onChange()"
                                                         />
                                                         <label class="ml-2"
                                                             >Existing
@@ -505,6 +525,7 @@ import TextInput from "@/Components/TextInput.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import UpdateModal from "@/Pages/Input/Modal/Update.vue";
+import ImageForm from "@/Pages/Input/Components/ImageForm.vue";
 import { Link, useForm, usePage, router, Head } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
 import { ref, watch, computed } from "vue";
@@ -521,10 +542,12 @@ export default {
         InputLabel,
         InputError,
         UpdateModal,
+        ImageForm,
     },
     props: ["furnitures", "errors"],
     setup(props) {
         const radioCode = ref(true);
+        const typeNewCode = ref(true);
         const categories = ["Indoor", "Outdoor", "Handicraft", "Root"];
         const notRootType = ["Teak wood", "Tiger wood", "Mahogany wood"];
         const isRoot = ref(false);
@@ -543,6 +566,8 @@ export default {
         });
         const selectAll = ref(false);
         const selectedFurnitures = ref([]);
+        const codeSelectedImg = ref("");
+        const previewCodeImg = ref(true);
         // const excelImport = ref("");
         // const errors = ref(props.errors);
         // console.log(props.furnitures);
@@ -635,6 +660,7 @@ export default {
 
         return {
             radioCode,
+            typeNewCode,
             submit,
             form,
             categories,
@@ -651,6 +677,8 @@ export default {
             excelImport,
             selectAll,
             selectedFurnitures,
+            codeSelectedImg,
+            previewCodeImg,
         };
     },
     methods: {
@@ -661,12 +689,30 @@ export default {
             this.tempUrl = URL.createObjectURL(this.form.image);
             // console.log(this.tempUrl);
         },
-        onChange(event) {
+        getEmitImage() {},
+        onChange() {
             //Change between input code manually and existing code
             this.radioCode = !this.radioCode;
             this.form.reset("code");
+            // console.log(this.furnitures);
+            // console.log(event);
             // console.log(this.radioCode);
             // console.log(this.form);
+        },
+        codeSelected() {
+            console.log(this.form.code);
+            const selectedFur = this.furnitures.filter((furniture) =>
+                furniture.code
+                    .toLowerCase()
+                    .includes(this.form.code.toLowerCase())
+            );
+            this.codeSelectedImg = selectedFur[0].image;
+            this.previewCodeImg = true;
+            // console.log(this.codeSelectedImg);
+            // console.log(selectedFur[0].image);
+        },
+        uploadNewImg() {
+            this.previewCodeImg = !this.previewCodeImg;
         },
         categoryChange(event) {
             //Check the selected category
