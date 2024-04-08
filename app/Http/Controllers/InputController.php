@@ -40,32 +40,56 @@ class InputController extends Controller
 
 
 
-        $check = $this->validateInput($request,'input');
-        // dd($check['image']);
-        // dd($request->all());
-        // dd($request->image->getClientOriginalName());
-        // dd(fake()->uuid());
-        if($check){
-            if($check['image']){
-                $fileUrl = $request->file('image')->store('furniture-img');
-            }else {
-                $fileUrl = null;
-            }
+        // dd(is_string($request->image));
 
-            Furniture::create ([
-                'uuid' => fake()->uuid(),
-                'image' => $fileUrl,
-                'code' => $request->code,
-                'description' => $request->description,
-                'category' => $request->category,
-                'wood_type' => $request->woodtype,
-                'color' => $request->color,
-                'width' => $request->width,
-                'depth' => $request->depth,
-                'height' => $request->height,
-                'stock' => $request->stock,
-                'price' => $request->price,
-            ]);
+        if(is_string($request->image)){
+            $check = $this->validateInput($request,'inputExistedImage');
+            // dd($check['image']);
+            if($check){
+                $fileUrl = $check['image'];
+                Furniture::create ([
+                    'uuid' => fake()->uuid(),
+                    'image' => $fileUrl,
+                    'code' => $request->code,
+                    'description' => $request->description,
+                    'category' => $request->category,
+                    'wood_type' => $request->woodtype,
+                    'color' => $request->color,
+                    'width' => $request->width,
+                    'depth' => $request->depth,
+                    'height' => $request->height,
+                    'stock' => $request->stock,
+                    'price' => $request->price,
+                ]);
+            }
+        }else{
+            $check = $this->validateInput($request,'input');
+            // dd($check['image']);
+            // dd($request->all());
+            // dd($request->image->getClientOriginalName());
+            // dd(fake()->uuid());
+            if($check){
+                if($check['image']){
+                    $fileUrl = $request->file('image')->store('furniture-img');
+                }else {
+                    $fileUrl = null;
+                }
+
+                Furniture::create ([
+                    'uuid' => fake()->uuid(),
+                    'image' => $fileUrl,
+                    'code' => $request->code,
+                    'description' => $request->description,
+                    'category' => $request->category,
+                    'wood_type' => $request->woodtype,
+                    'color' => $request->color,
+                    'width' => $request->width,
+                    'depth' => $request->depth,
+                    'height' => $request->height,
+                    'stock' => $request->stock,
+                    'price' => $request->price,
+                ]);
+            }
         }
         return redirect()->back()->with('message', 'input:200');
     }
@@ -97,7 +121,21 @@ class InputController extends Controller
                     'stock' => $validationInteger,
                     'price' => $validationInteger,
                 ]);
-        }else{
+        }elseif($context == 'inputExistedImage'){
+            return $input -> validate([
+                    'image' => $validationString,
+                    'description' => $validationString,
+                    'category' => $validationString,
+                    'woodtype' => $validationString,
+                    'color' => $validationString,
+                    'width' => $validationInteger,
+                    'height' => $validationInteger,
+                    'depth' => $validationInteger,
+                    'stock' => $validationInteger,
+                    'price' => $validationInteger,
+                ]);
+        }
+        else{
             return $input -> validate([
                     'sImage' => "required|image|file|max:1024",
                     'sDescription' => $validationString,
