@@ -47,56 +47,61 @@
                                                     <div
                                                         class="flex flex-col p-2"
                                                     >
-                                                        <div>
+                                                        <div v-if="form.image">
+                                                            <!-- <p>{{ form.code }} image</p> -->
                                                             <div
-                                                                v-if="tempUrl"
-                                                                class="p-5"
+                                                                v-if="
+                                                                    previewCodeImg
+                                                                "
+                                                                class="flex flex-col items-center"
                                                             >
-                                                                <!-- M̶a̶k̶e̶s̶ C̶h̶e̶c̶k̶,̶ i̶f̶ o̶p̶e̶n̶ f̶i̶r̶s̶t̶ t̶i̶m̶e̶,̶ t̶a̶k̶e̶ i̶m̶g̶ u̶r̶l̶ f̶r̶o̶m̶ d̶b̶ a̶n̶d̶ d̶i̶s̶p̶l̶a̶y̶ i̶t̶ -->
-                                                                <!-- I̶f̶ t̶h̶e̶r̶e̶ i̶s̶ a̶ c̶h̶a̶n̶g̶e̶ i̶n̶ i̶m̶a̶g̶e̶,̶ c̶h̶a̶n̶g̶e̶ p̶r̶e̶v̶i̶e̶w̶ t̶o̶ c̶u̶r̶r̶e̶n̶t̶ s̶e̶l̶e̶c̶t̶e̶d̶ i̶m̶a̶g̶e̶ -->
-                                                                <h2 class="m-2">
-                                                                    Preview
-                                                                    Image
-                                                                </h2>
                                                                 <img
-                                                                    class="m-auto rounded-md border-2 border-primary p-2"
+                                                                    class="w-[30%] h-[30%]"
                                                                     :src="
-                                                                        tempUrl
+                                                                        'storage/' +
+                                                                        form.image
                                                                     "
                                                                     alt=""
                                                                 />
+                                                                <button
+                                                                    class="mt-4 btn btn-info btn-sm w-fit"
+                                                                    type="button"
+                                                                    @click="
+                                                                        uploadNewImg()
+                                                                    "
+                                                                >
+                                                                    Use new
+                                                                    image
+                                                                </button>
                                                             </div>
-                                                            <div v-else>
-                                                                <!-- Change to img later -->
-                                                                <h1>
-                                                                    {{
-                                                                        form.image
-                                                                    }}
-                                                                </h1>
-                                                            </div>
-                                                        </div>
-                                                        <div
-                                                            class="flex flex-col"
-                                                        >
-                                                            <h1
-                                                                class="m-2 text-start"
+                                                            <div
+                                                                v-else
+                                                                class="flex flex-col justify-center"
                                                             >
-                                                                Image
-                                                            </h1>
-                                                            <input
-                                                                id="image"
-                                                                @change="
-                                                                    setImage
-                                                                "
-                                                                type="file"
-                                                                class="file-input file-input-sm rounded-md file-input-bordered file-input-primary w-full max-w-xs"
-                                                            />
-                                                            <InputError
-                                                                class="mt-2 text-start"
-                                                                :message="
-                                                                    Errors.sImage
-                                                                "
-                                                            />
+                                                                <ImageForm
+                                                                    @imageForm="
+                                                                        ExistedCodeNewImage
+                                                                    "
+                                                                ></ImageForm>
+                                                                <InputError
+                                                                    class="mt-2 text-start"
+                                                                    :message="
+                                                                        form
+                                                                            .errors
+                                                                            .image
+                                                                    "
+                                                                />
+                                                                <button
+                                                                    class="mt-4 btn w-fit btn-info btn-sm items-center"
+                                                                    type="button"
+                                                                    @click="
+                                                                        uploadNewImg()
+                                                                    "
+                                                                >
+                                                                    Use stored
+                                                                    image
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div
@@ -491,6 +496,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import NumberInput from "@/Components/NumberInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import ImageForm from "@/Pages/Input/Components/ImageForm.vue";
 import { Link, useForm, router, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import InputError from "@/Components/InputError.vue";
@@ -505,6 +511,7 @@ export default {
         NumberInput,
         InputLabel,
         InputError,
+        ImageForm,
     },
     setup(props, context) {
         const radioCode = ref(true);
@@ -513,6 +520,7 @@ export default {
         const isRoot = ref(false);
         const selectedCategory = ref("");
         let tempUrl = ref("");
+        const previewCodeImg = ref(true);
 
         console.log(props.SelectedFurniture.color);
 
@@ -580,6 +588,7 @@ export default {
             selectedCategory,
             tempUrl,
             update,
+            previewCodeImg,
         };
     },
     methods: {
@@ -591,6 +600,13 @@ export default {
             this.form.image = file;
             //Preview Image
             this.tempUrl = URL.createObjectURL(file);
+        },
+        ExistedCodeNewImage(n) {
+            // console.log(n);
+            this.form.image = n;
+        },
+        uploadNewImg() {
+            this.previewCodeImg = !this.previewCodeImg;
         },
         onChange(event) {
             //Change between input code manually and existing code
