@@ -48,10 +48,7 @@
                                                     >
                                                         <ImageForm
                                                             @imageForm="
-                                                                form.image
-                                                            "
-                                                            @tempUrlChange="
-                                                                tempUrl
+                                                                ExistedCodeNewImage
                                                             "
                                                         ></ImageForm>
                                                         <InputError
@@ -75,8 +72,9 @@
                                             </div>
                                             <div v-else>
                                                 <ImageForm
-                                                    @imageForm="form.image"
-                                                    @tempUrlChange="tempUrl"
+                                                    @imageForm="
+                                                        ExistedCodeNewImage
+                                                    "
                                                 ></ImageForm>
                                                 <InputError
                                                     class="mt-2 text-start"
@@ -700,7 +698,10 @@ export default {
             this.tempUrl = URL.createObjectURL(this.form.image);
             // console.log(this.tempUrl);
         },
-        getEmitImage() {},
+        ExistedCodeNewImage(n) {
+            // console.log(n);
+            this.form.image = n;
+        },
         onChange() {
             //Change between input code manually and existing code
             this.radioCode = !this.radioCode;
@@ -719,7 +720,9 @@ export default {
             );
             this.codeSelectedImg = selectedFur[0].image;
             this.previewCodeImg = true;
+            this.form.image = this.codeSelectedImg;
             // console.log(this.codeSelectedImg);
+            console.log(this.form.image);
             // console.log(selectedFur[0].image);
         },
         uploadNewImg() {
