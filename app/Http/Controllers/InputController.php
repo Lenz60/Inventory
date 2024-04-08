@@ -96,6 +96,8 @@ class InputController extends Controller
 
     public function update(Request $request){
 
+        dd($request->all());
+
         $this->validateInput($request,'update');
         return redirect()->back()->with('message', 'update:200');
         // return Redirect::route('input.index', ['message' => 'update:200']);
