@@ -348,34 +348,17 @@
                                 </div>
                             </form>
                             <div>
-                                <div v-if="filename == ''">
-                                    <button
-                                        class="btn m-4 px-10 btn-success"
-                                        :disabled="form.processing"
-                                        @click.prevent="$refs.file.click()"
-                                    >
-                                        Import
-                                    </button>
-                                </div>
-                                <div>{{ filename }}</div>
-                                <input
-                                    type="file"
-                                    ref="file"
-                                    class="hidden"
-                                    name="importExcel"
-                                    id="importExcel"
-                                    @change="onFileSelected"
-                                />
-                                <div v-if="filename != ''">
-                                    <button
-                                        class="btn m-4 px-10 btn-success"
-                                        :disabled="form.processing"
-                                        @click="xlsToLaravel(excelImport)"
-                                    >
-                                        Import
-                                    </button>
-                                </div>
+                                <!-- <div v-if="filename == ''"> -->
+                                <button
+                                    type="button"
+                                    class="btn m-4 px-10 btn-success"
+                                    :disabled="form.processing"
+                                    @click="toggleImportModal()"
+                                >
+                                    Import
+                                </button>
                             </div>
+                            <!-- </div> -->
                         </div>
                     </div>
                     <div class="bg-primary-content card m-2 p-5">
@@ -524,6 +507,9 @@
             >
             </UpdateModal>
         </div>
+        <div v-if="showImportModal">
+            <ImportModal @close="toggleImportModal()"></ImportModal>
+        </div>
     </AuthenticatedLayout>
 </template>
 
@@ -535,6 +521,7 @@ import NumberInput from "@/Components/NumberInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import UpdateModal from "@/Pages/Input/Modal/Update.vue";
 import ImageForm from "@/Pages/Input/Components/ImageForm.vue";
+import ImportModal from "@/Pages/Input/Modal/Import.vue";
 import { Link, useForm, usePage, router, Head } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
 import { ref, watch, computed } from "vue";
@@ -552,6 +539,7 @@ export default {
         InputError,
         UpdateModal,
         ImageForm,
+        ImportModal,
     },
     props: ["furnitures", "errors"],
     setup(props) {
@@ -569,14 +557,11 @@ export default {
         const search = ref("");
         const perPage = ref("");
         const prefixAsset = "storage/";
-        const filename = ref("");
-        const excelImport = useForm({
-            file: "",
-        });
         const selectAll = ref(false);
         const selectedFurnitures = ref([]);
         const codeSelectedImg = ref("");
         const previewCodeImg = ref(true);
+        const showImportModal = ref(false);
         // const excelImport = ref("");
         // const errors = ref(props.errors);
         // console.log(props.furnitures);
@@ -623,21 +608,6 @@ export default {
             }
         });
 
-        // const selectAllFurnitures = () => {
-        //     if (selectAll.value) {
-        //         selectedFurnitures.value = props.furnitures.value.data.map(
-        //             (furniture) => props.furnitures.uuid
-        //         );
-        //     } else {
-        //         selectedFurnitures.value = [];
-        //     }
-        // };
-        // console.log(selectedFurnitures.value);
-
-        // console.log(props.furnitures.description);
-
-        // console.log(props.furnitures[0].description);
-
         const filteredItems = computed(() => {
             return _.orderBy(
                 props.furnitures.filter(
@@ -682,12 +652,11 @@ export default {
             search,
             filteredItems,
             prefixAsset,
-            filename,
-            excelImport,
             selectAll,
             selectedFurnitures,
             codeSelectedImg,
             previewCodeImg,
+            showImportModal,
         };
     },
     methods: {
@@ -765,6 +734,9 @@ export default {
                 };
             }
         },
+        toggleImportModal() {
+            this.showImportModal = !this.showImportModal;
+        },
         deleteSelected(uuid) {
             Swal.fire({
                 title: "Are you sure?",
@@ -783,14 +755,6 @@ export default {
                 }
             });
             // console.log($uuid);
-        },
-        xlsToLaravel(e) {
-            this.excelImport.post(route("input.import"));
-            // router.get(route("input.import"));
-        },
-        onFileSelected(e) {
-            this.filename = e.target.files[0].name;
-            this.excelImport.file = e.target.files[0];
         },
         selectDelete(furniture) {
             const index = this.selectedFurnitures.indexOf(furniture.uuid);
