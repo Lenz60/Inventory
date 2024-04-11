@@ -291,12 +291,11 @@
                                                             <option
                                                                 v-if="isRoot"
                                                                 value="Root"
-                                                                selected
                                                             >
                                                                 Root
                                                             </option>
                                                             <option
-                                                                v-if="!isRoot"
+                                                                v-else
                                                                 v-for="notRoot in notRootType"
                                                             >
                                                                 {{ notRoot }}
@@ -500,7 +499,7 @@ import ImageForm from "@/Pages/Input/Components/ImageForm.vue";
 import { Link, useForm, router, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import InputError from "@/Components/InputError.vue";
-import { onUpdated } from "vue";
+import { onUpdated, onMounted } from "vue";
 import Swal from "sweetalert2";
 export default {
     props: ["SelectedFurniture", "Furnitures", "message", "Errors"],
@@ -518,6 +517,7 @@ export default {
         const categories = ["Indoor", "Outdoor", "Handicraft", "Root"];
         const notRootType = ["Teak wood", "Tiger wood", "Mahogany wood"];
         const isRoot = ref(false);
+        const Root = "Root";
         const selectedCategory = ref("");
         let tempUrl = ref("");
         const previewCodeImg = ref(true);
@@ -579,6 +579,18 @@ export default {
             }
         });
 
+        // Change the wood type to root if the selected category is root
+        onMounted(() => {
+            if (props.SelectedFurniture.category == "Root") {
+                isRoot.value = true;
+                form.woodtype = "Root";
+                // console.log(isRoot.value);
+            } else {
+                isRoot.value = false;
+                // console.log(isRoot.value);
+            }
+        });
+
         return {
             form,
             radioCode,
@@ -589,6 +601,7 @@ export default {
             tempUrl,
             update,
             previewCodeImg,
+            Root,
         };
     },
     methods: {
@@ -613,14 +626,20 @@ export default {
             this.radioCode = !this.radioCode;
             this.form.reset("code");
         },
+        woodtypeChange(event) {
+            console.log(event.target.value);
+        },
         categoryChange(event) {
             //Check the selected category
             //if selected category is not root
             //then remove root from wood type
+            console.log(event.target.value);
             if (event.target.options.selectedIndex > -1) {
                 this.selectedCategory = event.target.value;
                 if (this.selectedCategory == "Root") {
                     this.isRoot = true;
+                    this.form.woodtype = "Root";
+                    // console.log(this.form.woodtype);
                 } else {
                     this.isRoot = false;
                 }
