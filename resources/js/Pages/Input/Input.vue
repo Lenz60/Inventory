@@ -118,9 +118,12 @@
                                                             Existing Code
                                                         </option>
                                                         <option
-                                                            v-for="furniture in furnitures"
+                                                            v-for="(
+                                                                code, index
+                                                            ) in furnitureCode"
+                                                            :key="index"
                                                         >
-                                                            {{ furniture.code }}
+                                                            {{ code }}
                                                         </option>
                                                     </select>
                                                     <InputError
@@ -524,9 +527,8 @@ import ImageForm from "@/Pages/Input/Components/ImageForm.vue";
 import ImportModal from "@/Pages/Input/Modal/Import.vue";
 import { Link, useForm, usePage, router, Head } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onUpdated } from "vue";
 import InputError from "@/Components/InputError.vue";
-import { onUpdated } from "vue";
 import { _ } from "lodash";
 export default {
     components: {
@@ -585,6 +587,11 @@ export default {
                 // onFinish: () => form.reset(),
             });
         };
+
+        const furnitureCode = computed(() => {
+            const codes = props.furnitures.map((furniture) => furniture.code);
+            return [...new Set(codes)];
+        });
 
         onUpdated(() => {
             if (usePage().props.flash.message == "input:200") {
@@ -657,6 +664,7 @@ export default {
             codeSelectedImg,
             previewCodeImg,
             showImportModal,
+            furnitureCode,
         };
     },
     methods: {

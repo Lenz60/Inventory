@@ -59,7 +59,7 @@
                                                                     class="w-[30%] h-[30%]"
                                                                     :src="
                                                                         'storage/' +
-                                                                        form.image
+                                                                        currentImage
                                                                     "
                                                                     alt=""
                                                                 />
@@ -154,10 +154,16 @@
                                                                         Code
                                                                     </option>
                                                                     <option
-                                                                        v-for="furniture in Furnitures"
+                                                                        v-for="(
+                                                                            code,
+                                                                            index
+                                                                        ) in furnitureCode"
+                                                                        :key="
+                                                                            index
+                                                                        "
                                                                     >
                                                                         {{
-                                                                            furniture.code
+                                                                            code
                                                                         }}
                                                                     </option>
                                                                 </select>
@@ -499,7 +505,7 @@ import ImageForm from "@/Pages/Input/Components/ImageForm.vue";
 import { Link, useForm, router, usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import InputError from "@/Components/InputError.vue";
-import { onUpdated, onMounted } from "vue";
+import { onUpdated, onMounted, computed } from "vue";
 import Swal from "sweetalert2";
 export default {
     props: ["SelectedFurniture", "Furnitures", "message", "Errors"],
@@ -517,12 +523,12 @@ export default {
         const categories = ["Indoor", "Outdoor", "Handicraft", "Root"];
         const notRootType = ["Teak wood", "Tiger wood", "Mahogany wood"];
         const isRoot = ref(false);
-        const Root = "Root";
         const selectedCategory = ref("");
         let tempUrl = ref("");
         const previewCodeImg = ref(true);
+        const currentImage = props.SelectedFurniture.image;
 
-        console.log(props.SelectedFurniture.color);
+        // console.log(props.SelectedFurniture.color);
 
         // Declare props as the existing values of the input field
         let form = useForm({
@@ -542,7 +548,7 @@ export default {
 
         // console.log(props.SelectedFurniture.woodtype);
 
-        console.log(props.Errors);
+        // console.log(props.Errors);
 
         // console.log(props.message);
 
@@ -566,6 +572,10 @@ export default {
 
         // let msg = usePage().props.flash.message;
 
+        const furnitureCode = computed(() => {
+            const codes = props.Furnitures.map((furniture) => furniture.code);
+            return [...new Set(codes)];
+        });
         onUpdated(() => {
             // console.log(props.errors);
             if (usePage().props.flash.message == "update:200") {
@@ -601,7 +611,8 @@ export default {
             tempUrl,
             update,
             previewCodeImg,
-            Root,
+            furnitureCode,
+            currentImage,
         };
     },
     methods: {
