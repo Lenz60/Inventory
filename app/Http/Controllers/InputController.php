@@ -143,7 +143,7 @@ class InputController extends Controller
         }
 
 
-        $this->validateInput($request,'update');
+        // $this->validateInput($request,'update');
         return redirect()->back()->with('message', 'update:200');
         // return Redirect::route('input.index', ['message' => 'update:200']);
     }
@@ -214,7 +214,7 @@ class InputController extends Controller
             $this->processDrawings($array, $fileName);
             //* Delete uploaded file to avoid unecessary excess storage
             $this->deleteUploadedFile($fileName);
-            return redirect()->back();
+            return redirect()->back()->with('message', 'import:200');
         }
     }
 
@@ -270,7 +270,7 @@ class InputController extends Controller
                 $furniture = Furniture::where('uuid',$data['uuid'])->first();
                 if($furniture){
                     $furniture->update([
-                        'image' => "/furniture-img/B{$index}.jpg"
+                        'image' => "furniture-img/B{$index}.jpg"
                     ]);
                 }
             }
