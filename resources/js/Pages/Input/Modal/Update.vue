@@ -642,6 +642,7 @@ export default {
                     // console.log(this.form.woodtype);
                 } else {
                     this.isRoot = false;
+                    this.form.woodtype = null;
                 }
             }
         },
