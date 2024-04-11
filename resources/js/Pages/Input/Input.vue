@@ -705,8 +705,10 @@ export default {
                 this.selectedCategory = event.target.value;
                 if (this.selectedCategory == "Root") {
                     this.isRoot = true;
+                    this.form.woodtype = "Root";
                 } else {
                     this.isRoot = false;
+                    this.form.woodtype = null;
                 }
                 // console.log(this.isRoot);
                 // console.log(this.selectedCategory);
