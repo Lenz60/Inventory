@@ -43,7 +43,7 @@ class InputController extends Controller
         // dd(is_string($request->image));
 
         if(is_string($request->image)){
-            $check = $this->validateInput($request,'inputExistedImage');
+            $check = $this->validateInput($request,'input');
             // dd($check['image']);
             if($check){
                 $fileUrl = $check['image'];
@@ -96,7 +96,52 @@ class InputController extends Controller
 
     public function update(Request $request){
 
-        dd($request->all());
+        // dd($request->sImage);
+        $check = $this->validateInput($request,'update');
+        if(is_string($request->sImage)){
+
+            if($check){
+                $furniture = Furniture::find($request->sUuid);
+                // dd($furniture->first());
+                $furniture->update([
+                    'image' => $request->sImage,
+                    'code' => $request->sCode,
+                    'description' => $request->sDescription,
+                    'category' => $request->sCategory,
+                    'wood_type' => $request->sWoodtype,
+                    'width' => $request->sWidth,
+                    'color' => $request->sColor,
+                    'depth' => $request->sDepth,
+                    'height' => $request->sHeight,
+                    'price' => $request->sPrice,
+                    'stock' => $request->sStock,
+                ]);
+            }
+        }else{
+            if($check){
+                if($check['sImage']){
+                        $fileUrl = $request->file('sImage')->store('furniture-img');
+                    }else {
+                        $fileUrl = null;
+                    }
+                $furniture = Furniture::find($request->sUuid);
+                // dd($furniture->first());
+                $furniture->update([
+                    'image' => $fileUrl,
+                    'code' => $request->sCode,
+                    'description' => $request->sDescription,
+                    'category' => $request->sCategory,
+                    'wood_type' => $request->sWoodtype,
+                    'width' => $request->sWidth,
+                    'color' => $request->sColor,
+                    'depth' => $request->sDepth,
+                    'height' => $request->sHeight,
+                    'price' => $request->sPrice,
+                    'stock' => $request->sStock,
+                ]);
+            }
+        }
+
 
         $this->validateInput($request,'update');
         return redirect()->back()->with('message', 'update:200');
@@ -104,28 +149,24 @@ class InputController extends Controller
     }
 
     public function validateInput($input, $context){
-        $validationInteger = "required|numeric|min:0|not_in:0";
+        $validationInteger = "required|numeric|min:0|max_digits:6|not_in:0";
         $validationString = "required|string";
+
+        // dd(is_string($input->sImage));
+
+
+        if(is_string($input->image) || is_string($input->sImage)){
+            $validationImage = $validationString;
+        }else{
+            $validationImage = "required|image|file|max:1024";
+        }
 
         //To separate different error validation between input and update validation
         //pass the context to the function
         //if there is not context then it means that the validation is for update field and return different error variables
         if ($context == 'input'){
             return $input -> validate([
-                    'image' => "required|image|file|max:1024",
-                    'description' => $validationString,
-                    'category' => $validationString,
-                    'woodtype' => $validationString,
-                    'color' => $validationString,
-                    'width' => $validationInteger,
-                    'height' => $validationInteger,
-                    'depth' => $validationInteger,
-                    'stock' => $validationInteger,
-                    'price' => $validationInteger,
-                ]);
-        }elseif($context == 'inputExistedImage'){
-            return $input -> validate([
-                    'image' => $validationString,
+                    'image' => $validationImage,
                     'description' => $validationString,
                     'category' => $validationString,
                     'woodtype' => $validationString,
@@ -137,9 +178,9 @@ class InputController extends Controller
                     'price' => $validationInteger,
                 ]);
         }
-        else{
+        elseif('update'){
             return $input -> validate([
-                    'sImage' => "required|image|file|max:1024",
+                    'sImage' => $validationImage,
                     'sDescription' => $validationString,
                     'sCategory' => $validationString,
                     'sWoodtype' => $validationString,
