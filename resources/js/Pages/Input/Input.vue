@@ -612,6 +612,13 @@ export default {
                 router.get(route("input.index"));
                 // selectedFurnitures.value = "";
                 // router.get(route("input.index"));
+            } else if (usePage().props.flash.message == "import:200") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Furniture imported successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
             }
         });
 
@@ -748,6 +755,7 @@ export default {
             this.showImportModal = !this.showImportModal;
         },
         deleteSelected(uuid) {
+            // console.log(uuid);
             Swal.fire({
                 title: "Are you sure?",
                 text: "The selected item will be deleted",
@@ -776,9 +784,13 @@ export default {
             // console.log(this.selectedFurnitures);
         },
         bulkDelete() {
+            // console.log(this.selectedFurnitures.length);
+            const selectedDeletedFurnitures = this.selectedFurnitures.length;
             Swal.fire({
                 title: "Are you sure?",
-                text: "The selected item will be deleted",
+                text:
+                    selectedDeletedFurnitures +
+                    " selected item will be deleted",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#FF8F00",
@@ -804,7 +816,6 @@ export default {
             } else {
                 this.selectedFurnitures = [];
             }
-            console.log(this.selectedFurnitures);
         },
     },
 };
