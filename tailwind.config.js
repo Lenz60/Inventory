@@ -11,7 +11,7 @@ export default {
     ],
 
     daisyui: {
-        themes: ["dim", "business", "halloween", "corporate"],
+        themes: ["dim", "business", "halloween", "corporate", "fantasy"],
     },
 
     theme: {
