@@ -454,13 +454,16 @@
                                         <td>{{ no + 1 }}</td>
                                         <!-- <td>{{ furniture.image }}</td> -->
                                         <td>
-                                            <img
-                                                class="w-30 h-30"
-                                                :src="
-                                                    'storage/' + furniture.image
-                                                "
-                                                :alt="furniture.image"
-                                            />
+                                            <div class="w-fit h-fit">
+                                                <img
+                                                    class="w-fit h-fit"
+                                                    :src="
+                                                        'storage/' +
+                                                        furniture.image
+                                                    "
+                                                    :alt="furniture.image"
+                                                />
+                                            </div>
                                         </td>
                                         <td>{{ furniture.code }}</td>
                                         <td>{{ furniture.description }}</td>
