@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\OrdersPayment;
+use App\Models\OrdersProduction;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -15,14 +17,18 @@ class Order extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
     protected $fillable = [
         'id',
+        'cart_id',
         'qty',
         'total_price',
     ];
+
+    public function ordersPayment(){
+        $this->hasOne(OrdersPayment::class);
+    }
+
+    public function ordersProduction(){
+        $this->hasOne(OrdersProduction::class);
+    }
 }
