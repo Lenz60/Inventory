@@ -255,7 +255,7 @@
                                             <h1 class="m-2 text-start">
                                                 Width
                                             </h1>
-                                            <NumberInput
+                                            <input
                                                 id="width"
                                                 v-model="form.width"
                                                 type="number"
@@ -271,7 +271,7 @@
                                             <h1 class="m-2 text-start">
                                                 Depth
                                             </h1>
-                                            <NumberInput
+                                            <input
                                                 id="depth"
                                                 v-model="form.depth"
                                                 type="number"
@@ -287,7 +287,7 @@
                                             <h1 class="m-2 text-start">
                                                 Height
                                             </h1>
-                                            <NumberInput
+                                            <input
                                                 id="height"
                                                 v-model="form.height"
                                                 type="number"
@@ -303,7 +303,7 @@
                                             <h1 class="m-2 text-start">
                                                 Stock
                                             </h1>
-                                            <NumberInput
+                                            <input
                                                 id="stock"
                                                 v-model="form.stock"
                                                 type="number"
@@ -319,7 +319,7 @@
                                             <h1 class="m-2 text-start">
                                                 Price
                                             </h1>
-                                            <NumberInput
+                                            <input
                                                 id="price"
                                                 v-model="form.price"
                                                 type="number"
@@ -578,11 +578,11 @@ export default {
             category: "",
             woodtype: "",
             color: "",
-            width: 0,
-            depth: 0,
-            height: 0,
-            stock: 0,
-            price: 0,
+            width: "",
+            depth: "",
+            height: "",
+            stock: "",
+            price: "",
         });
 
         const submit = () => {
