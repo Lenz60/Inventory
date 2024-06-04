@@ -17,6 +17,12 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+
+/**
+ * Class InputController
+ *
+ * @method string getPath()
+ */
 class InputController extends Controller
 {
     //
@@ -48,7 +54,6 @@ class InputController extends Controller
             if($check){
                 $fileUrl = $check['image'];
                 Furniture::create ([
-                    'uuid' => fake()->uuid(),
                     'image' => $fileUrl,
                     'code' => $request->code,
                     'description' => $request->description,
@@ -76,7 +81,6 @@ class InputController extends Controller
                 }
 
                 Furniture::create ([
-                    'uuid' => fake()->uuid(),
                     'image' => $fileUrl,
                     'code' => $request->code,
                     'description' => $request->description,
@@ -151,6 +155,7 @@ class InputController extends Controller
     public function validateInput($input, $context){
         $validationInteger = "required|numeric|min:0|max_digits:6|not_in:0";
         $validationString = "required|string";
+        $validationStock = "required|numeric|max_digits:6";
 
         // dd(is_string($input->sImage));
 
@@ -174,7 +179,7 @@ class InputController extends Controller
                     'width' => $validationInteger,
                     'height' => $validationInteger,
                     'depth' => $validationInteger,
-                    'stock' => $validationInteger,
+                    'stock' => $validationStock,
                     'price' => $validationInteger,
                 ]);
         }
@@ -255,6 +260,7 @@ class InputController extends Controller
             Furniture::create($data);
         }
     }
+
 
     private function processDrawings(array $array, string $fileName): void{
         $drawings = $this->loadExcelData($fileName)->getDrawingCollection();
