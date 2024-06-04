@@ -7,6 +7,7 @@ use App\Models\Cart;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Faker\Factory as Faker;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -19,7 +20,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable =[
-        'uuid',
         'name',
         'company',
         'email',
@@ -48,5 +48,15 @@ class User extends Authenticatable
 
     public function cart(){
         return $this->hasMany(Cart::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $faker = Faker::create();
+            $model->uuid = $faker->uuid;
+        });
     }
 }

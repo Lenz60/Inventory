@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Model;
 
 class Admin extends Authenticatable
@@ -24,7 +25,6 @@ class Admin extends Authenticatable
     ];
 
 protected $fillable = [
-        'uuid',
         'email',
         'password',
         'name',
@@ -34,6 +34,16 @@ protected $fillable = [
     protected $hidden = [
         'password',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $faker = Faker::create();
+            $model->uuid = $faker->uuid;
+        });
+    }
 
 
 }

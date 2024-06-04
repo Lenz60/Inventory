@@ -19,6 +19,7 @@ class Cart extends Model
         'id',
         'user_id',
         'furniture_id',
+        'preorder',
         'qty',
         'total_price'
     ];
