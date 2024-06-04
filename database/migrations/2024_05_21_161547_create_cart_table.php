@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->string('user_id');
             $table->string('furniture_id');
+            $table->string('preorder');
             $table->string('qty');
             $table->float('total_price');
             $table->foreign('user_id')->references('uuid')->on('users')->onDelete('cascade');
