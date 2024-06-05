@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('cart_id');
+            $table->string('track_code');
             $table->integer('qty');
             $table->float('total_price');
-            $table->foreign('cart_id')->references('id')->on('cart')->onDelete('cascade');
             $table->timestamps();
         });
     }
