@@ -19,9 +19,8 @@ class Order extends Model
 
     protected $fillable = [
         'id',
-        'cart_id',
-        'qty',
         'total_price',
+        'track_code',
     ];
 
     public function ordersPayment(){
