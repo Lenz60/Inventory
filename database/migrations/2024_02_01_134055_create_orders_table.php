@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->string('id')->primary();
+            $table->string('total_price');
             $table->string('track_code');
-            $table->integer('qty');
-            $table->float('total_price');
             $table->timestamps();
         });
     }
