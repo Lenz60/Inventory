@@ -49,6 +49,16 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
                             </div>
                             <div
+                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                            >
+                                <NavLink
+                                    :href="route('order.index')"
+                                    :active="route().current('order.index')"
+                                >
+                                    Manage Order
+                                </NavLink>
+                            </div>
+                            <div
                                 v-if="$page.props.auth.user.role == 1"
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
