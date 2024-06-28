@@ -17,7 +17,6 @@
                                     <div class="w-[50%] items-center p-2">
                                         <div class="flex flex-col p-2">
                                             <div v-if="!radioCode">
-                                                <!-- ! Add logic to place img url of the selected code -->
                                                 <div v-if="form.code">
                                                     <!-- <p>{{ form.code }} image</p> -->
                                                     <div
@@ -269,7 +268,7 @@
                                         </div>
                                         <div class="flex flex-col p-2">
                                             <h1 class="m-2 text-start">
-                                                length
+                                                Length
                                             </h1>
                                             <input
                                                 id="length"
@@ -692,11 +691,20 @@ export default {
         onChange() {
             //Change between input code manually and existing code
             this.radioCode = !this.radioCode;
-            this.form.reset("code");
-            // console.log(this.furnitures);
-            // console.log(event);
-            // console.log(this.radioCode);
-            // console.log(this.form);
+            if (this.radioCode) {
+                // console.log("true");
+                this.form.reset("image");
+                this.form.reset("code");
+                this.form.reset("description");
+                this.form.reset("category");
+                this.form.reset("woodtype");
+                this.form.reset("color");
+                this.form.reset("width");
+                this.form.reset("length");
+                this.form.reset("height");
+                this.form.reset("stock");
+                this.form.reset("price");
+            }
         },
         codeSelected() {
             console.log(this.form.code);
@@ -705,7 +713,17 @@ export default {
                     .toLowerCase()
                     .includes(this.form.code.toLowerCase())
             );
+            console.log(selectedFur[0].category);
             this.codeSelectedImg = selectedFur[0].image;
+            this.form.description = selectedFur[0].description;
+            this.form.category = selectedFur[0].category;
+            this.form.woodtype = selectedFur[0].wood_type;
+            this.form.color = selectedFur[0].color;
+            this.form.width = selectedFur[0].width;
+            this.form.length = selectedFur[0].length;
+            this.form.height = selectedFur[0].height;
+            this.form.stock = selectedFur[0].stock;
+            this.form.price = selectedFur[0].price;
             this.previewCodeImg = true;
             this.form.image = this.codeSelectedImg;
             // console.log(this.codeSelectedImg);
