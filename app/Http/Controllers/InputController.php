@@ -54,6 +54,7 @@ class InputController extends Controller
             if($check){
                 $fileUrl = $check['image'];
                 Furniture::create ([
+                    'uuid' => fake()->uuid(),
                     'image' => $fileUrl,
                     'code' => $request->code,
                     'description' => $request->description,
