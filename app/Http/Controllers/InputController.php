@@ -193,7 +193,7 @@ class InputController extends Controller
                     'sColor' => $validationString,
                     'sWidth' => $validationInteger,
                     'sHeight' => $validationInteger,
-                    'slength' => $validationInteger,
+                    'sLength' => $validationInteger,
                     'sStock' => $validationInteger,
                     'sPrice' => $validationInteger,
             ]);
