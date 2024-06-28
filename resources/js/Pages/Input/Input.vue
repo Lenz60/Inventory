@@ -269,18 +269,18 @@
                                         </div>
                                         <div class="flex flex-col p-2">
                                             <h1 class="m-2 text-start">
-                                                Depth
+                                                length
                                             </h1>
                                             <input
-                                                id="depth"
-                                                v-model="form.depth"
+                                                id="length"
+                                                v-model="form.length"
                                                 type="number"
                                                 placeholder="0"
                                                 class="input input-bordered input-primary w-full max-w-xs"
                                             />
                                             <InputError
                                                 class="mt-2 text-start"
-                                                :message="form.errors.depth"
+                                                :message="form.errors.length"
                                             />
                                         </div>
                                         <div class="flex flex-col p-2">
@@ -425,7 +425,7 @@
                                         <th>Category</th>
                                         <th>Wood Type</th>
                                         <th>Width</th>
-                                        <th>Depth</th>
+                                        <th>length</th>
                                         <th>Height</th>
                                         <th>Stock</th>
                                         <th>Color</th>
@@ -470,7 +470,7 @@
                                         <td>{{ furniture.category }}</td>
                                         <td>{{ furniture.wood_type }}</td>
                                         <td>{{ furniture.width }}cm</td>
-                                        <td>{{ furniture.depth }}cm</td>
+                                        <td>{{ furniture.length }}cm</td>
                                         <td>{{ furniture.height }}cm</td>
                                         <td>{{ furniture.stock }}</td>
                                         <td>{{ furniture.color }}</td>
@@ -579,7 +579,7 @@ export default {
             woodtype: "",
             color: "",
             width: "",
-            depth: "",
+            length: "",
             height: "",
             stock: "",
             price: "",
@@ -747,7 +747,7 @@ export default {
                     woodtype: furniture.wood_type,
                     color: furniture.color,
                     width: parseInt(furniture.width),
-                    depth: parseInt(furniture.depth),
+                    length: parseInt(furniture.length),
                     height: parseInt(furniture.height),
                     stock: parseInt(furniture.stock),
                     price: parseFloat(furniture.price),

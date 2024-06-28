@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('category',array('Indoor','Outdoor','Handicraft','Root'));
             $table->enum('wood_type',array('Teak wood','Tiger wood','Mahogany wood','Root'));
             $table->string('width');
-            $table->string('depth');
+            $table->string('length');
             $table->string('height');
             $table->string('stock');
             $table->string('color');

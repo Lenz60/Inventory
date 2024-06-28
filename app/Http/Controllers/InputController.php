@@ -61,7 +61,7 @@ class InputController extends Controller
                     'wood_type' => $request->woodtype,
                     'color' => $request->color,
                     'width' => $request->width,
-                    'depth' => $request->depth,
+                    'length' => $request->length,
                     'height' => $request->height,
                     'stock' => $request->stock,
                     'price' => $request->price,
@@ -89,7 +89,7 @@ class InputController extends Controller
                     'wood_type' => $request->woodtype,
                     'color' => $request->color,
                     'width' => $request->width,
-                    'depth' => $request->depth,
+                    'length' => $request->length,
                     'height' => $request->height,
                     'stock' => $request->stock,
                     'price' => $request->price,
@@ -116,7 +116,7 @@ class InputController extends Controller
                     'wood_type' => $request->sWoodtype,
                     'width' => $request->sWidth,
                     'color' => $request->sColor,
-                    'depth' => $request->sDepth,
+                    'length' => $request->slength,
                     'height' => $request->sHeight,
                     'price' => $request->sPrice,
                     'stock' => $request->sStock,
@@ -139,7 +139,7 @@ class InputController extends Controller
                     'wood_type' => $request->sWoodtype,
                     'width' => $request->sWidth,
                     'color' => $request->sColor,
-                    'depth' => $request->sDepth,
+                    'length' => $request->slength,
                     'height' => $request->sHeight,
                     'price' => $request->sPrice,
                     'stock' => $request->sStock,
@@ -179,7 +179,7 @@ class InputController extends Controller
                     'color' => $validationString,
                     'width' => $validationInteger,
                     'height' => $validationInteger,
-                    'depth' => $validationInteger,
+                    'length' => $validationInteger,
                     'stock' => $validationStock,
                     'price' => $validationInteger,
                 ]);
@@ -193,7 +193,7 @@ class InputController extends Controller
                     'sColor' => $validationString,
                     'sWidth' => $validationInteger,
                     'sHeight' => $validationInteger,
-                    'sDepth' => $validationInteger,
+                    'slength' => $validationInteger,
                     'sStock' => $validationInteger,
                     'sPrice' => $validationInteger,
             ]);
@@ -247,7 +247,7 @@ class InputController extends Controller
             $array[$row]['category'] = $cells->get('E' . $row) ? $cells->get('E' . $row)->getValue() : '';
             $array[$row]['wood_type'] = $cells->get('F' . $row) ? $cells->get('F' . $row)->getValue() : '';
             $array[$row]['width'] = $cells->get('G' . $row) ? $cells->get('G' . $row)->getValue() : '';
-            $array[$row]['depth'] = $cells->get('H' . $row) ? $cells->get('H' . $row)->getValue() : '';
+            $array[$row]['length'] = $cells->get('H' . $row) ? $cells->get('H' . $row)->getValue() : '';
             $array[$row]['height'] = $cells->get('I' . $row) ? $cells->get('I' . $row)->getValue() : '';
             $array[$row]['stock'] = $cells->get('J' . $row) ? $cells->get('J' . $row)->getValue() : '';
             $array[$row]['color'] = $cells->get('K' . $row) ? $cells->get('K' . $row)->getValue() : '';
