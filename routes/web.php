@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
@@ -67,4 +68,7 @@ Route::middleware('auth:admin')->group(function (){
     Route::get('/order-manage',[OrderController::class, 'index'])->name('order.index');
 });
 
+Route::middleware('auth:admin')->group(function (){
+    Route::get('/device',[DeviceController::class, 'index'])->name('device.index');
+});
 require __DIR__.'/auth.php';
