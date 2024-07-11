@@ -48,11 +48,12 @@ class OrderController extends Controller
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->join('furniture', 'order_items.furniture_id', '=', 'furniture.uuid')
             ->join('users', 'order_items.user_id', '=', 'users.uuid')
-            ->select('orders.id as order_id', 'order_items.user_id', 'order_items.furniture_id', 'furniture.description', 'furniture.image', 'order_items.preorder as status', 'order_items.qty', 'order_items.total_price')
+            ->select('orders.id as order_id', 'order_items.user_id', 'order_items.furniture_id', 'furniture.description', 'furniture.image', 'order_items.preorder as preorder', 'order_items.qty', 'order_items.total_price')
             ->orderBy('order_items.created_at','desc')
-            ->groupBy('orders.id', 'order_items.user_id')
+            // ->groupBy('orders.id', 'order_items.user_id')
             ->get();
 
+        dd($order_items[0]->furniture_id);
         dd($order_items);
         return Inertia::render('Order/Order', [
         'orders' => $orders,
