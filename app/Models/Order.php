@@ -30,4 +30,7 @@ class Order extends Model
     public function ordersProduction(){
         $this->hasOne(OrdersProduction::class);
     }
+    public function ordersAddress(){
+        $this->hasOne(OrdersAddress::class);
+    }
 }
