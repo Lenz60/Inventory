@@ -2,9 +2,14 @@
     <AuthenticatedLayout>
         <div class="m-5 p-5">
             <div class="m-5">
-                <img v-if="qrCode" :src="qrCode" alt="QR Code" />
+                <img
+                    class="h-52 w-52"
+                    v-if="qrCode"
+                    :src="qrCode"
+                    alt="QR Code"
+                />
             </div>
-            <button class="btn btn-success" @click="scan(id)">Button</button>
+            <button class="btn btn-success" @click="scan()">Button</button>
             <button class="btn btn-error" @click="logout()">logout</button>
         </div>
     </AuthenticatedLayout>
@@ -46,7 +51,10 @@ export default {
                 if (this.intervalId) {
                     clearInterval(this.intervalId);
                 }
-                this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
+                this.intervalId = setInterval(
+                    () => this.checkStatus(newId),
+                    2000
+                ); // checks status every 2 seconds
             },
         },
     },
@@ -59,78 +67,58 @@ export default {
         async checkStatus() {
             try {
                 const statusResponse = await axios.get(
-                    `http://localhost:3000/sessions/${this.deviceName}/status`
+                    `http://localhost:3000/sessions/${this.id}/status`
                 );
                 if (statusResponse.data.status === "AUTHENTICATED") {
                     // replace 'success' with the actual success status
                     this.qrCode =
                         "https://freepngimg.com/download/success/6-2-success-png-image.png";
                     clearInterval(this.intervalId); // stop checking status once it's successful
-                } else {
                 }
             } catch (error) {
                 console.error("Error:", error);
             }
         },
-        async scan(id) {
-            // console.log("here");
+        async scan() {
             try {
-                //check if session is exists
                 const statusResponse = await axios.get(
-                    `http://localhost:3000/sessions/${this.deviceName}/status`
+                    `http://localhost:3000/sessions/${this.id}/status`
                 );
-                console.log(statusResponse.data.status);
                 if (statusResponse.data.status === "AUTHENTICATED") {
-                    // replace 'success' with the actual success status
                     this.qrCode =
                         "https://freepngimg.com/download/success/6-2-success-png-image.png";
-                    clearInterval(this.intervalId); // stop checking status once it's successful
                 } else {
-                    try {
-                        const res = await axios.post(
-                            `http://localhost:3000/sessions/add`,
-                            { sessionId: this.deviceName }
-                        );
-                        this.qrCode = res.data.qr;
-                        //If QR code Valid or scanned and login
-                        return true;
-                    } catch (error) {
-                        console.error("Error:", error);
-                        console.log(
-                            error.response.data.error ===
-                                "Session already exists"
-                        );
-                        if (
-                            error.response.data.error ===
-                            "Session already exists"
-                        ) {
-                            this.logout();
-                        }
-                    }
+                    const res = await axios.post(
+                        `http://localhost:3000/sessions/add`,
+                        { sessionId: this.id }
+                    );
+                    this.qrCode = res.data.qr;
+                    this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
                 }
+                return true;
             } catch (error) {
-                // this.intervalId = true;
-                console.log(error.response.data.error == "Session not found");
-                if (error.response.data.error == "Session not found") {
-                    // console.log("here");
-                    try {
-                        const res = await axios.post(
-                            `http://localhost:3000/sessions/add`,
-                            { sessionId: this.deviceName }
-                        );
-                        this.qrCode = res.data.qr;
-                        //If QR code Valid or scanned and login
-                        return true;
-                    } catch (error) {
-                        console.error("Error:", error);
-                    }
+                // console.error("Error:", error);
+                if (
+                    error.response &&
+                    error.response.data.error === "Session not found"
+                ) {
+                    const res = await axios.post(
+                        `http://localhost:3000/sessions/add`,
+                        { sessionId: this.id }
+                    );
+                    this.qrCode = res.data.qr;
+                    this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
+                } else if (
+                    error.response.data.error === "Session already exists"
+                ) {
+                    this.logout();
                 }
             }
         },
 
         async logout() {
             const response = await axios.delete(
-                `http://localhost:3000/sessions/${this.deviceName}`
+                `http://localhost:3000/sessions/${this.id}`
             );
             if (response) {
                 location.reload();
