@@ -6,15 +6,6 @@
             </div>
             <button class="btn btn-success" @click="scan(id)">Button</button>
             <button class="btn btn-error" @click="logout()">logout</button>
-            <p>
-                It should be noted that the implementation of the planned tasks
-                significantly conditions the creation of the step-by-step
-                consistent development of the society. There's no doubt that
-                social economic development requires the clarification of forms
-                of influence. However, one should not forget the understanding
-                of nature of resource saving technologies requires the
-                clarification of new propositions.
-            </p>
         </div>
     </AuthenticatedLayout>
 </template>
@@ -31,86 +22,119 @@ export default {
     setup() {
         const qrCode = ref(null);
         let statusResponse = ref("");
-        const id = "RaflyAndrian";
+        const id = "TheId";
+        const deviceName = "TheId";
+        const status = ref("");
+        const reloadPage = ref("");
+        let intervalId = null;
 
-        async function postSession(id) {
-            const response = await fetch("http://localhost:3000/sessions/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ sessionId: id }),
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            console.log(data);
-            qrCode.value = data.qr;
+        return {
+            qrCode,
+            statusResponse,
+            id,
+            deviceName,
+            status,
+            reloadPage,
+            intervalId,
+        };
+    },
+    watch: {
+        id: {
+            immediate: true,
+            handler(newId) {
+                const scan = this.scan(newId);
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                }
+                this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
+            },
+        },
+    },
+    beforeUnmount() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
         }
-
-        // onUpdated(() => {
-        //     checkStatus();
-        // });
-
-        onMounted(async () => {
-            // checkStatus();
-            // console.log(statusResponse.data);
+    },
+    methods: {
+        async checkStatus() {
             try {
-                const res = await axios.get(
-                    `http://localhost:3000/sessions/RaflyAndrian/status`
+                const statusResponse = await axios.get(
+                    `http://localhost:3000/sessions/${this.deviceName}/status`
                 );
-                statusResponse = res;
-                if (statusResponse.data.status == "AUTHENTICATED") {
-                    qrCode.value =
+                if (statusResponse.data.status === "AUTHENTICATED") {
+                    // replace 'success' with the actual success status
+                    this.qrCode =
                         "https://freepngimg.com/download/success/6-2-success-png-image.png";
-                    // location.reload();
+                    clearInterval(this.intervalId); // stop checking status once it's successful
                 } else {
                 }
             } catch (error) {
-                // postSession("RaflyAndrian"); // replace 'your-session-id' with your actual session ID
-                console.error("Error fetching status:", error);
+                console.error("Error:", error);
             }
-        });
-
-        return { qrCode, statusResponse, id };
-    },
-    methods: {
-        // async checkStatus() {
-        //     const res = await axios.get(
-        //         `http://localhost:3000/sessions/RaflyAndrian/status`
-        //     );
-        //     this.statusResponse = res;
-        //     // console.log(res);
-        //     console.log(this.statusResponse.data.status);
-        // },
-        async scan(id) {
-            const response = await fetch("http://localhost:3000/sessions/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ sessionId: id }),
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            console.log(data.qr);
-            this.qrCode = data.qr;
         },
-        async logout() {
-            const response = await fetch(
-                "http://localhost:3000/sessions/RaflyAndrian",
-                {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+        async scan(id) {
+            // console.log("here");
+            try {
+                //check if session is exists
+                const statusResponse = await axios.get(
+                    `http://localhost:3000/sessions/${this.deviceName}/status`
+                );
+                console.log(statusResponse.data.status);
+                if (statusResponse.data.status === "AUTHENTICATED") {
+                    // replace 'success' with the actual success status
+                    this.qrCode =
+                        "https://freepngimg.com/download/success/6-2-success-png-image.png";
+                    clearInterval(this.intervalId); // stop checking status once it's successful
+                } else {
+                    try {
+                        const res = await axios.post(
+                            `http://localhost:3000/sessions/add`,
+                            { sessionId: this.deviceName }
+                        );
+                        this.qrCode = res.data.qr;
+                        //If QR code Valid or scanned and login
+                        return true;
+                    } catch (error) {
+                        console.error("Error:", error);
+                        console.log(
+                            error.response.data.error ===
+                                "Session already exists"
+                        );
+                        if (
+                            error.response.data.error ===
+                            "Session already exists"
+                        ) {
+                            this.logout();
+                        }
+                    }
                 }
+            } catch (error) {
+                // this.intervalId = true;
+                console.log(error.response.data.error == "Session not found");
+                if (error.response.data.error == "Session not found") {
+                    // console.log("here");
+                    try {
+                        const res = await axios.post(
+                            `http://localhost:3000/sessions/add`,
+                            { sessionId: this.deviceName }
+                        );
+                        this.qrCode = res.data.qr;
+                        //If QR code Valid or scanned and login
+                        return true;
+                    } catch (error) {
+                        console.error("Error:", error);
+                    }
+                }
+            }
+        },
+
+        async logout() {
+            const response = await axios.delete(
+                `http://localhost:3000/sessions/${this.deviceName}`
             );
+            if (response) {
+                location.reload();
+            }
         },
     },
 };
