@@ -124,7 +124,7 @@ export default {
     },
     beforeUnmount() {
         if (this.intervalId) {
-            router.get(route("device.index"));
+            // router.get(route("device.index"));
             clearInterval(this.intervalId);
         }
     },
