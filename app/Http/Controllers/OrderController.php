@@ -53,8 +53,8 @@ class OrderController extends Controller
             // ->groupBy('orders.id', 'order_items.user_id')
             ->get();
 
-        dd($order_items[0]->furniture_id);
-        dd($order_items);
+        // dd($order_items[0]->furniture_id);
+        // dd($order_items);
         return Inertia::render('Order/Order', [
         'orders' => $orders,
         'order_items' => $order_items,
