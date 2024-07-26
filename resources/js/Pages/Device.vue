@@ -65,7 +65,7 @@
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { ref, onMounted, onUpdated } from "vue";
-import QRCode from "qrcode";
+import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 import axios from "axios";
 export default {
@@ -76,7 +76,7 @@ export default {
     setup(props) {
         const qrCode = ref(null);
         let statusResponse = ref("");
-        const id = "TheId";
+        const id = usePage().props.auth.user.uuid;
         const access = ref(null);
         let deviceNumber = ref("");
         // const deviceName = "TheId";
@@ -104,21 +104,21 @@ export default {
     watch: {
         id: {
             immediate: true,
-            handler(newId) {
-                const scan = this.scan(newId);
-                if (localStorage.getItem("isAuthenticated") === "true") {
-                    // skip the status check if the user is already authenticated
-                    return;
-                }
-                if (this.intervalId) {
-                    clearInterval(this.intervalId);
-                } else {
-                    this.intervalId = setInterval(
-                        () => this.checkStatus(newId),
-                        2000
-                    ); // checks status every 2 seconds
-                    // router.get(route("device.index"));
-                }
+            async handler(newId) {
+                const scan = await this.scan(newId);
+                // if (localStorage.getItem("isAuthenticated") === "true") {
+                //     // skip the status check if the user is already authenticated
+                //     return;
+                // }
+                // if (this.intervalId) {
+                //     clearInterval(this.intervalId);
+                // } else {
+                //     this.intervalId = setInterval(
+                //         () => this.checkStatus(newId),
+                //         2000
+                //     ); // checks status every 2 seconds
+                //     // router.get(route("device.index"));
+                // }
             },
         },
     },
@@ -138,7 +138,7 @@ export default {
                     // replace 'success' with the actual success status
                     this.qrCode = "AUTHENTICATED";
                     this.access = true;
-                    localStorage.setItem("isAuthenticated", "true"); // set the flag
+                    // localStorage.setItem("isAuthenticated", "true"); // set the flag
                     location.reload();
                     // router.get(route("device.index"));
                     // location.reload();
