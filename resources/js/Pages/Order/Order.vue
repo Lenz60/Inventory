@@ -1,55 +1,76 @@
 <template>
     <AuthenticatedLayout>
-        <div>
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <!-- head -->
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Job</th>
-                            <th>Favorite Color</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- row 1 -->
-                        <tr>
-                            <th>1</th>
-                            <td>Cy Ganderton</td>
-                            <td>Quality Control Specialist</td>
-                            <td>Blue</td>
-                        </tr>
-                        <!-- row 2 -->
-                        <tr class="hover">
-                            <th>2</th>
-                            <td>Hart Hagerty</td>
-                            <td>Desktop Support Technician</td>
-                            <td>Purple</td>
-                        </tr>
-                        <!-- row 3 -->
-                        <tr>
-                            <th>3</th>
-                            <td>Brice Swyre</td>
-                            <td>Tax Accountant</td>
-                            <td>Red</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-base-300 overflow-hidden shadow-sm card">
+                    <div>
+                        <div class="collapse bg-base-200">
+                            <input type="checkbox" />
+                            <div class="collapse-title text-xl font-medium">
+                                Click me to show/hide content
+                            </div>
+                            <div class="collapse-content">
+                                <p>hello</p>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="table">
+                                <!-- head -->
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Name</th>
+                                        <th>Order ID</th>
+                                        <th>Track code</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- row 1 -->
+                                    <tr
+                                        v-for="(order, no) in orders"
+                                        :key="order.id"
+                                        @click="showDetailModal"
+                                        class="hover:cursor-pointer hover:bg-neutral"
+                                    >
+                                        <td>
+                                            {{ no + 1 }}
+                                        </td>
+                                        <td>{{ order.name }}</td>
+                                        <td>{{ order.id }}</td>
+                                        <td>{{ order.track_code }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div v-if="showModal">
+            <DetailsModal></DetailsModal>
         </div>
     </AuthenticatedLayout>
 </template>
 
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import DetailsModal from "@/Pages/Order/Modal/OrderDetails.vue";
+import { ref } from "vue";
 export default {
     components: {
         AuthenticatedLayout,
+        DetailsModal,
     },
-    props: ["orders"],
-    setup() {
-        return {};
+    props: ["orders", "order_item"],
+    setup(props) {
+        console.log(props.orders);
+        const showModal = ref(false);
+        return { showModal };
+    },
+    methods: {
+        showDetailModal() {
+            this.showModal = !this.showModal;
+        },
     },
 };
 </script>
