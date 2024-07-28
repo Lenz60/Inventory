@@ -48,7 +48,7 @@ class OrderController extends Controller
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->join('furniture', 'order_items.furniture_id', '=', 'furniture.uuid')
             ->join('users', 'order_items.user_id', '=', 'users.uuid')
-            ->select('orders.id as order_id', 'order_items.user_id', 'order_items.furniture_id', 'furniture.description', 'furniture.image', 'order_items.preorder as preorder', 'order_items.qty', 'order_items.total_price')
+            ->select('order_items.id as id','orders.id as order_id', 'order_items.user_id','users.name', 'order_items.furniture_id', 'furniture.description','furniture.color', 'furniture.image', 'order_items.preorder as preorder', 'order_items.qty', 'order_items.total_price')
             ->orderBy('order_items.created_at','desc')
             // ->groupBy('orders.id', 'order_items.user_id')
             ->get();

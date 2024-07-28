@@ -4,15 +4,6 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-base-300 overflow-hidden shadow-sm card">
                     <div>
-                        <div class="collapse bg-base-200">
-                            <input type="checkbox" />
-                            <div class="collapse-title text-xl font-medium">
-                                Click me to show/hide content
-                            </div>
-                            <div class="collapse-content">
-                                <p>hello</p>
-                            </div>
-                        </div>
                         <div class="overflow-x-auto">
                             <table class="table">
                                 <!-- head -->
@@ -47,7 +38,10 @@
             </div>
         </div>
         <div v-if="showModal">
-            <DetailsModal></DetailsModal>
+            <DetailsModal
+                @close="showDetailModal()"
+                :OrderItem="order_items"
+            ></DetailsModal>
         </div>
     </AuthenticatedLayout>
 </template>
@@ -61,9 +55,10 @@ export default {
         AuthenticatedLayout,
         DetailsModal,
     },
-    props: ["orders", "order_item"],
+    props: ["orders", "order_items"],
     setup(props) {
         console.log(props.orders);
+        console.log(props.order_items);
         const showModal = ref(false);
         return { showModal };
     },
