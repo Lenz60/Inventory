@@ -66,9 +66,11 @@ Route::middleware('auth:admin')->group(function () {
 
 Route::middleware('auth:admin')->group(function (){
     Route::get('/order-manage',[OrderController::class, 'index'])->name('order.index');
+    Route::patch('/order-manage/update',[OrderController::class, 'update'])->name('order.update');
 });
 
 Route::middleware('auth:admin')->group(function (){
     Route::get('/device',[DeviceController::class, 'index'])->name('device.index');
 });
+
 require __DIR__.'/auth.php';

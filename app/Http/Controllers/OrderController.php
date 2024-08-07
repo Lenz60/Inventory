@@ -46,9 +46,10 @@ class OrderController extends Controller
 
         $order_items = DB::table('orders')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+            ->join('order_items_production', 'order_items_id', '=', 'order_items.id')
             ->join('furniture', 'order_items.furniture_id', '=', 'furniture.uuid')
             ->join('users', 'order_items.user_id', '=', 'users.uuid')
-            ->select('order_items.id as id','orders.id as order_id', 'order_items.user_id','users.name', 'order_items.furniture_id', 'furniture.description','furniture.color', 'furniture.image', 'order_items.preorder as preorder', 'order_items.qty', 'order_items.total_price')
+            ->select('order_items.id as id','orders.id as order_id', 'order_items.user_id','users.name', 'order_items.furniture_id', 'furniture.description','furniture.color', 'furniture.image', 'order_items.preorder as preorder', 'order_items.qty', 'order_items.total_price','order_items_production.production_status as status')
             ->orderBy('order_items.created_at','desc')
             // ->groupBy('orders.id', 'order_items.user_id')
             ->get();
@@ -59,5 +60,28 @@ class OrderController extends Controller
         'orders' => $orders,
         'order_items' => $order_items,
     ]);
+    }
+
+    public function update(Request $request){
+        // $order_items = DB::table('orders')
+        //     ->join('order_items', 'orders.id', '=', 'order_items.order_id')
+        //     ->join('order_items_production', 'order_items_id', '=', 'order_items.id')
+        //     ->join('furniture', 'order_items.furniture_id', '=', 'furniture.uuid')
+        //     ->join('users', 'order_items.user_id', '=', 'users.uuid')
+        //     ->select('order_items.id as id','orders.id as order_id', 'order_items.user_id','users.name', 'order_items.furniture_id', 'furniture.description','furniture.color', 'furniture.image', 'order_items.preorder as preorder', 'order_items.qty', 'order_items.total_price',  'order_items_production.production_status as status')
+        //     ->orderBy('order_items.created_at','desc')
+        //     ->get();
+            //Update the status off the order
+            // dd($order_items);
+            //Update the status based on request given by the $request->status
+            $order_items_production = DB::table('order_items_production')
+            ->where('order_items_id', $request->id)
+            ->update([
+                'production_status' => $request->status
+            ]);
+            return redirect()->back()->with('message', 'update:200');
+
+        // dd($request->all());
+        // return inertia()
     }
 }

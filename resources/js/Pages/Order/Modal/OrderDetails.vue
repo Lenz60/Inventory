@@ -75,22 +75,31 @@
                                             class="select select-info w-fit"
                                             v-model="items.selectedOption"
                                             @change="
-                                                items.isSelectChanged = true
+                                                // items.isSelectChanged = true
+                                                updateStatus($event, items.id)
                                             "
                                         >
-                                            <option>In Production</option>
-                                            <option>Opening</option>
-                                            <option>Treated</option>
-                                            <option>Finishing</option>
-                                            <option>Wrapped</option>
-                                            <option>Shipped</option>
+                                            <option :value="items.status">
+                                                {{ items.status }}
+                                            </option>
+                                            <option
+                                                v-for="(
+                                                    option, index
+                                                ) in items.filteredOptions"
+                                                :key="index"
+                                                :value="option"
+                                            >
+                                                {{ option }}
+                                            </option>
                                         </select>
+                                    </td>
+                                    <!-- <td>
                                         <input
                                             type="checkbox"
                                             class="checkbox checkbox-sm checkbox-info rounded-sm"
                                             v-if="items.isSelectChanged"
                                         />
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -103,19 +112,41 @@
 
 <script>
 import { ref } from "vue";
+import { router } from "@inertiajs/vue3";
 export default {
     props: ["OrderItem"],
     setup(props) {
-        console.log(props.OrderItem);
+        const options = [
+            "In Production",
+            "Opening",
+            "Treated",
+            "Finishing",
+            "Wrapped",
+            "Shipped",
+        ];
+        // console.log(props.OrderItem);
         props.OrderItem.forEach((item) => {
-            item.selectedOption = "In Production";
+            item.selectedOption = item.status;
             item.isSelectChanged = false;
+            item.filteredOptions = options.filter(
+                (option) => option !== item.status
+            );
         });
-        return { OrderItem: props.OrderItem };
+        return { OrderItem: props.OrderItem, options };
     },
     methods: {
         closeModal() {
             this.$emit("close");
+        },
+        updateStatus(e, id) {
+            // console.log(id);
+            const status = e.target.value;
+            const itemId = id.toString();
+            router.post(route("order.update"), {
+                _method: "patch",
+                id: itemId,
+                status: status,
+            });
         },
     },
 };
