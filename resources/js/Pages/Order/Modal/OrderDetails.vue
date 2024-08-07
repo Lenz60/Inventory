@@ -112,7 +112,9 @@
 
 <script>
 import { ref } from "vue";
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
+import { onUpdated } from "vue";
+import Swal from "sweetalert2";
 export default {
     props: ["OrderItem"],
     setup(props) {
@@ -124,6 +126,19 @@ export default {
             "Wrapped",
             "Shipped",
         ];
+        onUpdated(() => {
+            if (usePage().props.flash.message == "update:200") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Item status updated successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                //Set default message to 404 so that sweetalert not showing two times
+                usePage().props.flash.message = "update:404";
+                // router.get(route("order.index"));
+            }
+        });
         // console.log(props.OrderItem);
         props.OrderItem.forEach((item) => {
             item.selectedOption = item.status;
@@ -138,11 +153,12 @@ export default {
         closeModal() {
             this.$emit("close");
         },
-        updateStatus(e, id) {
+        async updateStatus(e, id) {
             // console.log(id);
             const status = e.target.value;
             const itemId = id.toString();
-            router.post(route("order.update"), {
+            // usePage().props.flash.message = "update:404";
+            await router.post(route("order.update"), {
                 _method: "patch",
                 id: itemId,
                 status: status,
