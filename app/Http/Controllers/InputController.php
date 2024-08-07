@@ -102,7 +102,7 @@ class InputController extends Controller
 
     public function update(Request $request){
 
-        // dd($request->sImage);
+        // dd($request->all());
         $check = $this->validateInput($request,'update');
         if(is_string($request->sImage)){
 
@@ -117,7 +117,7 @@ class InputController extends Controller
                     'wood_type' => $request->sWoodtype,
                     'width' => $request->sWidth,
                     'color' => $request->sColor,
-                    'length' => $request->slength,
+                    'length' => $request->sLength,
                     'height' => $request->sHeight,
                     'price' => $request->sPrice,
                     'stock' => $request->sStock,
@@ -140,7 +140,7 @@ class InputController extends Controller
                     'wood_type' => $request->sWoodtype,
                     'width' => $request->sWidth,
                     'color' => $request->sColor,
-                    'length' => $request->slength,
+                    'length' => $request->sLength,
                     'height' => $request->sHeight,
                     'price' => $request->sPrice,
                     'stock' => $request->sStock,

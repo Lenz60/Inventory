@@ -369,11 +369,13 @@
                                                         <h1
                                                             class="m-2 text-start"
                                                         >
-                                                            Depth
+                                                            Length
                                                         </h1>
                                                         <NumberInput
-                                                            id="depth"
-                                                            v-model="form.depth"
+                                                            id="length"
+                                                            v-model="
+                                                                form.length
+                                                            "
                                                             type="number"
                                                             placeholder="Type here"
                                                             class="input input-bordered input-primary w-full max-w-xs"
@@ -382,7 +384,7 @@
                                                         <InputError
                                                             class="mt-2 text-start"
                                                             :message="
-                                                                Errors.sDepth
+                                                                Errors.sLength
                                                             "
                                                         />
                                                     </div>
@@ -540,7 +542,7 @@ export default {
             woodtype: props.SelectedFurniture.woodtype,
             color: props.SelectedFurniture.color,
             width: parseInt(props.SelectedFurniture.width),
-            depth: parseInt(props.SelectedFurniture.depth),
+            length: parseInt(props.SelectedFurniture.length),
             height: parseInt(props.SelectedFurniture.height),
             stock: parseInt(props.SelectedFurniture.stock),
             price: parseFloat(props.SelectedFurniture.price),
@@ -563,7 +565,7 @@ export default {
                 sWoodtype: form.woodtype,
                 sColor: form.color,
                 sWidth: form.width,
-                sDepth: form.depth,
+                sLength: form.length,
                 sHeight: form.height,
                 sStock: form.stock,
                 sPrice: form.price,
