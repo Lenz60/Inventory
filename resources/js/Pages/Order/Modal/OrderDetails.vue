@@ -73,7 +73,17 @@
                                     <td>${{ items.total_price }}</td>
                                     <td>
                                         <select
-                                            class="select select-info w-fit"
+                                            :class="
+                                                [
+                                                    'Finishing',
+                                                    'Wrapped',
+                                                ].includes(items.selectedOption)
+                                                    ? 'select select-success w-fit'
+                                                    : items.selectedOption ===
+                                                      'Treated'
+                                                    ? 'select select-info w-fit'
+                                                    : 'select select-warning w-fit'
+                                            "
                                             v-model="items.selectedOption"
                                             @change="
                                                 // items.isSelectChanged = true

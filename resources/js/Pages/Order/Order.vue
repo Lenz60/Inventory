@@ -37,7 +37,12 @@
                                         </td>
                                         <td>
                                             <select
-                                                class="select select-info w-fit"
+                                                :class="
+                                                    order.selectedOption ===
+                                                    'Paid'
+                                                        ? 'select select-success w-fit'
+                                                        : 'select select-info w-fit'
+                                                "
                                                 v-model="order.selectedOption"
                                                 @change="
                                                     // items.isSelectChanged = true
