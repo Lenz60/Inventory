@@ -25,6 +25,7 @@
                         </svg>
                     </button>
                 </div>
+                <div v-if="$page.props.flash.message"></div>
                 <div class="p-5">
                     <div class="overflow-x-auto">
                         <table class="table">
@@ -126,17 +127,21 @@ export default {
             "Wrapped",
             "Shipped",
         ];
+        // console.log(message);
         onUpdated(() => {
-            if (usePage().props.flash.message == "update:200") {
+            // const { props } = usePage();
+            // const message = usePage().props.flash.message;
+            // console.log(props.flash.message);
+            if (usePage().props.flash.message == "updateOrder:200") {
                 Swal.fire({
                     icon: "success",
                     title: "Item status updated successfully",
                     showConfirmButton: false,
                     timer: 1500,
                 });
+                // router.get(route("order.index"));
                 //Set default message to 404 so that sweetalert not showing two times
                 usePage().props.flash.message = "update:404";
-                // router.get(route("order.index"));
             }
         });
         // console.log(props.OrderItem);
@@ -154,12 +159,12 @@ export default {
             this.$emit("close");
         },
         async updateStatus(e, id) {
-            // console.log(id);
             const status = e.target.value;
             const itemId = id.toString();
-            // usePage().props.flash.message = "update:404";
+
             await router.post(route("order.update"), {
                 _method: "patch",
+                update: "production",
                 id: itemId,
                 status: status,
             });

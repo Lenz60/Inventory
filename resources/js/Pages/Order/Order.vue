@@ -13,6 +13,7 @@
                                         <th>Name</th>
                                         <th>Order ID</th>
                                         <th>Track code</th>
+                                        <th>Update payment status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -20,15 +21,50 @@
                                     <tr
                                         v-for="(order, no) in orders"
                                         :key="order.id"
-                                        @click="showDetailModal"
                                         class="hover:cursor-pointer hover:bg-neutral"
                                     >
-                                        <td>
+                                        <td @click="showDetailModal(order.id)">
                                             {{ no + 1 }}
                                         </td>
-                                        <td>{{ order.name }}</td>
-                                        <td>{{ order.id }}</td>
-                                        <td>{{ order.track_code }}</td>
+                                        <td @click="showDetailModal(order.id)">
+                                            {{ order.name }}
+                                        </td>
+                                        <td @click="showDetailModal(order.id)">
+                                            {{ order.id }}
+                                        </td>
+                                        <td @click="showDetailModal(order.id)">
+                                            {{ order.track_code }}
+                                        </td>
+                                        <td>
+                                            <select
+                                                class="select select-info w-fit"
+                                                v-model="order.selectedOption"
+                                                @change="
+                                                    // items.isSelectChanged = true
+                                                    updateStatus(
+                                                        $event,
+                                                        order.id
+                                                    )
+                                                "
+                                            >
+                                                <option
+                                                    :value="
+                                                        order.payment_status
+                                                    "
+                                                >
+                                                    {{ order.payment_status }}
+                                                </option>
+                                                <option
+                                                    v-for="(
+                                                        option, index
+                                                    ) in order.filteredOptions"
+                                                    :key="index"
+                                                    :value="option"
+                                                >
+                                                    {{ option }}
+                                                </option>
+                                            </select>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -40,7 +76,7 @@
         <div v-if="showModal">
             <DetailsModal
                 @close="showDetailModal()"
-                :OrderItem="order_items"
+                :OrderItem="selectedOrderItems"
             ></DetailsModal>
         </div>
     </AuthenticatedLayout>
@@ -49,7 +85,9 @@
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DetailsModal from "@/Pages/Order/Modal/OrderDetails.vue";
-import { ref } from "vue";
+import { router, usePage } from "@inertiajs/vue3";
+import { ref, onUpdated } from "vue";
+import Swal from "sweetalert2";
 export default {
     components: {
         AuthenticatedLayout,
@@ -57,14 +95,53 @@ export default {
     },
     props: ["orders", "order_items"],
     setup(props) {
-        console.log(props.orders);
-        console.log(props.order_items);
+        const options = ["Pending", "Paid"];
+        const selectedOrderItems = ref([]);
+
+        props.orders.forEach((order) => {
+            order.selectedOption = order.payment_status;
+            order.isSelectChanged = false;
+            order.filteredOptions = options.filter(
+                (option) => option !== order.payment_status
+            );
+        });
         const showModal = ref(false);
-        return { showModal };
+
+        onUpdated(() => {
+            // const { props } = usePage();
+            // const message = usePage().props.flash.message;
+            // console.log(props.flash.message);
+            if (usePage().props.flash.message == "updatePayment:200") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Order payment status updated successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                // router.get(route("order.index"));
+                //Set default message to 404 so that sweetalert not showing two times
+                usePage().props.flash.message = "update:404";
+            }
+        });
+        return { orders: props.orders, showModal, selectedOrderItems, options };
     },
     methods: {
-        showDetailModal() {
+        showDetailModal(orderId) {
+            this.selectedOrderItems = this.order_items.filter(
+                (item) => item.order_id === orderId
+            );
             this.showModal = !this.showModal;
+        },
+        async updateStatus(e, Id) {
+            const status = e.target.value;
+            const orderId = Id.toString();
+
+            await router.post(route("order.update"), {
+                _method: "patch",
+                update: "payment",
+                id: orderId,
+                status: status,
+            });
         },
     },
 };
