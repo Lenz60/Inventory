@@ -120,9 +120,8 @@ export default {
             immediate: true,
             async handler(newId) {
                 const scan = await this.scan(newId);
-                console.log(scan);
+                // console.log(scan);
                 if (scan) {
-                    this.qrCode = scan;
                     this.showErrorMessage = false;
                 } else {
                     this.showErrorMessage = true;
@@ -168,6 +167,12 @@ export default {
                 }
             } catch (error) {
                 // console.error("Error:", error);
+                const res = await axios.post(
+                    `http://localhost:3000/sessions/add`,
+                    { sessionId: this.id }
+                );
+                this.qrCode = res.data.qr;
+                this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
             }
         },
         async scan() {
@@ -187,6 +192,7 @@ export default {
                     this.qrCode = res.data.qr;
                     this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
                 }
+                this.showErrorMessage = false;
                 return true;
             } catch (error) {
                 console.error("Error:", error.code);
