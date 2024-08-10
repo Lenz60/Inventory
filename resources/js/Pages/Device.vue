@@ -4,16 +4,16 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-base-300 overflow-hidden shadow-sm card">
                     <div
-                        class="p-6 border-2 border-yellow-400 text-center flex flex-col text-neutral-content"
+                        class="p-6 text-center flex flex-col text-neutral-content"
                     >
-                        <div class="border-2 border-purple-400">
+                        <div class="">
                             <h2>Device Login</h2>
                         </div>
-                        <div class="border-2 border-cyan-500 flex flex-row">
+                        <div class="flex flex-row">
                             <div
-                                class="w-[40%] text-center items-center border-2 border-green-400 flex flex-col"
+                                class="w-[40%] text-center items-center bg-base-100 card rounded-md flex flex-col"
                             >
-                                <div class="m-5 border-2 border-green-400 p-2">
+                                <div class="m-5 p-2">
                                     <div v-if="access">
                                         <img
                                             class="h-52 w-52"
@@ -22,18 +22,22 @@
                                         />
                                     </div>
                                     <div v-else>
-                                        <img
-                                            class="h-52 w-52"
-                                            v-if="qrCode"
-                                            :src="qrCode"
-                                            alt="QR Code"
-                                        />
+                                        <div v-if="qrCode">
+                                            <img
+                                                class="h-52 w-52"
+                                                v-if="qrCode"
+                                                :src="qrCode"
+                                                alt="QR Code"
+                                            />
+                                        </div>
+                                        <div v-else>
+                                            <h1 class="text-lg">
+                                                Failed to fetch QR code
+                                            </h1>
+                                        </div>
                                     </div>
                                 </div>
-                                <div
-                                    v-if="access"
-                                    class="border-2 border-blue-500 p-2"
-                                >
+                                <div v-if="access" class="p-2">
                                     <button
                                         class="btn btn-error"
                                         @click="logout()"
@@ -42,13 +46,13 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="w-full border-2 border-yellow-400">
+                            <div class="w-full">
                                 <div v-if="deviceName" class="p-5">
                                     <h1>Welcome {{ deviceName }}</h1>
                                     <h2>Your number is {{ deviceNumber }}</h2>
                                 </div>
                                 <div v-else>
-                                    <h1>
+                                    <h1 class="mt-5">
                                         You are not logged in <br />
                                         Please login by scanning the QR Code
                                     </h1>
@@ -84,9 +88,9 @@ export default {
         let intervalId = null;
 
         if (props.deviceId) {
-            deviceNumber = ref("+" + props.deviceId.split(":")[0]);
+            deviceNumber.value = ref("+" + props.deviceId.split(":")[0]);
         } else {
-            deviceNumber = ref(null);
+            deviceNumber.value = ref(null);
         }
 
         // console.log(deviceNumber.value);
