@@ -14,6 +14,7 @@
                                         <th>Order ID</th>
                                         <th>Track code</th>
                                         <th>Update payment status</th>
+                                        <th>Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -22,21 +23,15 @@
                                         v-for="(order, no) in orders"
                                         :key="order.id"
                                         class="hover:cursor-pointer hover:bg-neutral"
+                                        @click="showDetailModal(order.id)"
                                     >
-                                        <td @click="showDetailModal(order.id)">
-                                            {{ no + 1 }}
-                                        </td>
-                                        <td @click="showDetailModal(order.id)">
-                                            {{ order.name }}
-                                        </td>
-                                        <td @click="showDetailModal(order.id)">
-                                            {{ order.id }}
-                                        </td>
-                                        <td @click="showDetailModal(order.id)">
-                                            {{ order.track_code }}
-                                        </td>
+                                        <td>{{ no + 1 }}</td>
+                                        <td>{{ order.name }}</td>
+                                        <td>{{ order.id }}</td>
+                                        <td>{{ order.track_code }}</td>
                                         <td>
                                             <select
+                                                @click.stop
                                                 :class="
                                                     order.selectedOption ===
                                                     'Paid'
@@ -70,6 +65,14 @@
                                                 </option>
                                             </select>
                                         </td>
+                                        <td
+                                            @click.stop
+                                            @click="showInfoModal(order.id)"
+                                        >
+                                            <button class="btn btn-info">
+                                                Detail Info
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -78,11 +81,17 @@
                 </div>
             </div>
         </div>
-        <div v-if="showModal">
+        <div v-if="itemsModal">
             <DetailsModal
                 @close="showDetailModal()"
                 :OrderItem="selectedOrderItems"
             ></DetailsModal>
+        </div>
+        <div v-if="infoModal">
+            <InfoModal
+                @close="showInfoModal()"
+                :OrderInfo="selectedOrderInfo"
+            ></InfoModal>
         </div>
     </AuthenticatedLayout>
 </template>
@@ -90,6 +99,7 @@
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DetailsModal from "@/Pages/Order/Modal/OrderDetails.vue";
+import InfoModal from "@/Pages/Order/Modal/OrderInfo.vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { ref, onUpdated } from "vue";
 import Swal from "sweetalert2";
@@ -97,11 +107,14 @@ export default {
     components: {
         AuthenticatedLayout,
         DetailsModal,
+        InfoModal,
     },
-    props: ["orders", "order_items"],
+    props: ["orders", "order_items", "order_info"],
     setup(props) {
         const options = ["Pending", "Paid"];
         const selectedOrderItems = ref([]);
+        const selectedOrderInfo = ref([]);
+        console.log(props.order_items);
 
         props.orders.forEach((order) => {
             order.selectedOption = order.payment_status;
@@ -110,7 +123,8 @@ export default {
                 (option) => option !== order.payment_status
             );
         });
-        const showModal = ref(false);
+        const itemsModal = ref(false);
+        const infoModal = ref(false);
 
         onUpdated(() => {
             // const { props } = usePage();
@@ -128,14 +142,46 @@ export default {
                 usePage().props.flash.message = "update:404";
             }
         });
-        return { orders: props.orders, showModal, selectedOrderItems, options };
+        return {
+            orders: props.orders,
+            itemsModal,
+            infoModal,
+            selectedOrderItems,
+            selectedOrderInfo,
+            options,
+        };
     },
     methods: {
+        filterOrderItems(context, orderId) {
+            if (context == "Detail") {
+                return this.order_items.filter(
+                    (item) => item.order_id === orderId
+                );
+            } else {
+                return this.order_info.filter(
+                    (info) => info.order_id === orderId
+                );
+            }
+        },
         showDetailModal(orderId) {
-            this.selectedOrderItems = this.order_items.filter(
-                (item) => item.order_id === orderId
-            );
-            this.showModal = !this.showModal;
+            if (orderId === "") {
+                this.itemsModal = !this.itemsModal;
+            } else {
+                this.selectedOrderItems = this.filterOrderItems(
+                    "Detail",
+                    orderId
+                );
+                this.itemsModal = !this.itemsModal;
+            }
+        },
+        showInfoModal(orderId) {
+            if (orderId === "") {
+                this.infoModal = !this.infoModal;
+            } else {
+                this.selectedOrderInfo = this.filterOrderItems("Info", orderId);
+                console.log(this.selectedOrderInfo);
+                this.infoModal = !this.infoModal;
+            }
         },
         async updateStatus(e, Id) {
             const status = e.target.value;
