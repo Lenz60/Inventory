@@ -1,4 +1,5 @@
 <template>
+    <Head title="Device Login" />
     <AuthenticatedLayout>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -31,9 +32,16 @@
                                             />
                                         </div>
                                         <div v-else>
-                                            <h1 class="text-lg">
-                                                Failed to fetch QR code
-                                            </h1>
+                                            <div v-if="!showErrorMessage">
+                                                <span
+                                                    class="loading loading-spinner loading-lg"
+                                                ></span>
+                                            </div>
+                                            <div v-else>
+                                                <h1 class="text-lg">
+                                                    Failed to fetch QR code
+                                                </h1>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -69,12 +77,12 @@
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { ref, onMounted, onUpdated } from "vue";
-import { usePage } from "@inertiajs/vue3";
-import { router } from "@inertiajs/vue3";
+import { usePage, Head } from "@inertiajs/vue3";
 import axios from "axios";
 export default {
     components: {
         AuthenticatedLayout,
+        Head,
     },
     props: ["deviceId", "deviceName"],
     setup(props) {
@@ -83,6 +91,7 @@ export default {
         const id = usePage().props.auth.user.uuid;
         const access = ref(null);
         let deviceNumber = ref("");
+        const showErrorMessage = ref(false);
         // const deviceName = "TheId";
         const status = ref("");
         let intervalId = null;
@@ -103,6 +112,7 @@ export default {
             intervalId,
             deviceNumber,
             access,
+            showErrorMessage,
         };
     },
     watch: {
@@ -110,6 +120,13 @@ export default {
             immediate: true,
             async handler(newId) {
                 const scan = await this.scan(newId);
+                console.log(scan);
+                if (scan) {
+                    this.qrCode = scan;
+                    this.showErrorMessage = false;
+                } else {
+                    this.showErrorMessage = true;
+                }
                 // if (localStorage.getItem("isAuthenticated") === "true") {
                 //     // skip the status check if the user is already authenticated
                 //     return;
@@ -172,21 +189,26 @@ export default {
                 }
                 return true;
             } catch (error) {
-                // console.error("Error:", error);
-                if (
-                    error.response &&
-                    error.response.data.error === "Session not found"
-                ) {
-                    const res = await axios.post(
-                        `http://localhost:3000/sessions/add`,
-                        { sessionId: this.id }
-                    );
-                    this.qrCode = res.data.qr;
-                    this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
-                } else if (
-                    error.response.data.error === "Session already exists"
-                ) {
-                    this.logout();
+                console.error("Error:", error.code);
+                if (error.code == "ERR_NETWORK") {
+                    this.showErrorMessage = true;
+                } else {
+                    //If the erorr is not caused by network errors, check the error of the API
+                    if (
+                        error.response &&
+                        error.response.data.error === "Session not found"
+                    ) {
+                        const res = await axios.post(
+                            `http://localhost:3000/sessions/add`,
+                            { sessionId: this.id }
+                        );
+                        this.qrCode = res.data.qr;
+                        this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
+                    } else if (
+                        error.response.data.error === "Session already exists"
+                    ) {
+                        this.logout();
+                    }
                 }
             }
             // router.get(route("device.index"));
