@@ -27,7 +27,7 @@
                 </div>
                 <div v-if="$page.props.flash.message"></div>
                 <div class="p-5">
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto bg-base-300 card rounded-md">
                         <table class="table">
                             <!-- head -->
                             <thead>
@@ -47,7 +47,7 @@
                                 <tr
                                     v-for="(items, no) in OrderItem"
                                     :key="items.id"
-                                    class="hover:cursor-pointer hover:bg-neutral"
+                                    class="hover:bg-neutral"
                                 >
                                     <td>
                                         {{ no + 1 }}
@@ -77,6 +77,7 @@
                                                 [
                                                     'Finishing',
                                                     'Wrapped',
+                                                    'Shipped',
                                                 ].includes(items.selectedOption)
                                                     ? 'select select-success w-fit'
                                                     : items.selectedOption ===
