@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('order_id');
-            $table->string('user_id');
             $table->string('furniture_id');
             $table->string('preorder');
             $table->float('price');
             $table->string('qty');
             $table->float('total_price');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreign('user_id')->references('uuid')->on('users')->onDelete('cascade');
             $table->foreign('furniture_id')->references('uuid')->on('furniture')->onDelete('cascade');
             $table->timestamps();
         });

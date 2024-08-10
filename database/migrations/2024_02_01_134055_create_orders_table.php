@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->string('id')->primary();
+            $table->string('user_id');
             $table->string('total_price');
             $table->string('track_code');
+            $table->foreign('user_id')->references('uuid')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
