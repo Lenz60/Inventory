@@ -37,7 +37,7 @@ class OrderController extends Controller
             ->join('orders_payment', 'orders_payment.order_id', '=', 'orders.id')
             ->join('orders_info','orders_info.order_id', '=', 'orders.id')
             ->join('users', 'orders.user_id', '=', 'users.uuid')
-            ->select('orders.id as order_id','orders_info.name','orders_info.company','orders_info.email','orders_info.phone_number',
+            ->select('orders_info.id as id','orders.id as order_id','orders_info.name','orders_info.company','orders_info.email','orders_info.phone_number',
                         'orders_info.address','orders_info.country','orders_info.region','orders_info.zip'
                             ,'orders.track_code','orders_payment.payment_status')
             ->orderBy('orders.created_at', 'desc')
@@ -46,7 +46,7 @@ class OrderController extends Controller
 
         // dd($order_items[0]->furniture_id);
         // dd($order_items);
-        dd($order_info);
+        // dd($order_info);
         return Inertia::render('Order/Order', [
         'orders' => $orders,
         'order_items' => $order_items,
