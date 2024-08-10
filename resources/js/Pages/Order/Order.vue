@@ -1,4 +1,6 @@
 <template>
+    <Head title="Order Manager" />
+
     <AuthenticatedLayout>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -100,14 +102,16 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DetailsModal from "@/Pages/Order/Modal/OrderDetails.vue";
 import InfoModal from "@/Pages/Order/Modal/OrderInfo.vue";
-import { router, usePage } from "@inertiajs/vue3";
+import { router, usePage, Head } from "@inertiajs/vue3";
 import { ref, onUpdated } from "vue";
 import Swal from "sweetalert2";
+
 export default {
     components: {
         AuthenticatedLayout,
         DetailsModal,
         InfoModal,
+        Head,
     },
     props: ["orders", "order_items", "order_info"],
     setup(props) {

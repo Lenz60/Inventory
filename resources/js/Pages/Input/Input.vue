@@ -1,6 +1,6 @@
 <template>
     <AuthenticatedLayout>
-        <Head title="Inventory input" />
+        <Head title="Inventory Input" />
         <div class="flex flex-col text-center" data-theme="halloween">
             <div class="text-xl text-neutral-content leading-tight m-5">
                 <h1>Furniture Input</h1>
