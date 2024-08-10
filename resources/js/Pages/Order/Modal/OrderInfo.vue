@@ -25,26 +25,83 @@
                         </svg>
                     </button>
                 </div>
-                <div v-if="$page.props.flash.message"></div>
                 <div class="p-5">
-                    <div class="overflow-x-auto">
-                        <div class="border-2 border-green-400 flex flex-row">
-                            <div class="border-2 border-yellow-500 m-2">
-                                <p>
-                                    Likewise the bounds and place of personnel
-                                    training contributes to increasing the
-                                    quality of existing financial and
-                                    administrative conditions.
-                                </p>
+                    <div class="">
+                        <div class="w-full">
+                            <div
+                                class="items-start text-start justify-center m-2 card rounded-md bg-base-300 flex flex-col"
+                                v-for="(info, index) in OrderInfo"
+                                :key="info.id"
+                            >
+                                <div class="p-5">
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Name</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">{{ info.name }}</p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Company</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">{{ info.company }}</p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Email</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">{{ info.email }}</p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Phone Number</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">
+                                            {{ info.phone_number }}
+                                        </p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Address</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">{{ info.address }}</p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Country</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">{{ info.country }}</p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Region</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">{{ info.region }}</p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Zip</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">{{ info.zip }}</p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Tracking Code</h1>
+                                        <h1>:</h1>
+                                        <p class="pl-3">
+                                            {{ info.track_code }}
+                                        </p>
+                                    </div>
+                                    <div class="flex justify-start">
+                                        <h1 class="w-36">Payment Status</h1>
+                                        <h1>:</h1>
+                                        <div
+                                            v-if="info.payment_status == 'Paid'"
+                                        >
+                                            <p class="pl-3 text-success">
+                                                {{ info.payment_status }}
+                                            </p>
+                                        </div>
+                                        <div v-else>
+                                            <p class="pl-3 text-warning">
+                                                {{ info.payment_status }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="border-2 border-blue-500 m-2">
-                                <p>
-                                    However, one should not forget further
-                                    development of various forms of activity
-                                    allows to appreciate the value of
-                                    strengthening the democratic system.
-                                </p>
-                            </div>
+
                             <!-- {{ OrderInfo }} -->
                         </div>
                     </div>
@@ -83,5 +140,11 @@ export default {
     background: rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 100%;
+}
+h1 {
+    font-size: 1.1rem; /* Adjust as needed */
+}
+p {
+    font-size: 1.04rem;
 }
 </style>
