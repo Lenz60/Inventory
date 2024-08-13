@@ -7,13 +7,40 @@
                 <div class="bg-base-300 overflow-hidden shadow-sm card">
                     <div>
                         <div class="overflow-x-auto">
+                            <div class="flex justify-end p-2 m-2">
+                                <div
+                                    class="w-fit input input-bordered flex items-center gap-2 h-fit"
+                                >
+                                    <input
+                                        v-model="search"
+                                        type="text"
+                                        class="grow input"
+                                        placeholder="Search"
+                                    />
+                                    <div @click="">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 16 16"
+                                            fill="currentColor"
+                                            class="w-4 h-4 opacity-70"
+                                        >
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                                clip-rule="evenodd"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
                             <table class="table">
                                 <!-- head -->
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Order ID</th>
+                                        <th>Country</th>
+                                        <th>Region</th>
                                         <th>Track code</th>
                                         <th>Update payment status</th>
                                         <th>Details</th>
@@ -22,14 +49,15 @@
                                 <tbody>
                                     <!-- row 1 -->
                                     <tr
-                                        v-for="(order, no) in orders"
+                                        v-for="(order, no) in filteredItems"
                                         :key="order.id"
                                         class="hover:cursor-pointer hover:bg-neutral"
                                         @click="showDetailModal(order.id)"
                                     >
                                         <td>{{ no + 1 }}</td>
                                         <td>{{ order.name }}</td>
-                                        <td>{{ order.id }}</td>
+                                        <td>{{ order.country }}</td>
+                                        <td>{{ order.region }}</td>
                                         <td>{{ order.track_code }}</td>
                                         <td>
                                             <select
@@ -103,8 +131,9 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import DetailsModal from "@/Pages/Order/Modal/OrderDetails.vue";
 import InfoModal from "@/Pages/Order/Modal/OrderInfo.vue";
 import { router, usePage, Head } from "@inertiajs/vue3";
-import { ref, onUpdated } from "vue";
+import { ref, onUpdated, computed } from "vue";
 import Swal from "sweetalert2";
+import { _ } from "lodash";
 
 export default {
     components: {
@@ -118,6 +147,7 @@ export default {
         const options = ["Pending", "Paid"];
         const selectedOrderItems = ref([]);
         const selectedOrderInfo = ref([]);
+        const search = ref("");
         console.log(props.order_items);
 
         props.orders.forEach((order) => {
@@ -146,6 +176,31 @@ export default {
                 usePage().props.flash.message = "update:404";
             }
         });
+
+        const filteredItems = computed(() => {
+            return _.orderBy(
+                props.orders.filter(
+                    (order) =>
+                        order.name
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase()) ||
+                        order.country
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase()) ||
+                        order.region
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase()) ||
+                        order.track_code
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase()) ||
+                        order.payment_status
+                            .toLowerCase()
+                            .includes(search.value.toLowerCase())
+                ),
+                ["created_at"],
+                ["desc"]
+            );
+        });
         return {
             orders: props.orders,
             itemsModal,
@@ -153,6 +208,8 @@ export default {
             selectedOrderItems,
             selectedOrderInfo,
             options,
+            filteredItems,
+            search,
         };
     },
     methods: {

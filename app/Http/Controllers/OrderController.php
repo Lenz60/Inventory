@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -16,7 +17,8 @@ class OrderController extends Controller
             ->join('orders_payment', 'orders_payment.order_id', '=', 'orders.id')
             ->join('furniture', 'order_items.furniture_id', '=', 'furniture.uuid')
             ->join('users', 'orders.user_id', '=', 'users.uuid')
-            ->select('orders.id','users.name','orders.track_code','orders_payment.payment_status')
+            ->join('orders_info','orders_info.order_id', '=', 'orders.id')
+            ->select('orders.id','users.name','orders_info.country','orders_info.region','orders.track_code','orders_payment.payment_status','orders.created_at')
             ->orderBy('orders.created_at', 'desc')
             ->groupBy('orders.id', 'users.name')
             ->get();
@@ -47,6 +49,7 @@ class OrderController extends Controller
         // dd($order_items[0]->furniture_id);
         // dd($order_items);
         // dd($order_info);
+        // dd($orders);
         return Inertia::render('Order/Order', [
         'orders' => $orders,
         'order_items' => $order_items,
