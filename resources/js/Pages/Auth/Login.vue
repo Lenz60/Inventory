@@ -101,7 +101,7 @@ const submit = () => {
                 </Link> -->
 
                 <PrimaryButton
-                    class="ms-4 bg-orimary"
+                    class="ms-4 bg-secondary"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
