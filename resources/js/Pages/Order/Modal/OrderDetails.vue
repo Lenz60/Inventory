@@ -63,12 +63,12 @@
                                     </td>
                                     <td>{{ items.description }}</td>
                                     <td>{{ items.color }}</td>
-                                    <div v-if="items.preorder === 'true'">
-                                        <td>Pre-Order</td>
-                                    </div>
-                                    <div v-else>
-                                        <td>In Stock</td>
-                                    </div>
+                                    <td>
+                                        <div v-if="items.preorder === 'true'">
+                                            Pre-Order
+                                        </div>
+                                        <div v-else>In stock</div>
+                                    </td>
                                     <td>{{ items.qty }}</td>
                                     <td>${{ items.total_price }}</td>
                                     <td>
