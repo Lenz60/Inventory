@@ -43,6 +43,7 @@
                                         <th>Region</th>
                                         <th>Track code</th>
                                         <th>Update payment status</th>
+                                        <th>Invoice status</th>
                                         <th>Details</th>
                                     </tr>
                                 </thead>
@@ -95,6 +96,7 @@
                                                 </option>
                                             </select>
                                         </td>
+                                        <td>{{ order.invoice_status }}</td>
                                         <td
                                             @click.stop
                                             @click="showInfoModal(order.id)"

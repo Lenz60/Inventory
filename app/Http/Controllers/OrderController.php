@@ -18,7 +18,7 @@ class OrderController extends Controller
             ->join('furniture', 'order_items.furniture_id', '=', 'furniture.uuid')
             ->join('users', 'orders.user_id', '=', 'users.uuid')
             ->join('orders_info','orders_info.order_id', '=', 'orders.id')
-            ->select('orders.id','users.name','orders_info.country','orders_info.region','orders.track_code','orders_payment.payment_status','orders.created_at')
+            ->select('orders.id','users.name','orders_info.country','orders_info.region','orders.track_code','orders_payment.payment_status','orders.invoice_status','orders.created_at')
             ->orderBy('orders.created_at', 'desc')
             ->groupBy('orders.id', 'users.name')
             ->get();
