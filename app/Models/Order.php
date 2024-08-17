@@ -21,6 +21,7 @@ class Order extends Model
         'id',
         'total_price',
         'track_code',
+        'invoice_status'
     ];
 
     public function ordersPayment(){

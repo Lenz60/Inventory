@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('user_id');
             $table->string('total_price');
             $table->string('track_code');
+            $table->string('invoice_status');
             $table->foreign('user_id')->references('uuid')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
