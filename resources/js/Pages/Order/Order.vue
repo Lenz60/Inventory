@@ -152,13 +152,6 @@ export default {
         const search = ref("");
         console.log(props.order_items);
 
-        props.orders.forEach((order) => {
-            order.selectedOption = order.payment_status;
-            order.isSelectChanged = false;
-            order.filteredOptions = options.filter(
-                (option) => option !== order.payment_status
-            );
-        });
         const itemsModal = ref(false);
         const infoModal = ref(false);
 
@@ -173,13 +166,21 @@ export default {
                     showConfirmButton: false,
                     timer: 1500,
                 });
-                // router.get(route("order.index"));
                 //Set default message to 404 so that sweetalert not showing two times
                 usePage().props.flash.message = "update:404";
+                // router.get(route("order.index"));
             }
         });
 
         const filteredItems = computed(() => {
+            // Set the payment status selected when changed
+            props.orders.forEach((order) => {
+                order.selectedOption = order.payment_status;
+                order.isSelectChanged = false;
+                order.filteredOptions = options.filter(
+                    (option) => option !== order.payment_status
+                );
+            });
             return _.orderBy(
                 props.orders.filter(
                     (order) =>
@@ -203,6 +204,7 @@ export default {
                 ["desc"]
             );
         });
+
         return {
             orders: props.orders,
             itemsModal,
