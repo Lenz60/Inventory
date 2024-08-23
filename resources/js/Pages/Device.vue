@@ -152,11 +152,16 @@ export default {
         async checkStatus() {
             try {
                 const statusResponse = await axios.get(
-                    `http://localhost:3000/sessions/${this.id}/status`
+                    `http://localhost:3000/sessions/${this.id}/status`,
+                    {
+                        headers: {
+                            "x-api-key": "testAPI",
+                        },
+                    }
                 );
-                if (statusResponse.data.status === "AUTHENTICATED") {
+                if (statusResponse.data.status === "connected") {
                     // replace 'success' with the actual success status
-                    this.qrCode = "AUTHENTICATED";
+                    this.qrCode = "connected";
                     this.access = true;
                     // localStorage.setItem("isAuthenticated", "true"); // set the flag
                     location.reload();
@@ -169,7 +174,12 @@ export default {
                 // console.error("Error:", error);
                 const res = await axios.post(
                     `http://localhost:3000/sessions/add`,
-                    { sessionId: this.id }
+                    { sessionId: this.id },
+                    {
+                        headers: {
+                            "x-api-key": "testAPI",
+                        },
+                    }
                 );
                 this.qrCode = res.data.qr;
                 this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
@@ -178,16 +188,26 @@ export default {
         async scan() {
             try {
                 const statusResponse = await axios.get(
-                    `http://localhost:3000/sessions/${this.id}/status`
+                    `http://localhost:3000/sessions/${this.id}/status`,
+                    {
+                        headers: {
+                            "x-api-key": "testAPI",
+                        },
+                    }
                 );
-                if (statusResponse.data.status === "AUTHENTICATED") {
-                    this.qrCode = "AUTHENTICATED";
+                if (statusResponse.data.status === "connected") {
+                    this.qrCode = "connected";
                     this.access = true;
                     // router.get(route("device.index"));
                 } else {
                     const res = await axios.post(
                         `http://localhost:3000/sessions/add`,
-                        { sessionId: this.id }
+                        { sessionId: this.id },
+                        {
+                            headers: {
+                                "x-api-key": "testAPI",
+                            },
+                        }
                     );
                     this.qrCode = res.data.qr;
                     this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
@@ -196,6 +216,7 @@ export default {
                 return true;
             } catch (error) {
                 console.error("Error:", error.code);
+                console.log(error);
                 if (error.code == "ERR_NETWORK") {
                     this.showErrorMessage = true;
                 } else {
@@ -206,7 +227,12 @@ export default {
                     ) {
                         const res = await axios.post(
                             `http://localhost:3000/sessions/add`,
-                            { sessionId: this.id }
+                            { sessionId: this.id },
+                            {
+                                headers: {
+                                    "x-api-key": "testAPI",
+                                },
+                            }
                         );
                         this.qrCode = res.data.qr;
                         this.intervalId = setInterval(this.checkStatus, 2000); // checks status every 2 seconds
@@ -222,7 +248,8 @@ export default {
 
         async logout() {
             const response = await axios.delete(
-                `http://localhost:3000/sessions/${this.id}`
+                `http://localhost:3000/sessions/${this.id}`,
+                { headers: { "x-api-key": "testAPI" } }
             );
             if (response) {
                 location.reload();
