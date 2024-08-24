@@ -452,16 +452,40 @@
                                         </td>
                                         <td>{{ no + 1 }}</td>
                                         <!-- <td>{{ furniture.image }}</td> -->
-                                        <td>
-                                            <div class="w-fit h-fit">
-                                                <img
-                                                    class="w-fit h-fit"
-                                                    :src="
-                                                        'storage/' +
-                                                        furniture.image
-                                                    "
-                                                    :alt="furniture.image"
-                                                />
+                                        <td class="w-auto">
+                                            <div
+                                                v-if="
+                                                    furniture.image.includes(
+                                                        'placeholder'
+                                                    )
+                                                "
+                                            >
+                                                <div
+                                                    class="w-[100px] h-[100px]"
+                                                >
+                                                    <img
+                                                        class="w-fit h-fit"
+                                                        :src="
+                                                            'https://loremflickr.com/100/100/furniture?random=' +
+                                                            no
+                                                        "
+                                                        :alt="furniture.image"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div v-else>
+                                                <div
+                                                    class="w-[100px] h-[100px]"
+                                                >
+                                                    <img
+                                                        class="w-fit h-fit"
+                                                        :src="
+                                                            'storage/' +
+                                                            furniture.image
+                                                        "
+                                                        :alt="furniture.image"
+                                                    />
+                                                </div>
                                             </div>
                                         </td>
                                         <td>{{ furniture.code }}</td>
@@ -529,7 +553,7 @@ import ImageForm from "@/Pages/Input/Components/ImageForm.vue";
 import ImportModal from "@/Pages/Input/Modal/Import.vue";
 import { Link, useForm, usePage, router, Head } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
-import { ref, watch, computed, onUpdated } from "vue";
+import { ref, watch, computed, onUpdated, onMounted } from "vue";
 import InputError from "@/Components/InputError.vue";
 import { _ } from "lodash";
 export default {
@@ -566,6 +590,12 @@ export default {
         const codeSelectedImg = ref("");
         const previewCodeImg = ref(true);
         const showImportModal = ref(false);
+
+        const prefixImage = ref("");
+
+        onMounted(() => {
+            console.log(props.furnitures);
+        });
         // const excelImport = ref("");
         // const errors = ref(props.errors);
         // console.log(props.furnitures);
