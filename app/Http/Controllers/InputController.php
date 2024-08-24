@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Ulid\Ulid;
 use Inertia\Inertia;
 use Spatie\Tags\Tag;
 use App\Models\Furniture;
@@ -54,7 +55,7 @@ class InputController extends Controller
             if($check){
                 $fileUrl = $check['image'];
                 Furniture::create ([
-                    'uuid' => fake()->uuid(),
+                    'uuid' => Ulid::generate(),
                     'image' => $fileUrl,
                     'code' => $request->code,
                     'description' => $request->description,
@@ -82,7 +83,7 @@ class InputController extends Controller
                 }
 
                 Furniture::create ([
-                    'uuid' => fake()->uuid(),
+                    'uuid' => Ulid::generate(),
                     'image' => $fileUrl,
                     'code' => $request->code,
                     'description' => $request->description,
@@ -241,7 +242,7 @@ class InputController extends Controller
         $cells = $this->loadExcelData($fileName)->getCellCollection();
         $array = [];
         for ($row = 2; $row <= $cells->getHighestRow(); $row++) {
-            $array[$row]['uuid'] = \Faker\Factory::create()->uuid;
+            $array[$row]['uuid'] = Ulid::generate();
             $array[$row]['image'] = $cells->get('B' . $row) ? $cells->get('B' . $row)->getValue() : '';
             $array[$row]['code'] = $cells->get('C' . $row) ? $cells->get('C' . $row)->getValue() : '';
             $array[$row]['description'] = $cells->get('D' . $row) ? $cells->get('D' . $row)->getValue() : '';

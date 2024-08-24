@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Ulid\Ulid;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
@@ -17,8 +18,8 @@ class FurnitureFactory extends Factory
     public function definition(): array
     {
         return [
-            'uuid' => $this->faker->uuid(),
-            'image' => $this->faker->word().'.jpg',
+            'uuid' => (string) Ulid::generate(),
+            'image' => $this->faker->imageUrl(),
             'code' => $this->faker->bothify('?#?##?'),
             'description' => $this->faker->words(3, true),
             'category' => $this->faker->randomElement(['Indoor','Outdoor','Handicraft','Root']),
