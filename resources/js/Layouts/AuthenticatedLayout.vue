@@ -180,6 +180,7 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
+                            class="text-neutral-content"
                             :href="route('dashboard')"
                             :active="route().current('dashboard')"
                         >
@@ -190,19 +191,58 @@ const showingNavigationDropdown = ref(false);
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="px-4">
-                            <div class="font-medium text-base text-gray-800">
+                            <div class="font-medium text-neutral-content">
                                 {{ $page.props.auth.user.name }}
                             </div>
-                            <div class="font-medium text-sm text-gray-500">
+                            <div
+                                class="font-medium text-sm text-neutral-content"
+                            >
                                 {{ $page.props.auth.user.email }}
                             </div>
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">
+                            <ResponsiveNavLink
+                                class="text-neutral-content"
+                                :href="route('input.index')"
+                            >
+                                Input
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                class="text-neutral-content"
+                                :href="route('order.index')"
+                            >
+                                Manage Order
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                class="text-neutral-content"
+                                :href="route('manage.index')"
+                            >
+                                Manage Admin
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink class="text-neutral-content">
+                                <div
+                                    v-if="$page.props.auth.user.role == 1"
+                                    class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                                    :href="route('manage.index')"
+                                >
+                                    Manage Admin
+                                </div>
+                                <div
+                                    class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                                    :href="route('device.index')"
+                                >
+                                    Manage Device
+                                </div>
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                class="text-neutral-content"
+                                :href="route('profile.edit')"
+                            >
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
+                                class="text-neutral-content"
                                 :href="route('logout')"
                                 method="post"
                                 as="button"
