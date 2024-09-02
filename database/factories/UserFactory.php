@@ -52,4 +52,12 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function specificUser()
+    {
+        return $this->state([
+            'email' => 'user@email.com',
+
+        ]);
+    }
 }

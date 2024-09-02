@@ -25,4 +25,12 @@ class AdminFactory extends Factory
             'role' => fake()->randomElement(['1','2']),
         ];
     }
+
+    public function specificAdmin()
+    {
+        return $this->state([
+            'email' => 'admin@email.com',
+            'role' => 1,
+        ]);
+    }
 }
