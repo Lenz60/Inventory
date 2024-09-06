@@ -67,6 +67,7 @@ Route::middleware('auth:admin')->group(function () {
 Route::middleware('auth:admin')->group(function (){
     Route::get('/order-manage',[OrderController::class, 'index'])->name('order.index');
     Route::patch('/order-manage/update',[OrderController::class, 'update'])->name('order.update');
+    Route::post('/order-manage/invoice', [OrderController::class, 'invoice'])->name('order.invoice');
 });
 
 Route::middleware('auth:admin')->group(function (){
