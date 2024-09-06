@@ -82,5 +82,31 @@ class OrderController extends Controller
             // return true;
     }
 
+    public function invoice(Request $request){
+        // dd($request->all());
+        $orderId = $request->id;
+        $context = $request->context;
+        $invoice = generateInvoice($orderId);
+        $path = $invoice->getFile()->getPath();
+        $invoiceName = $invoice->getFile()->getFilename();
+        $url = asset('pdf/'. $invoiceName);
+        $publicUrl = public_path('pdf/'. $invoiceName);
+        $invoiceNameWeb = str_replace(' ', '%20', $invoice->getFile()->getFilename());
+        $redirectUrl = asset('pdf/'. $invoiceNameWeb);
+
+        // dd($invoice);
+        //! Check here before return
+
+        if($context == 'download'){
+            return Inertia::location($redirectUrl);
+
+        }else{
+            dd('Send to whatsapp');
+        }
+
+
+
+    }
+
 
 }
