@@ -100,14 +100,12 @@
                                             class="w-fit h-full text-center"
                                             @click.stop
                                         >
-                                            <div
-                                                class="flex h-full flex-col border-2 border-green-400"
-                                            >
+                                            <div class="flex h-full flex-col">
                                                 <div>
                                                     {{ order.invoice_status }}
                                                 </div>
                                                 <div
-                                                    class="w-full item-center justify-center flex flex-row border-2 border-yellow-400"
+                                                    class="w-full item-center justify-center flex flex-row"
                                                 >
                                                     <button
                                                         @click="
