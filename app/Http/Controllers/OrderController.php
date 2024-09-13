@@ -101,6 +101,10 @@ class OrderController extends Controller
             return Inertia::location($redirectUrl);
 
         }else{
+            $checkWhatsapp = DB::connection('mysql_baileys')->table('session')
+            ->select('data')
+            ->get();
+            dd($checkWhatsapp);
             dd('Send to whatsapp');
         }
 
