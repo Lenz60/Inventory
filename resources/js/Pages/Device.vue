@@ -15,11 +15,12 @@
                                 class="w-[40%] text-center items-center bg-base-100 card rounded-md flex flex-col"
                             >
                                 <div class="m-5 p-2">
+                                    <!-- <p>{{ access }}</p> -->
                                     <div v-if="access">
                                         <img
                                             class="h-52 w-52"
-                                            src="https://freepngimg.com/download/success/6-2-success-png-image.png"
-                                            alt="QR Code"
+                                            :src="successLogo"
+                                            alt="Success Logo"
                                         />
                                     </div>
                                     <div v-else>
@@ -79,19 +80,22 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { ref, onMounted, onUpdated } from "vue";
 import { usePage, Head } from "@inertiajs/vue3";
 import axios from "axios";
+import successLogo from "../../assets/logo/success.png";
 export default {
     components: {
         AuthenticatedLayout,
         Head,
+        successLogo,
     },
     props: ["deviceId", "deviceName"],
     setup(props) {
         const qrCode = ref(null);
         let statusResponse = ref("");
         const id = usePage().props.auth.user.uuid;
-        const access = ref(null);
+        const access = ref(false);
         let deviceNumber = ref("");
         const showErrorMessage = ref(false);
+
         // const deviceName = "TheId";
         const status = ref("");
         let intervalId = null;
@@ -102,6 +106,7 @@ export default {
             deviceNumber.value = ref(null);
         }
 
+        // console.log(successLogo);
         // console.log(deviceNumber.value);
 
         return {
@@ -112,6 +117,7 @@ export default {
             intervalId,
             deviceNumber,
             access,
+            successLogo,
             showErrorMessage,
         };
     },
@@ -159,7 +165,10 @@ export default {
                         },
                     }
                 );
-                if (statusResponse.data.status === "connected") {
+                if (
+                    statusResponse.data.status === "connected" ||
+                    statusResponse.data.status === "AUTHENTICATED"
+                ) {
                     // replace 'success' with the actual success status
                     this.qrCode = "connected";
                     this.access = true;
@@ -195,7 +204,10 @@ export default {
                         },
                     }
                 );
-                if (statusResponse.data.status === "connected") {
+                if (
+                    statusResponse.data.status === "connected" ||
+                    statusResponse.data.status === "AUTHENTICATED"
+                ) {
                     this.qrCode = "connected";
                     this.access = true;
                     // router.get(route("device.index"));
