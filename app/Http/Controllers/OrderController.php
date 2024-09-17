@@ -102,10 +102,12 @@ class OrderController extends Controller
 
         }else{
             $checkWhatsapp = DB::connection('mysql_baileys')->table('session')
-            ->select('data')
-            ->get();
+            ->where('id', 'creds')->count();
+
+            if($checkWhatsapp <= 0 ){
+                return redirect()->back()->with('message', 'noWhatsapp:404');
+            }
             dd($checkWhatsapp);
-            dd('Send to whatsapp');
         }
 
 

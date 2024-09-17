@@ -252,8 +252,21 @@ export default {
                     timer: 1500,
                 });
                 //Set default message to 404 so that sweetalert not showing two times
-                usePage().props.flash.message = "update:404";
+                usePage().props.flash.message = "";
                 // router.get(route("order.index"));
+            } else if (usePage().props.flash.message == "noWhatsapp:404") {
+                Swal.fire({
+                    icon: "error",
+                    title: "No Whatsapp account found",
+                    text: "Please login to your whatsapp account first",
+                    showConfirmButton: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        router.get(route("device.index"));
+                    }
+                });
+                statePdfLoading.value = false;
+                usePage().props.flash.message = "";
             }
         });
 
