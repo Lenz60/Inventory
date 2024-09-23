@@ -233,7 +233,7 @@ export default {
         const selectedOrderItems = ref([]);
         const selectedOrderInfo = ref([]);
         const search = ref("");
-        console.log(props.order_items);
+        // console.log(props.order_items);
 
         const itemsModal = ref(false);
         const infoModal = ref(false);
@@ -263,6 +263,19 @@ export default {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         router.get(route("device.index"));
+                    }
+                });
+                statePdfLoading.value = false;
+                usePage().props.flash.message = "";
+            } else if (usePage().props.flash.message == "invoiceSent:200") {
+                Swal.fire({
+                    icon: "success",
+                    title: "Invoice Sent",
+                    text: "Invoice sent to customer",
+                    showConfirmButton: true,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        router.get(route("order.index"));
                     }
                 });
                 statePdfLoading.value = false;
@@ -344,7 +357,7 @@ export default {
                 this.infoModal = !this.infoModal;
             } else {
                 this.selectedOrderInfo = this.filterOrderItems("Info", orderId);
-                console.log(this.selectedOrderInfo);
+                // console.log(this.selectedOrderInfo);
                 this.infoModal = !this.infoModal;
             }
         },

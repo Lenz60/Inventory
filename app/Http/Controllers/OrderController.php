@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Order;
+use App\Models\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -93,6 +95,8 @@ class OrderController extends Controller
         $publicUrl = public_path('pdf/'. $invoiceName);
         $invoiceNameWeb = str_replace(' ', '%20', $invoice->getFile()->getFilename());
         $redirectUrl = asset('pdf/'. $invoiceNameWeb);
+         // dd($Whatsapp);
+        $client = new \GuzzleHttp\Client();
 
         // dd($invoice);
         //! Check here before return
@@ -107,7 +111,36 @@ class OrderController extends Controller
             if($checkWhatsapp <= 0 ){
                 return redirect()->back()->with('message', 'noWhatsapp:404');
             }
-            dd($checkWhatsapp);
+            $whatsapp = Session::first();
+            if($whatsapp){
+                $sessionId = $whatsapp->sessionId;
+            }else{
+                $sessionId = null;
+            }
+            if($sessionId == null){
+                return redirect()->back()->with('message', 'noWhatsapp:404');
+            }
+            // dd($checkWhatsapp);
+            $response = $client->request('POST', 'http://localhost:3000/' . $sessionId . '/messages/send', [
+                'headers' => ['x-api-key' => 'testAPI'],
+                'json' => [
+                    'jid' => '6283840765667@s.whatsapp.net',
+                    'type' => 'number',
+                    'message' => [
+                        'document' => ['url' => $url],
+                        'mimetype' => 'application/pdf',
+                        'caption' => "Here is your invoice of your order at Teratai Furniture",
+                        'fileName' => $invoiceName
+                    ],
+                ],
+            ]);
+            // dd($response.status);
+            if($response->getStatusCode() == 200){
+                $updateOrder = Order::find($orderId);
+                $updateOrder->invoice_status = 'Sent';
+                $updateOrder->save();
+                return redirect()->back()->with('message', 'invoiceSent:200');
+            }
         }
 
 
