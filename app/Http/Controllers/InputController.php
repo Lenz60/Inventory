@@ -269,7 +269,13 @@ class InputController extends Controller
         $drawings = $this->loadExcelData($fileName)->getDrawingCollection();
         foreach ($drawings as $index => $drawing) {
             $coordinates = $drawing->getCoordinates();
+            //! Ignore this error no function
             $drawing_path = $drawing->getPath();
+            $publicStorage = public_path('/storage/furniture-img');
+            // create folder furniture-img in /storage public if there is no folder
+            if (!file_exists($publicStorage)) {
+                mkdir($publicStorage, 0777, true);
+            }
             $img_url = "/storage/furniture-img/{$coordinates}.jpg";
             $img_path = public_path($img_url);
             $contents = file_get_contents($drawing_path);
