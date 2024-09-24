@@ -242,7 +242,7 @@ class InputController extends Controller
         $cells = $this->loadExcelData($fileName)->getCellCollection();
         $array = [];
         for ($row = 2; $row <= $cells->getHighestRow(); $row++) {
-            $array[$row]['uuid'] = Ulid::generate();
+            $array[$row]['uuid'] = Ulid::generate()->__toString();
             $array[$row]['image'] = $cells->get('B' . $row) ? $cells->get('B' . $row)->getValue() : '';
             $array[$row]['code'] = $cells->get('C' . $row) ? $cells->get('C' . $row)->getValue() : '';
             $array[$row]['description'] = $cells->get('D' . $row) ? $cells->get('D' . $row)->getValue() : '';
@@ -258,8 +258,10 @@ class InputController extends Controller
         return $array;
     }
 
+
     private function saveFurnitureData(array $array): void{
         foreach ($array as $data) {
+            // dd($data);
             Furniture::create($data);
         }
     }
@@ -283,6 +285,7 @@ class InputController extends Controller
 
             foreach($array as $index => $data){
                 $furniture = Furniture::where('uuid',$data['uuid'])->first();
+                // dd($furniture);
                 if($furniture){
                     $furniture->update([
                         'image' => "furniture-img/B{$index}.jpg"
