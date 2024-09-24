@@ -455,9 +455,9 @@
                                         <td class="w-auto">
                                             <div
                                                 v-if="
-                                                    furniture.image?.includes(
+                                                    furniture.image.includes(
                                                         'placeholder'
-                                                    ) ?? 'placeholder'
+                                                    )
                                                 "
                                             >
                                                 <div
