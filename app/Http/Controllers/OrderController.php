@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\Session;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -52,6 +53,12 @@ class OrderController extends Controller
         // dd($order_items);
         // dd($order_info);
         // dd($orders);
+        $files = glob(public_path('pdf/*')); // get all file names
+        foreach ($files as $file) { // iterate files
+            if (is_file($file)) {
+                unlink($file); // delete file
+            }
+        }
         return Inertia::render('Order/Order', [
         'orders' => $orders,
         'order_items' => $order_items,
@@ -95,8 +102,7 @@ class OrderController extends Controller
         $publicUrl = public_path('pdf/'. $invoiceName);
         $invoiceNameWeb = str_replace(' ', '%20', $invoice->getFile()->getFilename());
         $redirectUrl = asset('pdf/'. $invoiceNameWeb);
-         // dd($Whatsapp);
-        $client = new \GuzzleHttp\Client();
+        // dd($Whatsapp);
 
         // dd($invoice);
         //! Check here before return
@@ -105,6 +111,13 @@ class OrderController extends Controller
             return Inertia::location($redirectUrl);
 
         }else{
+            $client = new \GuzzleHttp\Client();
+            //? Check client connection
+            try{
+                $response = $client->request('GET','http://localhost:3000/sessions/', ['headers' => ['x-api-key' => 'testAPI']]);
+            }catch(Exception $e){
+                return redirect()->back()->with('message', 'noWhatsapp:500');
+            }
             $checkWhatsapp = DB::connection('mysql_baileys')->table('session')
             ->where('id', 'creds')->count();
 
