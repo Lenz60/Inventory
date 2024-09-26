@@ -267,12 +267,22 @@ export default {
                 });
                 statePdfLoading.value = false;
                 usePage().props.flash.message = "";
+            } else if (usePage().props.flash.message == "noWhatsapp:500") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Whatsapp client server is error or not available",
+                    text: "Please contact the developer",
+                    showConfirmButton: true,
+                });
+                statePdfLoading.value = false;
+                usePage().props.flash.message = "";
             } else if (usePage().props.flash.message == "invoiceSent:200") {
                 Swal.fire({
                     icon: "success",
                     title: "Invoice Sent",
                     text: "Invoice sent to customer",
-                    showConfirmButton: true,
+                    showConfirmButton: false,
+                    timer: 1500,
                 }).then((result) => {
                     if (result.isConfirmed) {
                         router.get(route("order.index"));
