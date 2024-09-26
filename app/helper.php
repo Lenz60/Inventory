@@ -46,6 +46,10 @@ if(!function_exists("generateInvoice")){
         // dd($order_items);
         $code = $orders->track_code;
         $orders = Order::get()->where('id', '=', $order_id)->first();
+        $publicStorage = public_path('pdf/');
+        if (!file_exists($publicStorage)) {
+                mkdir($publicStorage, 0755, true);
+            }
         $path = public_path(). '/pdf/' . $user->name .'[Invoice-'. $code . ']' . '.pdf';
         $css = file_get_contents(resource_path('css/app.css'));
 
