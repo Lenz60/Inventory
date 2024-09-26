@@ -276,7 +276,7 @@ class InputController extends Controller
             $publicStorage = public_path('/storage/furniture-img');
             // create folder furniture-img in /storage public if there is no folder
             if (!file_exists($publicStorage)) {
-                mkdir($publicStorage, 0777, true);
+                mkdir($publicStorage, 0755, true);
             }
             $img_url = "/storage/furniture-img/{$coordinates}.jpg";
             $img_path = public_path($img_url);
