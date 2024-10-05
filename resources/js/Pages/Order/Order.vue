@@ -290,6 +290,20 @@ export default {
                 });
                 statePdfLoading.value = false;
                 usePage().props.flash.message = "";
+            } else if (usePage().props.flash.message == "invoiceSent:500") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Internal server error",
+                    text: "Please relogin the whatsapp account",
+                    showConfirmButton: false,
+                    timer: 1500,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        router.get(route("order.index"));
+                    }
+                });
+                statePdfLoading.value = false;
+                usePage().props.flash.message = "";
             }
         });
 

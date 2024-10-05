@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\Session;
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -134,19 +135,23 @@ class OrderController extends Controller
                 return redirect()->back()->with('message', 'noWhatsapp:404');
             }
             // dd($checkWhatsapp);
-            $response = $client->request('POST', 'http://localhost:3000/' . $sessionId . '/messages/send', [
-                'headers' => ['x-api-key' => 'testAPI'],
-                'json' => [
-                    'jid' => '6283840765667@s.whatsapp.net',
-                    'type' => 'number',
-                    'message' => [
-                        'document' => ['url' => $url],
-                        'mimetype' => 'application/pdf',
-                        'caption' => "Here is your invoice of your order at Teratai Furniture",
-                        'fileName' => $invoiceName
+            try{
+                $response = $client->request('POST', 'http://localhost:3000/' . $sessionId . '/messages/send', [
+                    'headers' => ['x-api-key' => 'testAPI'],
+                    'json' => [
+                        'jid' => '6283840765667@s.whatsapp.net',
+                        'type' => 'number',
+                        'message' => [
+                            'document' => ['url' => $url],
+                            'mimetype' => 'application/pdf',
+                            'caption' => "Here is your invoice of your order at Teratai Furniture",
+                            'fileName' => $invoiceName
+                        ],
                     ],
-                ],
-            ]);
+                ]);
+            }catch(GuzzleException $e){
+                return redirect()->back()->with('message', 'invoiceSent:500');
+            }
             // dd($response.status);
             if($response->getStatusCode() == 200){
                 $updateOrder = Order::find($orderId);
@@ -155,10 +160,5 @@ class OrderController extends Controller
                 return redirect()->back()->with('message', 'invoiceSent:200');
             }
         }
-
-
-
     }
-
-
 }
