@@ -4,10 +4,12 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,9 +39,13 @@ Route::get('/', function () {
     ]);
 })->middleware(['auth:admin','verified']);
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth:admin', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth:admin', 'verified'])->name('dashboard');
+
+Route::middleware('auth:admin')->group(function(){
+    Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
+});
 
 Route::middleware('auth:admin')->group(function (){
     Route::get('/input',[InputController::class, 'index'])->name('input.index');
