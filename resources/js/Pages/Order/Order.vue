@@ -254,6 +254,17 @@ export default {
                 //Set default message to 404 so that sweetalert not showing two times
                 usePage().props.flash.message = "";
                 // router.get(route("order.index"));
+            } else if (usePage().props.flash.message == "update:500") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Internal Server Error",
+                    text: "Failed to proceed the order",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                //Set default message to 404 so that sweetalert not showing two times
+                usePage().props.flash.message = "";
+                // router.get(route("order.index"));
             } else if (usePage().props.flash.message == "noWhatsapp:404") {
                 Swal.fire({
                     icon: "error",

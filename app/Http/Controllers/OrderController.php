@@ -85,7 +85,7 @@ class OrderController extends Controller
                 ]);
                 return redirect()->back()->with('message', 'updateOrder:200');
             }else{
-                dd("invalid");
+                return redirect()->back()->with('message', 'update:500');
             }
             //Update the status based on request given by the $request->status
             // if()
