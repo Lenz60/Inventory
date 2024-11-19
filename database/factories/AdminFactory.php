@@ -29,7 +29,7 @@ class AdminFactory extends Factory
     public function specificAdmin()
     {
         return $this->state([
-            'email' => 'admin@email.com',
+            'email' => 'admin@teratai.com',
             'role' => 1,
         ]);
     }

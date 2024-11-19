@@ -103,7 +103,14 @@ class OrderController extends Controller
         $publicUrl = public_path('pdf/'. $invoiceName);
         $invoiceNameWeb = str_replace(' ', '%20', $invoice->getFile()->getFilename());
         $redirectUrl = asset('pdf/'. $invoiceNameWeb);
-        // dd($Whatsapp);
+        $apiUrl = env('API_URL');
+        $apiKey = env('API_KEY');
+
+        $user_info = DB::table('orders')
+            ->join('orders_info', 'orders.id', '=', 'orders_info.order_id')
+            ->where('orders.id', '=', $orderId)
+            ->first();
+        dd($user_info->phone_number);
 
         // dd($invoice);
         //! Check here before return
@@ -115,7 +122,7 @@ class OrderController extends Controller
             $client = new \GuzzleHttp\Client();
             //? Check client connection
             try{
-                $response = $client->request('GET','http://localhost:3000/sessions/', ['headers' => ['x-api-key' => 'testAPI']]);
+                $response = $client->request('GET',$apiUrl . '/sessions/', ['headers' => ['x-api-key' => $apiKey]]);
             }catch(Exception $e){
                 return redirect()->back()->with('message', 'noWhatsapp:500');
             }
@@ -136,10 +143,10 @@ class OrderController extends Controller
             }
             // dd($checkWhatsapp);
             try{
-                $response = $client->request('POST', 'http://localhost:3000/' . $sessionId . '/messages/send', [
-                    'headers' => ['x-api-key' => 'testAPI'],
+                $response = $client->request('POST', $apiUrl . '/' . $sessionId . '/messages/send', [
+                    'headers' => ['x-api-key' => $apiKey],
                     'json' => [
-                        'jid' => '6283840765667@s.whatsapp.net',
+                        'jid' => $user_info->phone_number.'@s.whatsapp.net',
                         'type' => 'number',
                         'message' => [
                             'document' => ['url' => $url],

@@ -158,10 +158,10 @@ export default {
         async checkStatus() {
             try {
                 const statusResponse = await axios.get(
-                    `http://localhost:3000/sessions/${this.id}/status`,
+                    `${process.env.VUE_APP_API_URL}/sessions/${this.id}/status`,
                     {
                         headers: {
-                            "x-api-key": "testAPI",
+                            "x-api-key": `${process.env.VUE_APP_API_KEY}`,
                         },
                     }
                 );
@@ -182,11 +182,11 @@ export default {
             } catch (error) {
                 // console.error("Error:", error);
                 const res = await axios.post(
-                    `http://localhost:3000/sessions/add`,
+                    `${process.env.VUE_APP_API_URL}/sessions/add`,
                     { sessionId: this.id },
                     {
                         headers: {
-                            "x-api-key": "testAPI",
+                            "x-api-key": `${process.env.VUE_APP_API_KEY}`,
                         },
                     }
                 );
@@ -197,10 +197,10 @@ export default {
         async scan() {
             try {
                 const statusResponse = await axios.get(
-                    `http://localhost:3000/sessions/${this.id}/status`,
+                    `${process.env.VUE_APP_API_URL}/sessions/${this.id}/status`,
                     {
                         headers: {
-                            "x-api-key": "testAPI",
+                            "x-api-key": `${process.env.VUE_APP_API_KEY}`,
                         },
                     }
                 );
@@ -213,11 +213,11 @@ export default {
                     // router.get(route("device.index"));
                 } else {
                     const res = await axios.post(
-                        `http://localhost:3000/sessions/add`,
+                        `${process.env.VUE_APP_API_URL}/sessions/add`,
                         { sessionId: this.id },
                         {
                             headers: {
-                                "x-api-key": "testAPI",
+                                "x-api-key": `${process.env.VUE_APP_API_KEY}`,
                             },
                         }
                     );
@@ -238,11 +238,11 @@ export default {
                         error.response.data.error === "Session not found"
                     ) {
                         const res = await axios.post(
-                            `http://localhost:3000/sessions/add`,
+                            `${process.env.VUE_APP_API_URL}/sessions/add`,
                             { sessionId: this.id },
                             {
                                 headers: {
-                                    "x-api-key": "testAPI",
+                                    "x-api-key": `${process.env.VUE_APP_API_KEY}`,
                                 },
                             }
                         );
@@ -260,8 +260,8 @@ export default {
 
         async logout() {
             const response = await axios.delete(
-                `http://localhost:3000/sessions/${this.id}`,
-                { headers: { "x-api-key": "testAPI" } }
+                `${process.env.VUE_APP_API_URL}/sessions/${this.id}`,
+                { headers: { "x-api-key": `${process.env.VUE_APP_API_KEY}` } }
             );
             if (response) {
                 location.reload();

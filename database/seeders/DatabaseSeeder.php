@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Furniture::factory()->count(5)->create();
+        // Furniture::factory()->count(5)->create();
         // Admin::factory()->specificAdmin()->create(); // Create admin with specified email and role
         // Admin::factory()->count(4)->create(); // Create additional random admins
         // User::factory()->specificUser()->create(); // Create user with specified email
